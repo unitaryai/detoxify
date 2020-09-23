@@ -40,23 +40,20 @@ cd Jigsaw-toxic-comment-challenges
 pip install -e . 
 pip install -r requirements.txt
  ```   
- Commands to download the Jigsaw data (requires to have the Kaggle API installed).   
+ Commands to download the Jigsaw data (requires to have the Kaggle API installed). 
+ 
+ If you do not already have a kaggle account: 
+ - you need to create one to be able to download the data
+ 
+ - go to My Account and click on Create New API Token - this will download a kaggle.json file
+
+ - make sure this file is located in ~/.kaggle
  ```bash
 
 # create data directory
 
 mkdir jigsaw_data
 cd jigsaw_data
-
-# Create Kaggle account or skip the following step
-
-If you do not already have a kaggle account, create one to download the data.
-
-Once your account is set up, go to My Account and click on Create New API Token.
-
-This will download a kaggle.json file.
-
-Make sure this file is located in ~/.kaggle
 
 # download data
 
@@ -70,7 +67,7 @@ kaggle competitions download -c jigsaw-multilingual-toxic-comment-classification
 
 unzip -d jigsaw-toxic-comment-classification-challenge jigsaw-toxic-comment-classification-challenge.zip
 
-unzip -d jigsaw-unintended-bias-in-toxicity-classification jigsaw-unintended-bias-in-toxicity-classification.zip
+unzip -d  jigsaw-unintended-bias-in-toxicity-classification jigsaw-unintended-bias-in-toxicity-classification.zip
 
 unzip -d jigsaw-multilingual-toxic-comment-classification jigsaw-multilingual-toxic-comment-classification.zip
 
