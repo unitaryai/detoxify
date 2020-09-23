@@ -67,7 +67,7 @@ kaggle competitions download -c jigsaw-multilingual-toxic-comment-classification
 
 unzip -d jigsaw-toxic-comment-classification-challenge jigsaw-toxic-comment-classification-challenge.zip
 
-unzip -d  jigsaw-unintended-bias-in-toxicity-classification jigsaw-unintended-bias-in-toxicity-classification.zip
+unzip -d jigsaw-unintended-bias-in-toxicity-classification jigsaw-unintended-bias-in-toxicity-classification.zip
 
 unzip -d jigsaw-multilingual-toxic-comment-classification jigsaw-multilingual-toxic-comment-classification.zip
 
