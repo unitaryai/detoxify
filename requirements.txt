@@ -1,3 +1,5 @@
 pytorch-lightning >= 0.9.0
-torch >= 1.3.0
-torchvision >= 0.6.0
+torch >= 0.1.6
+torchvision >= 0.1.6
+transformers >= 3.2.0
+kaggle >= 1.5.8

@@ -1,31 +1,7 @@
-### Deep learning project seed
-Use this seed to start new deep learning / ML projects.
-
-- Built in setup.py
-- Built in requirements
-- Examples with MNIST
-- Badges
-- Bibtex
-
-#### Goals  
-The goal of this seed is to structure ML paper-code the same so that work can easily be extended and replicated.   
-
-### DELETE EVERYTHING ABOVE FOR YOUR PROJECT  
- 
----
-
 <div align="center">    
  
-# Your Project Name     
+# Jigsaw Toxic Comment Classification Implementations     
 
-[![Paper](http://img.shields.io/badge/paper-arxiv.1001.2234-B31B1B.svg)](https://www.nature.com/articles/nature14539)
-[![Conference](http://img.shields.io/badge/NeurIPS-2019-4b44ce.svg)](https://papers.nips.cc/book/advances-in-neural-information-processing-systems-31-2018)
-[![Conference](http://img.shields.io/badge/ICLR-2019-4b44ce.svg)](https://papers.nips.cc/book/advances-in-neural-information-processing-systems-31-2018)
-[![Conference](http://img.shields.io/badge/AnyConference-year-4b44ce.svg)](https://papers.nips.cc/book/advances-in-neural-information-processing-systems-31-2018)  
-<!--
-ARXIV   
-[![Paper](http://img.shields.io/badge/arxiv-math.co:1480.1111-B31B1B.svg)](https://www.nature.com/articles/nature14539)
--->
 ![CI testing](https://github.com/PyTorchLightning/deep-learning-project-template/workflows/CI%20testing/badge.svg?branch=master&event=push)
 
 
@@ -35,26 +11,69 @@ Conference
 </div>
  
 ## Description   
-What it does   
+Library to easily train and test classifiers for all 3 Jigsaw Toxic Comment Challenges.
+
+Dependencies:
+- 🤗 Transformers
+- ⚡ Pytorch lightning 
+- Kaggle API
+
+| Challenge | Year | Description | Original Data Source | Top Leaderboard Score
+|-|-|-|-|-|
+| [Toxic Comment Classification Challenge](https://www.kaggle.com/c/jigsaw-toxic-comment-classification-challenge) | 2018 |  build a multi-headed model that’s capable of detecting different types of of toxicity like threats, obscenity, insults, and identity-based hate. | Wikipedia Comments | 0.98856
+| [Jigsaw Unintended Bias in Toxicity Classification](https://www.kaggle.com/c/jigsaw-unintended-bias-in-toxicity-classification) | 2019 | build a model that recognizes toxicity and minimizes this type of unintended bias with respect to mentions of identities. You'll be using a dataset labeled for identity mentions and optimizing a metric designed to measure unintended bias. | Civil Comments | 0.94734
+| [Jigsaw Multilingual Toxic Comment Classification](https://www.kaggle.com/c/jigsaw-multilingual-toxic-comment-classification) | 2020 | build effective multilingual models | Wikipedia Comments + Civil Comments | 0.9536
+
 
 ## How to run   
 First, install dependencies   
 ```bash
 # clone project   
-git clone https://github.com/YourGithubName/deep-learning-project-template
+git clone https://github.com/laurahanu/Jigsaw-toxic-comment-challenges
+
+# create virtual env
+python3 -m venv toxic-env
+source toxic-env/bin/activate
 
 # install project   
-cd deep-learning-project-template 
-pip install -e .   
+cd Jigsaw-toxic-comment-challenges 
+pip install -e . 
 pip install -r requirements.txt
  ```   
- Next, navigate to any file and run it.   
+ Commands to download the Jigsaw data (requires to have the Kaggle API installed).   
  ```bash
-# module folder
-cd project
 
-# run module (example: mnist as your main contribution)   
-python lit_classifier_main.py    
+# create data directory
+
+mkdir jigsaw_data
+cd jigsaw_data
+
+# Create Kaggle account or skip the following step
+
+If you do not already have a kaggle account, create one to download the data.
+
+Once your account is set up, go to My Account and click on Create New API Token.
+
+This will download a kaggle.json file.
+
+Make sure this file is located in ~/.kaggle
+
+# download data
+
+kaggle competitions download -c jigsaw-toxic-comment-classification-challenge
+
+kaggle competitions download -c jigsaw-unintended-bias-in-toxicity-classification
+
+kaggle competitions download -c jigsaw-multilingual-toxic-comment-classification
+
+# unzip 
+
+unzip -d jigsaw-toxic-comment-classification-challenge jigsaw-toxic-comment-classification-challenge.zip
+
+unzip -d jigsaw-unintended-bias-in-toxicity-classification jigsaw-unintended-bias-in-toxicity-classification.zip
+
+unzip -d jigsaw-multilingual-toxic-comment-classification jigsaw-multilingual-toxic-comment-classification.zip
+
 ```
 
 ## Imports
@@ -77,6 +96,15 @@ trainer.fit(model, train, val)
 # test using the best model!
 trainer.test(test_dataloaders=test)
 ```
+## Checkpoints
+
+Trained checkpoints available for each.
+
+| Model | Checkpoints | Score
+|-|-|-|
+| Toxic Comment Classification Challenge| path to checkpoint | N/a
+| Unintended Bias Toxic Comment Classification Challenge | path to checkpoint | N/a
+| MultilingualToxic Comment Classification Challenge | path to checkpoint | N/a
 
 ### Citation   
 ```
