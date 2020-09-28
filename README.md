@@ -4,10 +4,6 @@
 
 ![CI testing](https://github.com/PyTorchLightning/deep-learning-project-template/workflows/CI%20testing/badge.svg?branch=master&event=push)
 
-
-<!--  
-Conference   
--->   
 </div>
  
 ## Description   
@@ -62,14 +58,6 @@ kaggle competitions download -c jigsaw-toxic-comment-classification-challenge
 kaggle competitions download -c jigsaw-unintended-bias-in-toxicity-classification
 
 kaggle competitions download -c jigsaw-multilingual-toxic-comment-classification
-
-# unzip 
-
-unzip -d jigsaw-toxic-comment-classification-challenge jigsaw-toxic-comment-classification-challenge.zip
-
-unzip -d jigsaw-unintended-bias-in-toxicity-classification jigsaw-unintended-bias-in-toxicity-classification.zip
-
-unzip -d jigsaw-multilingual-toxic-comment-classification jigsaw-multilingual-toxic-comment-classification.zip
 
 ```
 
