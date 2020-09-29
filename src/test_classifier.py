@@ -1,6 +1,6 @@
 from pytorch_lightning import Trainer, seed_everything
 
-from train import BERTClassifier
+from .train import BERTClassifier
 from src.utils import ignore_none_collate
 import src.data_loaders as module_data
 import argparse
