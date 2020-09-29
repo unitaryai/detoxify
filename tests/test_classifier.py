@@ -46,8 +46,8 @@ def test_lit_classifier():
         collate_fn=ignore_none_collate,
     )
 
-    trainer = Trainer(gpus=1, limit_train_batches=10, limit_val_batches=5, max_epochs=2)
+    trainer = Trainer(limit_train_batches=10, limit_val_batches=5, max_epochs=2)
     trainer.fit(model, data_loader, valid_data_loader)
 
     results = trainer.test(test_dataloaders=valid_data_loader)
-    assert results[0]["test_acc"] > 0.7
+    assert results[0]["test_acc"] > 0.6
