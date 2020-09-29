@@ -12,6 +12,7 @@ from src.utils import move_to
 import torch.nn.functional as F
 from sklearn.metrics import roc_auc_score
 import numpy as np
+import os
 from src.data_loaders import (
     JigsawData,
     JigsawDataBERT,
@@ -20,10 +21,10 @@ from src.data_loaders import (
 )
 
 
-def test_classifier(config, checkpoint_path, device="cuda"):
+def test_classifier(config, checkpoint_path, device="cuda:1"):
 
     model = BERTClassifier(config)
-    checkpoint = torch.load(checkpoint_path)
+    checkpoint = torch.load(checkpoint_path, map_location=device)
     model.load_state_dict(checkpoint["state_dict"])
     model.eval()
     model.to(device)
@@ -98,8 +99,20 @@ if __name__ == "__main__":
         type=str,
         help="path to a saved checkpoint",
     )
+    parser.add_argument(
+        "-d",
+        "--device",
+        default=None,
+        type=str,
+        help="path to a saved checkpoint",
+    )
+
     args = parser.parse_args()
     config = json.load(open(args.config))
+
+    if args.device is not None:
+        os.environ["CUDA_VISIBLE_DEVICES"] = args.device
+        config["gpus"] = args.device
 
     results = test_classifier(config, args.checkpoint)
 

@@ -69,10 +69,10 @@ class BERTClassifier(pl.LightningModule):
     def test_step(self, batch, batch_idx):
         x, meta = batch
         output = self(x)
-        loss = F.cross_entropy(output, meta)
+        loss = binary_cross_entropy(output, meta)
         result = pl.EvalResult(checkpoint_on=loss)
         result.log("test_loss", loss)
-        result.log("test_acc", accuracy(output, meta))
+        result.log("test_acc", binary_accuracy(output, meta))
         return result
 
     def configure_optimizers(self):

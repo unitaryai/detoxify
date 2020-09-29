@@ -11,9 +11,10 @@ from src.data_loaders import (
 from torch.utils.data import DataLoader
 from src.utils import ignore_none_collate
 import json
+import os
 
 
-def test_lit_classifier():
+def test_classifier():
     seed_everything(1234)
 
     def get_instance(module, name, config, *args, **kwargs):
@@ -21,7 +22,9 @@ def test_lit_classifier():
             *args, **config[name]["args"], **kwargs
         )
 
-    config = json.load(open("configs/BERT_toxic_comment_classification.json"))
+    config = json.load(
+        open("tests/dummy_configs/BERT_toxic_comment_classification.json")
+    )
 
     model = BERTClassifier(config)
 
@@ -46,7 +49,9 @@ def test_lit_classifier():
         collate_fn=ignore_none_collate,
     )
 
-    trainer = Trainer(limit_train_batches=10, limit_val_batches=5, max_epochs=2)
+    trainer = Trainer(
+        gpus=limit_train_batches=10, limit_val_batches=5, max_epochs=2
+    )
     trainer.fit(model, data_loader, valid_data_loader)
 
     results = trainer.test(test_dataloaders=valid_data_loader)
