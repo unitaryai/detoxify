@@ -37,7 +37,7 @@ def test_classifier():
     data_loader = DataLoader(
         dataset,
         batch_size=config["batch_size"],
-        num_workers=12,
+        num_workers=5,
         shuffle=True,
         drop_last=True,
         pin_memory=True,
@@ -47,15 +47,15 @@ def test_classifier():
     valid_data_loader = DataLoader(
         val_dataset,
         batch_size=config["batch_size"],
-        num_workers=10,
+        num_workers=5,
         shuffle=False,
         collate_fn=ignore_none_collate,
     )
 
     trainer = Trainer(
         gpus=0 if torch.cuda.is_available() else None,
-        limit_train_batches=10,
-        limit_val_batches=5,
+        limit_train_batches=3,
+        limit_val_batches=2,
         max_epochs=1,
     )
     trainer.fit(model, data_loader, valid_data_loader)
