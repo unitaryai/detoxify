@@ -4,7 +4,6 @@ import pytorch_lightning as pl
 from pytorch_lightning.metrics.functional import accuracy
 from torch.nn import functional as F
 import transformers
-from src.data_loaders import *
 from torch.utils.data import DataLoader
 import json
 import argparse
@@ -17,6 +16,12 @@ from transformers import (
     BertForSequenceClassification,
     PretrainedConfig,
     BertConfig,
+)
+from src.data_loaders import (
+    JigsawData,
+    JigsawDataBERT,
+    JigsawDataBiasBERT,
+    JigsawDataMultilingualBERT,
 )
 
 
@@ -105,11 +110,15 @@ def cli_main():
     parser.add_argument(
         "-g", "--n_gpu", default=None, type=int, help="if given, override the num"
     )
+    parser.add_argument(
+        "-e", "--n_epochs", default=100, type=int, help="if given, override the num"
+    )
+
     args = parser.parse_args()
     config = json.load(open(args.config))
 
-    if args.n_gpu is not None:
-        config["n_gpu"] = args.n_gpu
+    if args.device is not None:
+        config["device"] = args.device
 
     # data
     def get_instance(module, name, config, *args, **kwargs):
@@ -143,16 +152,15 @@ def cli_main():
     # training
 
     checkpoint_callback = ModelCheckpoint(
-        save_top_k=5,
+        save_top_k=20,
         verbose=True,
         monitor="val_loss",
         mode="min",
     )
-
     trainer = pl.Trainer(
-        gpus=args.n_gpu,
-        max_epochs=5,
-        limit_train_batches=200,
+        gpus=args.device,
+        max_epochs=args.n_epochs,
+        accumulate_grad_batches=config["accumulate_grad_batches"],
         checkpoint_callback=checkpoint_callback,
     )
     trainer.fit(model, data_loader, valid_data_loader)
