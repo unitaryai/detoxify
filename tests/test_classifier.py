@@ -56,7 +56,7 @@ def test_classifier():
         gpus=0 if torch.cuda.is_available() else None,
         limit_train_batches=10,
         limit_val_batches=5,
-        max_epochs=2,
+        max_epochs=1,
     )
     trainer.fit(model, data_loader, valid_data_loader)
 
