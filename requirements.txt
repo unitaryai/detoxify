@@ -3,4 +3,4 @@ torch >= 0.1.6
 transformers >= 3.2.0
 kaggle >= 1.5.8
 pandas >= 1.1.2
-sklearn >= 0.23.2
+scikit-learn >= 0.23.2
