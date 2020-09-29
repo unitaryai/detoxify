@@ -1,10 +1,8 @@
 from torch.utils.data.dataset import Dataset
 import torch
-import os
 import pandas as pd
 import numpy as np
 from transformers import BertTokenizer
-import torch
 
 
 class JigsawData(Dataset):
@@ -46,6 +44,7 @@ class JigsawData(Dataset):
             data = val_set
 
         self.data = data
+        self.train = train
 
     def __len__(self):
         return len(self.data)
@@ -103,7 +102,7 @@ class JigsawDataBERT(JigsawData):
         return tokenised_text, meta
 
 
-class JigsawDataBERT_unintended_bias(JigsawData):
+class JigsawDataBiasBERT(JigsawData):
     """Dataloader for the Jigsaw Unintended Bias in Toxicity Classification.
     Source: https://www.kaggle.com/c/jigsaw-unintended-bias-in-toxicity-classification/
     """
@@ -159,18 +158,21 @@ class JigsawDataBERT_unintended_bias(JigsawData):
         text_id = self.data.id[pd_index]
         text = self.data.comment_text[pd_index]
         target_dict = {
-            l: 1 if self.data.iloc[index][l] >= 0.5 else 0 for l in self.classes
+            label: 1 if self.data.iloc[index][label] >= 0.5 else 0
+            for label in self.classes
         }
 
         identity_target = {
-            l: -1 if np.isnan(self.data.iloc[index][l]) else self.data.iloc[index][l]
-            for l in self.identity_classes
+            label: -1
+            if np.isnan(self.data.iloc[index][label])
+            else self.data.iloc[index][label]
+            for label in self.identity_classes
         }
         identity_target.update(
-            {l: 1 for l in identity_target if identity_target[l] >= 0.5}
+            {label: 1 for label in identity_target if identity_target[label] >= 0.5}
         )
         identity_target.update(
-            {l: 0 for l in identity_target if 0 < identity_target[l] < 0.5}
+            {label: 0 for label in identity_target if 0 < identity_target[label] < 0.5}
         )
         target_dict.update(identity_target)
 
@@ -207,7 +209,7 @@ class JigsawDataBERT_unintended_bias(JigsawData):
         return weights
 
 
-class JigsawDataBERT_multilingual_challenge(JigsawData):
+class JigsawDataMultilingualBERT(JigsawData):
     """Dataloader for the Jigsaw Multilingual Toxic Comment Classification.
     Source: https://www.kaggle.com/c/jigsaw-multilingual-toxic-comment-classification/
     """
@@ -237,7 +239,8 @@ class JigsawDataBERT_multilingual_challenge(JigsawData):
         text_id = self.data.id[pd_index]
         text = self.data.comment_text[pd_index]
         target_dict = {
-            l: 1 if self.data.iloc[index][l] >= 0.5 else 0 for l in self.classes
+            label: 1 if self.data.iloc[index][label] >= 0.5 else 0
+            for label in self.classes
         }
 
         tokenised_text = self.tokenizer(
