@@ -8,9 +8,10 @@ from torch.utils.data import DataLoader
 import json
 import argparse
 import src.data_loaders as module_data
-from src.metric import binary_cross_entropy, binary_accuracy
+
 from src.utils import move_to, ignore_none_collate
 from pytorch_lightning.callbacks import ModelCheckpoint
+
 from transformers import (
     BertTokenizer,
     BertForSequenceClassification,
@@ -44,6 +45,14 @@ class BERTClassifier(pl.LightningModule):
             for param in self.bert.parameters():
                 param.requires_grad = False
 
+        self.bias_loss = False
+
+        if "loss_weight" in config:
+            self.loss_weight = config["loss_weight"]
+        if "num_main_classes" in config:
+            self.num_main_classes = config["num_main_classes"]
+            self.bias_loss = True
+
     def forward(self, inputs):
         outputs = self.bert(**inputs)
         return outputs[0]
@@ -51,7 +60,7 @@ class BERTClassifier(pl.LightningModule):
     def training_step(self, batch, batch_idx):
         x, meta = batch
         output = self(x)
-        loss = binary_cross_entropy(output, meta)
+        loss = self.binary_cross_entropy(output, meta)
         result = pl.TrainResult(minimize=loss)
         result.log("train_loss", loss)
         return result
@@ -59,9 +68,9 @@ class BERTClassifier(pl.LightningModule):
     def validation_step(self, batch, batch_idx):
         x, meta = batch
         output = self(x)
-        loss = binary_cross_entropy(output, meta)
+        loss = self.binary_cross_entropy(output, meta)
         result = pl.EvalResult(checkpoint_on=loss)
-        acc = binary_accuracy(output, meta)
+        acc = self.binary_accuracy(output, meta)
         result.log("val_loss", loss)
         result.log("val_acc", acc)
         return result
@@ -69,16 +78,85 @@ class BERTClassifier(pl.LightningModule):
     def test_step(self, batch, batch_idx):
         x, meta = batch
         output = self(x)
-        loss = binary_cross_entropy(output, meta)
+        loss = self.binary_cross_entropy(output, meta)
         result = pl.EvalResult(checkpoint_on=loss)
         result.log("test_loss", loss)
-        result.log("test_acc", binary_accuracy(output, meta))
+        result.log("test_acc", self.binary_accuracy(output, meta))
         return result
 
     def configure_optimizers(self):
         return torch.optim.Adam(
             self.parameters(), **self.hparams["config"]["optimizer"]["args"]
         )
+
+    def binary_cross_entropy(self, input, meta):
+
+        if "multi_target" in meta:
+            target = meta["multi_target"].to(input.device)
+            loss_fn = F.binary_cross_entropy_with_logits
+            loss = 0
+            identity_loss = 0
+
+        if "weights" in meta:
+            meta["weights"].to(input.device)
+        else:
+            meta["weights"] = torch.ones(target.shape[0]).to(input.device)
+
+        if not self.bias_loss:
+            self.num_main_classes = self.num_classes
+            self.loss_weight = 1
+
+        for i in range(target.shape[-1]):
+            mask = target[:, i] != -1
+            if torch.sum(mask) > 0:
+
+                if i < self.num_main_classes:
+                    loss = (
+                        loss
+                        + (
+                            loss_fn(
+                                input[mask, i],
+                                target[:, i][mask].float(),
+                                reduction="none",
+                            )
+                            * meta["weights"]
+                        ).mean()
+                    )
+                else:
+                    identity_loss = identity_loss + loss_fn(
+                        input[mask, i], target[:, i][mask].float()
+                    )
+        loss = loss / self.num_main_classes
+        num_identity_classes = self.num_classes - self.num_main_classes
+        identity_loss = (
+            identity_loss / num_identity_classes
+            if num_identity_classes != 0
+            else identity_loss
+        )
+        loss = loss * self.loss_weight + identity_loss * (1 - self.loss_weight)
+        return loss
+
+    def binary_accuracy(self, output, meta):
+        if "multi_target" in meta:
+            correct = 0
+            target = meta["multi_target"].to(output.device)
+            cnt = 0
+            with torch.no_grad():
+                for i in range(target.shape[-1]):
+                    mask = target[:, i] != -1
+                    pred = torch.sigmoid(output[mask, i]) >= 0.5
+                    correct = (
+                        correct
+                        + torch.sum(pred.to(output.device) == target[mask, i]).item()
+                    )
+                    cnt = cnt + torch.sum(mask)
+            return torch.tensor(correct / cnt.item())
+        else:
+            target = meta["target"].to(output.device).reshape(output.shape) >= 0.5
+            with torch.no_grad():
+                pred = torch.sigmoid(output) >= 0.5
+                correct = torch.sum(pred == target).item()
+            return torch.tensor(correct / len(target))
 
 
 def cli_main():

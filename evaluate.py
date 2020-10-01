@@ -1,6 +1,6 @@
 from pytorch_lightning import Trainer, seed_everything
 
-from src.train import BERTClassifier
+from train import BERTClassifier
 from src.utils import ignore_none_collate
 import src.data_loaders as module_data
 import argparse
@@ -19,9 +19,10 @@ from src.data_loaders import (
     JigsawDataBiasBERT,
     JigsawDataMultilingualBERT,
 )
+import pandas as pd
 
 
-def test_classifier(config, checkpoint_path, device="cuda:1"):
+def test_classifier(config, dataset, checkpoint_path, device="cuda:1"):
 
     model = BERTClassifier(config)
     checkpoint = torch.load(checkpoint_path, map_location=device)
@@ -33,6 +34,8 @@ def test_classifier(config, checkpoint_path, device="cuda:1"):
         return getattr(module, config[name]["type"])(
             *args, **config[name]["args"], **kwargs
         )
+
+    config["dataset"]["args"]["test_csv_file"] = dataset
 
     test_dataset = get_instance(module_data, "dataset", config, train=False)
 
@@ -46,9 +49,11 @@ def test_classifier(config, checkpoint_path, device="cuda:1"):
 
     scores = []
     targets = []
+    ids = []
     for *items, meta in tqdm(test_data_loader):
         items = move_to(items, device)
         targets += meta["multi_target"]
+        ids += meta["text_id"]
         with torch.no_grad():
             out = model.forward(*items)
             sm = F.sigmoid(out).cpu().detach().numpy()
@@ -61,8 +66,9 @@ def test_classifier(config, checkpoint_path, device="cuda:1"):
     auc_scores = []
 
     for class_idx in range(scores.shape[1]):
-        target_binary = targets[:, class_idx]
-        class_scores = scores[:, class_idx]
+        mask = targets[:, class_idx] != -1
+        target_binary = targets[mask, class_idx]
+        class_scores = scores[mask, class_idx]
         try:
             auc = roc_auc_score(target_binary, class_scores)
             auc_scores.append(auc)
@@ -79,6 +85,7 @@ def test_classifier(config, checkpoint_path, device="cuda:1"):
         "targets": targets.tolist(),
         "auc_scores": auc_scores,
         "mean_auc": mean_auc,
+        "ids": ids,
     }
 
     return results
@@ -106,6 +113,13 @@ if __name__ == "__main__":
         type=str,
         help="path to a saved checkpoint",
     )
+    parser.add_argument(
+        "-t",
+        "--test_csv",
+        default=None,
+        type=str,
+        help="path to a saved checkpoint",
+    )
 
     args = parser.parse_args()
     config = json.load(open(args.config))
@@ -114,7 +128,25 @@ if __name__ == "__main__":
         os.environ["CUDA_VISIBLE_DEVICES"] = args.device
         config["gpus"] = args.device
 
-    results = test_classifier(config, args.checkpoint)
+    results = test_classifier(config, args.test_csv, args.checkpoint)
 
     with open(args.checkpoint[:-4] + "results.json", "w") as f:
         json.dump(results, f)
+    submission = [
+        [results["ids"][s], *results["scores"][s]]
+        for s in range(len(results["scores"]))
+    ]
+
+    df_submission = pd.DataFrame(
+        submission,
+        columns=[
+            "id",
+            "toxic",
+            "severe_toxic",
+            "obscene",
+            "threat",
+            "insult",
+            "identity_hate",
+        ],
+    )
+    df_submission.to_csv(args.checkpoint[:-4] + "submission.csv", index=False)
