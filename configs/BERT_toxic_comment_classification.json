@@ -3,6 +3,7 @@
     "n_gpu": 1,
     "batch_size": 10,
     "accumulate_grad_batches": 3,
+    "loss": "binary_cross_entropy",
     "arch": {
         "type": "BERT",
         "args": {
@@ -15,7 +16,7 @@
         "args": {
             "train_csv_file": "jigsaw_data/jigsaw-toxic-comment-classification-challenge/train.csv",
             "test_csv_file": null,
-            "train_fraction": 0.9,
+            "val_fraction": 0.1,
             "create_val_set": true,
             "add_test_labels": true
         }
