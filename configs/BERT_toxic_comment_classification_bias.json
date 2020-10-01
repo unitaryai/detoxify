@@ -1,0 +1,33 @@
+{
+    "name": "Jigsaw_BERT_bias",
+    "n_gpu": 1,
+    "batch_size": 10,
+    "accumulate_grad_batches": 3,
+    "loss": "bias_binary_cross_entropy",
+    "loss_weight": 0.75,
+    "num_main_classes": 7,
+    "arch": {
+        "type": "BERT",
+        "args": {
+            "num_classes": 16,
+            "freeze": false
+        }
+    },
+    "dataset": {
+        "type": "JigsawDataBiasBERT",
+        "args": {
+            "train_csv_file": "jigsaw_data/jigsaw-unintended-bias-in-toxicity-classification/train.csv",
+            "test_csv_file": null,
+            "val_fraction": 0.1,
+            "create_val_set": true
+        }
+    },
+    "optimizer": {
+        "type": "Adam",
+        "args": {
+            "lr": 3e-5,
+            "weight_decay": 3e-6,
+            "amsgrad": true
+        }
+    }
+}
