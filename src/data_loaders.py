@@ -3,6 +3,8 @@ import torch
 import pandas as pd
 import numpy as np
 from transformers import BertTokenizer
+import datasets
+from datasets import list_datasets, load_dataset, list_metrics, load_metric
 
 
 class JigsawData(Dataset):
@@ -16,45 +18,40 @@ class JigsawData(Dataset):
         train_csv_file,
         test_csv_file,
         train=True,
-        train_fraction=0.9,
+        val_fraction=0.9,
         add_test_labels=False,
         create_val_set=True,
     ):
 
         if train_csv_file is not None:
-            train_set = pd.read_csv(train_csv_file)
+            train_set_pd = pd.read_csv(train_csv_file)
+            self.train_set_pd = train_set_pd
+            if "toxicity" not in train_set_pd.columns:
+                train_set_pd.rename(columns={"target": "toxicity"}, inplace=True)
+            train_set = datasets.Dataset.from_pandas(train_set_pd)
 
         if create_val_set:
-            train_set, val_set = self.create_validation_set(
-                train_set, train_fraction=train_fraction
-            )
+            data = train_set.train_test_split(val_fraction)
+            self.train_set = data["train"]
+            self.val_set = data["test"]
+
         if test_csv_file is not None:
             val_set = pd.read_csv(test_csv_file)
             if add_test_labels:
                 data_labels = pd.read_csv(test_csv_file[:-4] + "_labels.csv")
                 for category in data_labels.columns[1:]:
                     val_set[category] = data_labels[category]
-                    val_set.drop(
-                        val_set.loc[val_set["toxic"] == -1].index, inplace=True
-                    )
+            self.val_set = datasets.Dataset.from_pandas(val_set)
 
         if train:
-            data = train_set
+            self.data = self.train_set
         else:
-            data = val_set
+            self.data = self.val_set
 
-        self.data = data
         self.train = train
 
     def __len__(self):
         return len(self.data)
-
-    def create_validation_set(self, train_data, train_fraction=0.9):
-        np.random.seed(0)
-        indices = np.random.rand(len(train_data)) < train_fraction
-        train_set = train_data[indices]
-        val_set = train_data[~indices]
-        return train_set, val_set
 
 
 class JigsawDataBERT(JigsawData):
@@ -67,7 +64,7 @@ class JigsawDataBERT(JigsawData):
         train_csv_file="/data/unitarybot/jigsaw_data/train.csv",
         test_csv_file="/data/unitarybot/jigsaw_data/test.csv",
         train=True,
-        train_fraction=0.9,
+        val_fraction=0.1,
         create_val_set=True,
         add_test_labels=True,
     ):
@@ -77,18 +74,20 @@ class JigsawDataBERT(JigsawData):
             train_csv_file=train_csv_file,
             test_csv_file=test_csv_file,
             train=train,
-            train_fraction=train_fraction,
+            val_fraction=val_fraction,
             add_test_labels=add_test_labels,
             create_val_set=create_val_set,
         )
-        self.classes = list(self.data.columns[2:])
+        self.classes = list(self.data.column_names[2:])
 
     def __getitem__(self, index):
         meta = {}
-        pd_index = self.data.index[index]
-        text_id = self.data.id[pd_index]
-        text = self.data.comment_text[pd_index]
-        target_dict = dict(self.data.iloc[index][2:])
+        entry = self.data[index]
+        text_id = entry["id"]
+        text = entry["comment_text"]
+        target_dict = {
+            label: value for label, value in entry.items() if label in self.classes
+        }
 
         tokenised_text = self.tokenizer(
             text, return_tensors="pt", padding=True, truncation=True
@@ -112,8 +111,9 @@ class JigsawDataBiasBERT(JigsawData):
         train_csv_file="/data/unitarybot/jigsaw_data/train.csv",
         test_csv_file="/data/unitarybot/jigsaw_data/test.csv",
         train=True,
-        train_fraction=0.9,
+        val_fraction=0.1,
         create_val_set=True,
+        compute_bias_weights=True,
     ):
 
         self.tokenizer = BertTokenizer.from_pretrained("bert-base-uncased")
@@ -142,30 +142,26 @@ class JigsawDataBiasBERT(JigsawData):
             train_csv_file=train_csv_file,
             test_csv_file=test_csv_file,
             train=train,
-            train_fraction=train_fraction,
+            val_fraction=val_fraction,
             create_val_set=create_val_set,
         )
         if train:
-            self.weights = self.compute_weigths(self.data)
-        self.train = train
+            if compute_bias_weights:
+                self.weights = self.compute_weigths(self.train_set_pd)
+            else:
+                self.weights = None
 
-        if "toxicity" not in self.data.columns:
-            self.data.rename(columns={"target": "toxicity"}, inplace=True)
+        self.train = train
 
     def __getitem__(self, index):
         meta = {}
-        pd_index = self.data.index[index]
-        text_id = self.data.id[pd_index]
-        text = self.data.comment_text[pd_index]
-        target_dict = {
-            label: 1 if self.data.iloc[index][label] >= 0.5 else 0
-            for label in self.classes
-        }
+        entry = self.data[index]
+        text_id = entry["id"]
+        text = entry["comment_text"]
+        target_dict = {label: 1 if entry[label] >= 0.5 else 0 for label in self.classes}
 
         identity_target = {
-            label: -1
-            if np.isnan(self.data.iloc[index][label])
-            else self.data.iloc[index][label]
+            label: -1 if entry[label] is None else entry[label]
             for label in self.identity_classes
         }
         identity_target.update(
@@ -189,16 +185,18 @@ class JigsawDataBiasBERT(JigsawData):
         else:
             meta["weights"] = torch.tensor([1], dtype=torch.int32)
 
+        meta["toxicity_ids"] = torch.tensor(
+            [True] * len(self.classes) + [False] * len(self.identity_classes)
+        )
         return tokenised_text, meta
 
     def compute_weigths(self, train_df):
         """Inspired from 2nd solution.
         Source: https://www.kaggle.com/c/jigsaw-unintended-bias-in-toxicity-classification/discussion/100661"""
-
         subgroup_bool = (train_df[self.identity_classes].fillna(0) >= 0.5).sum(
             axis=1
         ) > 0
-        positive_bool = train_df["target"] >= 0.5
+        positive_bool = train_df["toxicity"] >= 0.5
         weights = np.ones(len(train_df)) * 0.25
 
         # Backgroud Positive and Subgroup Negative
@@ -219,7 +217,7 @@ class JigsawDataMultilingualBERT(JigsawData):
         train_csv_file="/data/unitarybot/jigsaw_data/multilingual_challenge/jigsaw-toxic-comment-train.csv",
         test_csv_file="/data/unitarybot/jigsaw_data/multilingual_challenge/validation.csv",
         train=True,
-        train_fraction=0.9,
+        val_fraction=0.1,
         create_val_set=False,
     ):
 
@@ -229,19 +227,16 @@ class JigsawDataMultilingualBERT(JigsawData):
             train_csv_file=train_csv_file,
             test_csv_file=test_csv_file,
             train=train,
-            train_fraction=train_fraction,
+            val_fraction=val_fraction,
             create_val_set=create_val_set,
         )
 
     def __getitem__(self, index):
         meta = {}
-        pd_index = self.data.index[index]
-        text_id = self.data.id[pd_index]
-        text = self.data.comment_text[pd_index]
-        target_dict = {
-            label: 1 if self.data.iloc[index][label] >= 0.5 else 0
-            for label in self.classes
-        }
+        entry = self.data[index]
+        text_id = entry["id"]
+        text = entry["comment_text"]
+        target_dict = {label: 1 if entry[label] >= 0.5 else 0 for label in self.classes}
 
         tokenised_text = self.tokenizer(
             text, return_tensors="pt", padding=True, truncation=True
