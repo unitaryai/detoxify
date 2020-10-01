@@ -1,6 +1,6 @@
 <div align="center">    
  
-# Jigsaw Toxic Comment Classification Implementations     
+# Jigsaw Toxic Comment Classification Challenges     
 
 ![CI testing](https://github.com/PyTorchLightning/deep-learning-project-template/workflows/CI%20testing/badge.svg?branch=master&event=push)
 ![Lint](https://github.com/laurahanu/Jigsaw-toxic-comment-challenges/workflows/Lint/badge.svg)
@@ -15,7 +15,7 @@ Dependencies:
 - ⚡ Pytorch lightning 
 - Kaggle API
 
-| Challenge | Year | Description | Original Data Source | Top Leaderboard Score
+| Challenge | Year | Goal | Original Data Source | Top Leaderboard Score
 |-|-|-|-|-|
 | [Toxic Comment Classification Challenge](https://www.kaggle.com/c/jigsaw-toxic-comment-classification-challenge) | 2018 |  build a multi-headed model that’s capable of detecting different types of of toxicity like threats, obscenity, insults, and identity-based hate. | Wikipedia Comments | 0.98856
 | [Jigsaw Unintended Bias in Toxicity Classification](https://www.kaggle.com/c/jigsaw-unintended-bias-in-toxicity-classification) | 2019 | build a model that recognizes toxicity and minimizes this type of unintended bias with respect to mentions of identities. You'll be using a dataset labeled for identity mentions and optimizing a metric designed to measure unintended bias. | Civil Comments | 0.94734
@@ -26,20 +26,22 @@ Dependencies:
 First, install dependencies   
 ```bash
 # clone project   
+
 git clone https://github.com/laurahanu/Jigsaw-toxic-comment-challenges
 
 # create virtual env
+
 python3 -m venv toxic-env
 source toxic-env/bin/activate
 
 # install project   
+
 cd Jigsaw-toxic-comment-challenges 
 pip install -e . 
 pip install -r requirements.txt
- ```   
- Commands to download the Jigsaw data (requires to have the Kaggle API installed). 
- 
- If you do not already have a kaggle account: 
+ ```    
+
+ If you do not already have a Kaggle account: 
  - you need to create one to be able to download the data
  
  - go to My Account and click on Create New API Token - this will download a kaggle.json file
@@ -62,25 +64,16 @@ kaggle competitions download -c jigsaw-multilingual-toxic-comment-classification
 
 ```
 
-## Imports
-This project is setup as a package which means you can now easily import any file into any other file like so:
-```python
-from project.datasets.mnist import mnist
-from project.lit_classifier_main import LitClassifier
-from pytorch_lightning import Trainer
+ ```bash
 
-# model
-model = LitClassifier()
+# start training
 
-# data
-train, val, test = mnist()
+python train.py --config configs/BERT_toxic_comment_classification_bias.json 
 
-# train
-trainer = Trainer()
-trainer.fit(model, train, val)
+# evaluate model
 
-# test using the best model!
-trainer.test(test_dataloaders=test)
+python evaluate.py --checkpoint checkpoint-0.pth --test_csv test_set.csv
+
 ```
 ## Checkpoints
 
