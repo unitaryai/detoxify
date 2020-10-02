@@ -23,7 +23,7 @@ def move_to(obj, device):
         raise TypeError("Invalid type for move_to")
 
 
-def pad_item(batch, fused=False):
+def pad_item(batch):
     """Pads text items in a batch to the length
     of the longest item in the batch.
     """
@@ -47,9 +47,7 @@ def ignore_none_collate(batch):
     outputs = []
     for i, elem in enumerate(batch[0]):
         if isinstance(elem, dict) and "input_ids" in elem:
-            outputs.append(
-                pad_item([b[i] for b in batch if b[0] is not None], fused=False)
-            )
+            outputs.append(pad_item([b[i] for b in batch if b[0] is not None]))
         else:
             outputs.append(default_collate([b[i] for b in batch if b[0] is not None]))
     return outputs
