@@ -106,34 +106,28 @@ class BERTClassifier(pl.LightningModule):
             self.num_main_classes = self.num_classes
             self.loss_weight = 1
 
-        for i in range(target.shape[-1]):
-            mask = target[:, i] != -1
-            if torch.sum(mask) > 0:
-
-                if i < self.num_main_classes:
-                    loss = (
-                        loss
-                        + (
-                            loss_fn(
-                                input[mask, i],
-                                target[:, i][mask].float(),
-                                reduction="none",
-                            )
-                            * meta["weights"]
-                        ).mean()
-                    )
-                else:
-                    identity_loss = identity_loss + loss_fn(
-                        input[mask, i], target[:, i][mask].float()
-                    )
-        loss = loss / self.num_main_classes
-        num_identity_classes = self.num_classes - self.num_main_classes
-        identity_loss = (
-            identity_loss / num_identity_classes
-            if num_identity_classes != 0
-            else identity_loss
+        mask = target != -1
+        weight = torch.stack(self.num_main_classes * [meta["weights"].squeeze()], -1)
+        loss = loss_fn(
+            input,
+            target.float(),
+            reduction="none",
         )
-        loss = loss * self.loss_weight + identity_loss * (1 - self.loss_weight)
+        loss[:, : self.num_main_classes] = loss[:, : self.num_main_classes] * weight
+
+        loss = loss * mask
+        final_loss = torch.sum(loss[:, : self.num_main_classes]) / torch.sum(
+            mask[:, : self.num_main_classes]
+        )
+
+        if self.bias_loss and torch.sum(mask[:, self.num_main_classes :]) > 0:
+            identity_loss = torch.sum(loss[:, self.num_main_classes :]) / torch.sum(
+                mask[:, self.num_main_classes :]
+            )
+        else:
+            identity_loss = 0
+        loss = final_loss * self.loss_weight + identity_loss * (1 - self.loss_weight)
+
         return loss
 
     def binary_accuracy(self, output, meta):
