@@ -2,7 +2,7 @@
  
 # Jigsaw Toxic Comment Classification Challenges     
 
-![CI testing](![CI testing](https://github.com/laurahanu/Jigsaw-toxic-comment-challenges/workflows/CI%20testing/badge.svg))
+![CI testing](https://github.com/laurahanu/Jigsaw-toxic-comment-challenges/workflows/CI%20testing/badge.svg)
 ![Lint](https://github.com/laurahanu/Jigsaw-toxic-comment-challenges/workflows/Lint/badge.svg)
 
 </div>
