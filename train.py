@@ -11,7 +11,6 @@ import src.data_loaders as module_data
 
 from src.utils import move_to
 from pytorch_lightning.callbacks import ModelCheckpoint
-from transformers import BertTokenizer
 
 from transformers import (
     BertTokenizer,
@@ -28,6 +27,13 @@ from src.data_loaders import (
 
 
 class BERTClassifier(pl.LightningModule):
+    """BERT classifier using the pretrained ""bert-base-uncased""
+    BertForSequenceClassification from the HuggingFace libraby.
+    Args:
+        config ([dict]): takes in args from a predefined config
+                              file containing hyperparameters.
+    """
+
     def __init__(self, config):
         super().__init__()
         self.save_hyperparameters()
@@ -116,18 +122,27 @@ class BERTClassifier(pl.LightningModule):
             self.parameters(), **self.hparams["config"]["optimizer"]["args"]
         )
 
-    def binary_cross_entropy(self, input, meta):
+    def binary_cross_entropy(self, output, meta):
+        """Custom binary_cross_entropy function.
+
+        Args:
+            output ([torch.tensor]): model predictions
+            meta ([dict]): meta dict of tensors including targets and weights
+
+        Returns:
+            [torch.tensor]: model loss
+        """
 
         if "multi_target" in meta:
-            target = meta["multi_target"].to(input.device)
+            target = meta["multi_target"].to(output.device)
             loss_fn = F.binary_cross_entropy_with_logits
             loss = 0
             identity_loss = 0
 
         if "weights" in meta:
-            meta["weights"].to(input.device)
+            meta["weights"].to(output.device)
         else:
-            meta["weights"] = torch.ones(target.shape[0]).to(input.device)
+            meta["weights"] = torch.ones(target.shape[0]).to(output.device)
 
         if not self.bias_loss:
             self.num_main_classes = self.num_classes
@@ -136,7 +151,7 @@ class BERTClassifier(pl.LightningModule):
         mask = target != -1
         weight = torch.stack(self.num_main_classes * [meta["weights"].squeeze()], -1)
         loss = loss_fn(
-            input,
+            output,
             target.float(),
             reduction="none",
         )
@@ -158,26 +173,24 @@ class BERTClassifier(pl.LightningModule):
         return loss
 
     def binary_accuracy(self, output, meta):
-        if "multi_target" in meta:
-            correct = 0
-            target = meta["multi_target"].to(output.device)
-            cnt = 0
-            with torch.no_grad():
-                for i in range(target.shape[-1]):
-                    mask = target[:, i] != -1
-                    pred = torch.sigmoid(output[mask, i]) >= 0.5
-                    correct = (
-                        correct
-                        + torch.sum(pred.to(output.device) == target[mask, i]).item()
-                    )
-                    cnt = cnt + torch.sum(mask)
-            return torch.tensor(correct / cnt.item())
-        else:
-            target = meta["target"].to(output.device).reshape(output.shape) >= 0.5
-            with torch.no_grad():
-                pred = torch.sigmoid(output) >= 0.5
-                correct = torch.sum(pred == target).item()
-            return torch.tensor(correct / len(target))
+        """Custom binary_accuracy function.
+
+        Args:
+            output ([torch.tensor]): model predictions
+            meta ([dict]): meta dict of tensors including targets and weights
+
+        Returns:
+            [torch.tensor]: model accuracy
+        """
+
+        target = meta["multi_target"].to(output.device)
+        with torch.no_grad():
+            mask = target != -1
+            pred = torch.sigmoid(output[mask]) >= 0.5
+            correct = torch.sum(pred.to(output[mask].device) == target[mask])
+            correct = correct.item() / torch.sum(mask).item()
+
+        return torch.tensor(correct)
 
 
 def cli_main():
