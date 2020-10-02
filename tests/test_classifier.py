@@ -9,7 +9,6 @@ from src.data_loaders import (
     JigsawDataMultilingualBERT,
 )
 from torch.utils.data import DataLoader
-from src.utils import ignore_none_collate
 import json
 import os
 import torch
@@ -41,7 +40,6 @@ def test_classifier():
         shuffle=True,
         drop_last=True,
         pin_memory=True,
-        collate_fn=ignore_none_collate,
     )
 
     valid_data_loader = DataLoader(
@@ -49,7 +47,6 @@ def test_classifier():
         batch_size=config["batch_size"],
         num_workers=5,
         shuffle=False,
-        collate_fn=ignore_none_collate,
     )
 
     trainer = Trainer(

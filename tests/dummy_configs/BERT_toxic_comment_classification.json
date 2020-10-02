@@ -16,7 +16,7 @@
         "args": {
             "train_csv_file": "tests/dummy_data/jigsaw-toxic-comment-classification-challenge/train.csv",
             "test_csv_file": null,
-            "train_fraction": 0.9,
+            "val_fraction": 0.1,
             "create_val_set": true,
             "add_test_labels": true
         }
