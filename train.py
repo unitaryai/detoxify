@@ -9,8 +9,9 @@ import json
 import argparse
 import src.data_loaders as module_data
 
-from src.utils import move_to, ignore_none_collate
+from src.utils import move_to
 from pytorch_lightning.callbacks import ModelCheckpoint
+from transformers import BertTokenizer
 
 from transformers import (
     BertTokenizer,
@@ -53,35 +54,61 @@ class BERTClassifier(pl.LightningModule):
             self.num_main_classes = config["num_main_classes"]
             self.bias_loss = True
 
+        self.tokenizer = BertTokenizer.from_pretrained("bert-base-uncased")
+
     def forward(self, inputs):
         outputs = self.bert(**inputs)
         return outputs[0]
 
     def training_step(self, batch, batch_idx):
+
         x, meta = batch
-        output = self(x)
+        tokenised_text = self.tokenizer(
+            x, return_tensors="pt", padding=True, truncation=True
+        )
+        tokenised_text = move_to(tokenised_text.data, self.device)
+
+        output = self(tokenised_text)
         loss = self.binary_cross_entropy(output, meta)
+
         result = pl.TrainResult(minimize=loss)
         result.log("train_loss", loss)
+
         return result
 
     def validation_step(self, batch, batch_idx):
+
         x, meta = batch
-        output = self(x)
+        tokenised_text = self.tokenizer(
+            x, return_tensors="pt", padding=True, truncation=True
+        )
+        tokenised_text = move_to(tokenised_text.data, self.device)
+
+        output = self(tokenised_text)
         loss = self.binary_cross_entropy(output, meta)
+
         result = pl.EvalResult(checkpoint_on=loss)
         acc = self.binary_accuracy(output, meta)
         result.log("val_loss", loss)
         result.log("val_acc", acc)
+
         return result
 
     def test_step(self, batch, batch_idx):
+
         x, meta = batch
-        output = self(x)
+        tokenised_text = self.tokenizer(
+            x, return_tensors="pt", padding=True, truncation=True
+        )
+        tokenised_text = move_to(tokenised_text.data, self.device)
+
+        output = self(tokenised_text)
         loss = self.binary_cross_entropy(output, meta)
+
         result = pl.EvalResult(checkpoint_on=loss)
         result.log("test_loss", loss)
         result.log("test_acc", self.binary_accuracy(output, meta))
+
         return result
 
     def configure_optimizers(self):
@@ -208,7 +235,6 @@ def cli_main():
         shuffle=True,
         drop_last=True,
         pin_memory=True,
-        collate_fn=ignore_none_collate,
     )
 
     valid_data_loader = DataLoader(
@@ -216,7 +242,6 @@ def cli_main():
         batch_size=config["batch_size"],
         num_workers=20,
         shuffle=False,
-        collate_fn=ignore_none_collate,
     )
     # model
     model = BERTClassifier(config)

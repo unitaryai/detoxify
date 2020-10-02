@@ -69,7 +69,6 @@ class JigsawDataBERT(JigsawData):
         add_test_labels=True,
     ):
 
-        self.tokenizer = BertTokenizer.from_pretrained("bert-base-uncased")
         super().__init__(
             train_csv_file=train_csv_file,
             test_csv_file=test_csv_file,
@@ -89,16 +88,12 @@ class JigsawDataBERT(JigsawData):
             label: value for label, value in entry.items() if label in self.classes
         }
 
-        tokenised_text = self.tokenizer(
-            text, return_tensors="pt", padding=True, truncation=True
-        )
-        tokenised_text = tokenised_text.data
         meta["multi_target"] = torch.tensor(
             list(target_dict.values()), dtype=torch.int32
         )
         meta["text_id"] = text_id
 
-        return tokenised_text, meta
+        return text, meta
 
 
 class JigsawDataBiasBERT(JigsawData):
@@ -116,7 +111,6 @@ class JigsawDataBiasBERT(JigsawData):
         compute_bias_weights=True,
     ):
 
-        self.tokenizer = BertTokenizer.from_pretrained("bert-base-uncased")
         self.classes = [
             "toxicity",
             "severe_toxicity",
@@ -172,14 +166,11 @@ class JigsawDataBiasBERT(JigsawData):
         )
         target_dict.update(identity_target)
 
-        tokenised_text = self.tokenizer(
-            text, return_tensors="pt", padding=True, truncation=True
-        )
-        tokenised_text = tokenised_text.data
         meta["multi_target"] = torch.tensor(
             list(target_dict.values()), dtype=torch.int32
         )
         meta["text_id"] = text_id
+
         if self.train:
             meta["weights"] = self.weights[index]
         else:
@@ -188,7 +179,7 @@ class JigsawDataBiasBERT(JigsawData):
         meta["toxicity_ids"] = torch.tensor(
             [True] * len(self.classes) + [False] * len(self.identity_classes)
         )
-        return tokenised_text, meta
+        return text, meta
 
     def compute_weigths(self, train_df):
         """Inspired from 2nd solution.
@@ -221,7 +212,6 @@ class JigsawDataMultilingualBERT(JigsawData):
         create_val_set=False,
     ):
 
-        self.tokenizer = BertTokenizer.from_pretrained("bert-base-uncased")
         self.classes = ["toxic"]
         super().__init__(
             train_csv_file=train_csv_file,
@@ -238,11 +228,7 @@ class JigsawDataMultilingualBERT(JigsawData):
         text = entry["comment_text"]
         target_dict = {label: 1 if entry[label] >= 0.5 else 0 for label in self.classes}
 
-        tokenised_text = self.tokenizer(
-            text, return_tensors="pt", padding=True, truncation=True
-        )
-        tokenised_text = tokenised_text.data
         meta["target"] = torch.tensor(list(target_dict.values()), dtype=torch.int32)
         meta["text_id"] = text_id
 
-        return tokenised_text, meta
+        return text, meta
