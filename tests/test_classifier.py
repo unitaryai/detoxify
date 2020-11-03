@@ -1,6 +1,6 @@
 from pytorch_lightning import Trainer, seed_everything
 
-from train import BERTClassifier
+from train import ToxicClassifier
 import src.data_loaders as module_data
 from src.data_loaders import (
     JigsawData,
@@ -17,17 +17,16 @@ import torch
 def test_classifier():
     seed_everything(1234)
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    config = json.load(
+        open("tests/dummy_configs/BERT_toxic_comment_classification.json")
+    )
 
     def get_instance(module, name, config, *args, **kwargs):
         return getattr(module, config[name]["type"])(
             *args, **config[name]["args"], **kwargs
         )
 
-    config = json.load(
-        open("tests/dummy_configs/BERT_toxic_comment_classification.json")
-    )
-
-    model = BERTClassifier(config)
+    model = ToxicClassifier(config)
     model.to(device)
 
     dataset = get_instance(module_data, "dataset", config)

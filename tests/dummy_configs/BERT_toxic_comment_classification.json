@@ -8,7 +8,9 @@
         "type": "BERT",
         "args": {
             "num_classes": 6,
-            "freeze": false
+            "model_type": "bert-base-uncased",
+            "model_name": "BertForSequenceClassification",
+            "tokenizer_name": "BertTokenizer"
         }
     },
     "dataset": {
