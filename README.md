@@ -1,6 +1,7 @@
 <div align="center">    
  
-# Jigsaw Toxic Comment Classification Challenges     
+# 🙊 Detoxify
+##  Toxic Comment Classification with ⚡ Pytorch Lightning and 🤗 Transformers   
 
 ![CI testing](https://github.com/laurahanu/Jigsaw-toxic-comment-challenges/workflows/CI%20testing/badge.svg)
 ![Lint](https://github.com/laurahanu/Jigsaw-toxic-comment-challenges/workflows/Lint/badge.svg)
@@ -8,12 +9,13 @@
 </div>
  
 ## Description   
-Library to easily train and test classifiers for all 3 Jigsaw Toxic Comment Challenges.
+Trained models & code to predict toxic comments on 3 Jigsaw challenges: Toxic comment classification, Unintended Bias in Toxic comments, Multilingual toxic comment classification.
 
 Dependencies:
 - 🤗 Transformers
 - ⚡ Pytorch lightning 
 - Kaggle API
+- Python 3.6
 
 | Challenge | Year | Goal | Original Data Source | Top Leaderboard Score
 |-|-|-|-|-|
@@ -36,10 +38,28 @@ source toxic-env/bin/activate
 
 # install project   
 
-cd Jigsaw-toxic-comment-challenges 
-pip install -e . 
+pip install -e Detoxify
+cd Detoxify
 pip install -r requirements.txt
- ```    
+
+
+
+ ```   
+
+## Prediction
+```bash
+
+# Run on a comment, list of comments, or from a csv
+
+python run_prediction.py --model_type multilingual --checkpoint model_path --input This is an example --device cpu 
+
+# to see usage
+
+python run_prediction.py --help
+
+```
+
+## Training
 
  If you do not already have a Kaggle account: 
  - you need to create one to be able to download the data
@@ -47,6 +67,7 @@ pip install -r requirements.txt
  - go to My Account and click on Create New API Token - this will download a kaggle.json file
 
  - make sure this file is located in ~/.kaggle
+
  ```bash
 
 # create data directory
@@ -70,14 +91,18 @@ kaggle competitions download -c jigsaw-multilingual-toxic-comment-classification
 
 python train.py --config configs/BERT_toxic_comment_classification_bias.json 
 
+# monitor progress with tensorboard
+
+tensorboard --logdir=./saved
+
 # evaluate model
 
-python evaluate.py --checkpoint checkpoint-0.pth --test_csv test_set.csv
+python evaluate.py --checkpoint saved/lightning_logs/checkpoints/checkpoint-0.pth --test_csv test_set.csv
 
 ```
 ## Checkpoints
 
-Trained checkpoints available for each.
+Trained checkpoints available for each challenge.
 
 | Model | Checkpoints | Score
 |-|-|-|
@@ -87,10 +112,10 @@ Trained checkpoints available for each.
 
 ### Citation   
 ```
-@article{YourName,
-  title={Your Title},
-  author={Your team},
-  journal={Location},
-  year={Year}
+@article{Unitary,
+  title={Detoxify},
+  author={Unitary team},
+  journal={Github. https://github.com/laurahanu/Jigsaw-toxic-comment-challenges},
+  year={2020}
 }
 ```   
