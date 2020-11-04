@@ -14,7 +14,7 @@
         }
     },
     "dataset": {
-        "type": "JigsawDataBERT",
+        "type": "JigsawDataOriginal",
         "args": {
             "train_csv_file": "jigsaw_data/jigsaw-toxic-comment-classification-challenge/train.csv",
             "test_csv_file": "jigsaw_data/jigsaw-toxic-comment-classification-challenge/val.csv",

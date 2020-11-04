@@ -24,7 +24,7 @@ class JigsawData(Dataset):
         create_val_set=True,
     ):
 
-        if train and train_csv_file is not None:
+        if train_csv_file is not None:
             if isinstance(train_csv_file, list):
                 train_set_pd = self.load_data(train_csv_file)
             else:
@@ -70,7 +70,7 @@ class JigsawData(Dataset):
         return train
 
 
-class JigsawDataBERT(JigsawData):
+class JigsawDataOriginal(JigsawData):
     """Dataloader for the original Jigsaw Toxic Comment Classification Challenge.
     Source: https://www.kaggle.com/c/jigsaw-toxic-comment-classification-challenge
     """
@@ -113,7 +113,7 @@ class JigsawDataBERT(JigsawData):
         return text, meta
 
 
-class JigsawDataBiasBERT(JigsawData):
+class JigsawDataBias(JigsawData):
     """Dataloader for the Jigsaw Unintended Bias in Toxicity Classification.
     Source: https://www.kaggle.com/c/jigsaw-unintended-bias-in-toxicity-classification/
     """
@@ -222,7 +222,7 @@ class JigsawDataBiasBERT(JigsawData):
         return weights
 
 
-class JigsawDataMultilingualBERT(JigsawData):
+class JigsawDataMultilingual(JigsawData):
     """Dataloader for the Jigsaw Multilingual Toxic Comment Classification.
     Source: https://www.kaggle.com/c/jigsaw-multilingual-toxic-comment-classification/
     """

@@ -14,7 +14,7 @@
         }
     },
     "dataset": {
-        "type": "JigsawDataMultilingualBERT",
+        "type": "JigsawDataMultilingual",
         "args": {
             "train_csv_file": ["jigsaw_data/jigsaw-multilingual-toxic-comment-classification/jigsaw-toxic-comment-train-google-es-cleaned.csv",
                                 "jigsaw_data/jigsaw-multilingual-toxic-comment-classification/jigsaw-toxic-comment-train-google-fr-cleaned.csv",

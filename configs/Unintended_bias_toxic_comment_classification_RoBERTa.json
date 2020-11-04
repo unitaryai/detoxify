@@ -15,7 +15,7 @@
         }
     },
     "dataset": {
-        "type": "JigsawDataBiasBERT",
+        "type": "JigsawDataBias",
         "args": {
             "train_csv_file": "jigsaw_data/jigsaw-unintended-bias-in-toxicity-classification/train.csv",
             "test_csv_file": "jigsaw_data/jigsaw-unintended-bias-in-toxicity-classification/test_public_expanded.csv",

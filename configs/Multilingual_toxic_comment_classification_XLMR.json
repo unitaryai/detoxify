@@ -14,7 +14,7 @@
         }
     },
     "dataset": {
-        "type": "JigsawDataMultilingualBERT",
+        "type": "JigsawDataMultilingual",
         "args": {
             "train_csv_file": ["jigsaw_data/jigsaw-multilingual-toxic-comment-classification/jigsaw-toxic-comment-train.csv",
                                "jigsaw_data/jigsaw-multilingual-toxic-comment-classification/jigsaw-unintended-bias-train.csv"],
