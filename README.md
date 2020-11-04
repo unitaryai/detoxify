@@ -46,7 +46,9 @@ This challenge includes the following labels:
 - `identity_hate`
 
 ### Jigsaw Unintended Bias in Toxicity Classification
-This challenge has 2 types of labels: the main toxicity labels and some additional identity labels that represent the identities mentioned in the comments. Only identities with more than 500 examples in the test set (combined public and private) are included in the evaluation calculation. These identities are shown in bold. These are also the only ones used for training as additional classes alongside the toxicity labels. 
+This challenge has 2 types of labels: the main toxicity labels and some additional identity labels that represent the identities mentioned in the comments. 
+
+Only identities with more than 500 examples in the test set (combined public and private) are included during training as additional labels and in the evaluation calculation. These identities are shown in bold.
 
 - `toxicity`
 - `severe_toxicity`
@@ -118,13 +120,25 @@ pip install -r requirements.txt
 
 # model_type options: original, bias, multilingual
 
-python run_prediction.py --model_type bias --checkpoint model_path --input 'This is an example' --device cpu 
+python run_prediction.py 'shut up, you are a liar' --model_type original --device cpu --checkpoint model_path
 
 # to see usage
 
 python run_prediction.py --help
 
 ```
+## Examples
+
+| Example Input | Model Type | Language | Toxicity | Severe_toxicity | Obscene | Threat | Insult | Identity_attack | Sexually_explicit
+|-|-|-|-|-|-|-|-|-|-|
+| shut up, you are a liar | Original | en | 0.988 | 0.015 | 0.356 | 0.002 | 0.838 | 0.007 | N/A
+| I am a jewish woman who is blind | Bias | en | 0.171 | 0.001 | 0.004 | 0.004 |  0.032 | 0.088 | 0.001
+| tais-toi, tu es un menteur | Multilingual | fr | 0.987 | N/A | N/A | N/A | N/A | N/A | N/A
+| cállate, eres mentirosa | Multilingual | es | 0.945 | N/A | N/A | N/A | N/A | N/A | N/A
+| kapa çeneni, sen bir yalancısın | Multilingual | tr | 0.952 | N/A | N/A | N/A | N/A | N/A | N/A
+| stai zitto, tu sei un bugiardo | Multilingual | it | 0.986 | N/A | N/A | N/A | N/A | N/A | N/A
+| заткнись, ты лжец | Multilingual | ru | 0.941 | N/A | N/A | N/A | N/A | N/A | N/A
+| cala a boca, você é um mentiroso | Multilingual | pt | 0.81 | N/A | N/A | N/A | N/A | N/A | N/A
 
 ## Training
 
@@ -168,7 +182,9 @@ python train.py --config configs/Unintended_bias_toxic_comment_classification_Ro
 ```
  ### Multilingual Toxic Comment Classification
 
- This is trained in 2 stages. First, train on all available data, and second, train only on the translated versions of the first challenge. These can be downloaded from [here](https://www.kaggle.com/miklgr500/jigsaw-train-multilingual-coments-google-api).
+ This is trained in 2 stages. First, train on all available data, and second, train only on the translated versions of the first challenge. 
+ 
+ The [translated data](https://www.kaggle.com/miklgr500/jigsaw-train-multilingual-coments-google-api) can be downloaded from Kaggle in french, spanish, italian, portuguese, turkish, and russian (the languages available in the test set).
 
  ```bash
 
