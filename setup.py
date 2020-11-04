@@ -3,13 +3,19 @@
 from setuptools import setup, find_packages
 
 setup(
-    name="src",
+    name="detoxify",
     version="0.0.0",
-    description="Describe Your Cool Project",
-    author="",
+    description="A python library for detecting toxic comments",
+    author="Unitary",
     author_email="",
     # REPLACE WITH YOUR OWN GITHUB PROJECT LINK
-    url="https://github.com/PyTorchLightning/pytorch-lightning-conference-seed",
-    install_requires=["pytorch-lightning"],
+    url="https://github.com/laurahanu/detoxify",
+    install_requires=["pytorch-lightning",
+                      "transformers",
+                      "datasets",
+                      "pandas",
+                      "kaggle",
+                      "scikit-learn",
+                      "tqdm"],
     packages=find_packages(),
 )
