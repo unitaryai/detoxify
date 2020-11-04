@@ -1,27 +1,30 @@
 {
-    "name": "Jigsaw_BERT_bias",
+    "name": "Jigsaw_ROBERTA_bias",
     "n_gpu": 1,
     "batch_size": 10,
     "accumulate_grad_batches": 3,
-    "loss": "bias_binary_cross_entropy",
-    "loss_weight": 0.75,
     "num_main_classes": 7,
+    "loss_weight": 0.75,
     "arch": {
-        "type": "BERT",
+        "type": "ROBERTA",
         "args": {
             "num_classes": 16,
-            "freeze": false
+            "model_type": "roberta-base",
+            "model_name": "RobertaForSequenceClassification",
+            "tokenizer_name": "RobertaTokenizer"
         }
     },
     "dataset": {
         "type": "JigsawDataBiasBERT",
         "args": {
             "train_csv_file": "jigsaw_data/jigsaw-unintended-bias-in-toxicity-classification/train.csv",
-            "test_csv_file": null,
-            "val_fraction": 0.1,
-            "create_val_set": true
+            "test_csv_file": "jigsaw_data/jigsaw-unintended-bias-in-toxicity-classification/test_public_expanded.csv",
+            "val_fraction": null,
+            "create_val_set": false,
+            "loss_weight": 0.75
         }
     },
+    "fc_lrmul": 10,
     "optimizer": {
         "type": "Adam",
         "args": {

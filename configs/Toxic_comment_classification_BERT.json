@@ -8,17 +8,19 @@
         "type": "BERT",
         "args": {
             "num_classes": 6,
-            "freeze": false
+            "model_type": "bert-base-uncased",
+            "model_name": "BertForSequenceClassification",
+            "tokenizer_name": "BertTokenizer"
         }
     },
     "dataset": {
         "type": "JigsawDataBERT",
         "args": {
             "train_csv_file": "jigsaw_data/jigsaw-toxic-comment-classification-challenge/train.csv",
-            "test_csv_file": null,
-            "val_fraction": 0.1,
-            "create_val_set": true,
-            "add_test_labels": true
+            "test_csv_file": "jigsaw_data/jigsaw-toxic-comment-classification-challenge/val.csv",
+            "val_fraction": null,
+            "create_val_set": false,
+            "add_test_labels": false
         }
     },
     "optimizer": {
