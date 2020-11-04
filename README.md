@@ -36,7 +36,8 @@ All challenges have a toxicity label. The toxicity labels represent the aggregat
 More information about the labelling schema can be found [here](https://www.kaggle.com/c/jigsaw-unintended-bias-in-toxicity-classification/data).
 
 ### Toxic Comment Classification Challenge
-info
+This challenge includes the following labels:
+
 - `toxic`
 - `severe_toxic`
 - `obscene`
@@ -45,7 +46,7 @@ info
 - `identity_hate`
 
 ### Jigsaw Unintended Bias in Toxicity Classification
-This challenge has 2 types of labels: the main toxicity labels and some additional identity labels that represent the identities mentioned in the comments. The identity labels in bold are the only ones used for training as additional classes alongside the toxicity labels. Say why
+This challenge has 2 types of labels: the main toxicity labels and some additional identity labels that represent the identities mentioned in the comments. Only identities with more than 500 examples in the test set (combined public and private) are included in the evaluation calculation. These identities are shown in bold. These are also the only ones used for training as additional classes alongside the toxicity labels. 
 
 - `toxicity`
 - `severe_toxicity`
@@ -94,7 +95,7 @@ First, install dependencies
 ```bash
 # clone project   
 
-git clone https://github.com/laurahanu/Jigsaw-toxic-comment-challenges
+git clone https://github.com/laurahanu/detoxify
 
 # create virtual env
 
@@ -103,10 +104,9 @@ source toxic-env/bin/activate
 
 # install project   
 
-pip install -e Detoxify
-cd Detoxify
+pip install -e detoxify
+cd detoxify
 pip install -r requirements.txt
-
 
 
  ```   
