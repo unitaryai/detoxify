@@ -4,9 +4,9 @@ from train import ToxicClassifier
 import src.data_loaders as module_data
 from src.data_loaders import (
     JigsawData,
-    JigsawDataBERT,
-    JigsawDataBiasBERT,
-    JigsawDataMultilingualBERT,
+    JigsawDataOriginal,
+    JigsawDataBias,
+    JigsawDataMultilingual,
 )
 from torch.utils.data import DataLoader
 import json
@@ -57,4 +57,8 @@ def test_classifier():
     trainer.fit(model, data_loader, valid_data_loader)
 
     results = trainer.test(test_dataloaders=valid_data_loader)
-    assert results[0]["test_acc"] > 0.6
+    print(results)
+    assert results > 0.6
+
+if __name__ == "__main__":
+    test_classifier()

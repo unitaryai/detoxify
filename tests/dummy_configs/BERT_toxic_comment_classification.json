@@ -14,7 +14,7 @@
         }
     },
     "dataset": {
-        "type": "JigsawDataBERT",
+        "type": "JigsawDataOriginal",
         "args": {
             "train_csv_file": "tests/dummy_data/jigsaw-toxic-comment-classification-challenge/train.csv",
             "test_csv_file": null,
