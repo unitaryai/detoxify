@@ -35,7 +35,7 @@ def test_classifier():
     data_loader = DataLoader(
         dataset,
         batch_size=config["batch_size"],
-        num_workers=5,
+        num_workers=2,
         shuffle=True,
         drop_last=True,
         pin_memory=True,
@@ -44,7 +44,7 @@ def test_classifier():
     valid_data_loader = DataLoader(
         val_dataset,
         batch_size=config["batch_size"],
-        num_workers=5,
+        num_workers=2,
         shuffle=False,
     )
 
