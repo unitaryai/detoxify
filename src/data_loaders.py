@@ -2,9 +2,10 @@ from torch.utils.data.dataset import Dataset
 import torch
 import pandas as pd
 import numpy as np
-from transformers import BertTokenizer
 import datasets
 from datasets import list_datasets, load_dataset, list_metrics, load_metric
+import random 
+from tqdm import tqdm
 
 
 class JigsawData(Dataset):
@@ -23,15 +24,18 @@ class JigsawData(Dataset):
         create_val_set=True,
     ):
 
-        if train_csv_file is not None:
-            train_set_pd = pd.read_csv(train_csv_file)
+        if train and train_csv_file is not None:
+            if isinstance(train_csv_file, list):
+                train_set_pd = self.load_data(train_csv_file)
+            else:
+                train_set_pd = pd.read_csv(train_csv_file)
             self.train_set_pd = train_set_pd
             if "toxicity" not in train_set_pd.columns:
                 train_set_pd.rename(columns={"target": "toxicity"}, inplace=True)
-            train_set = datasets.Dataset.from_pandas(train_set_pd)
+            self.train_set = datasets.Dataset.from_pandas(train_set_pd)
 
         if create_val_set:
-            data = train_set.train_test_split(val_fraction)
+            data = self.train_set.train_test_split(val_fraction)
             self.train_set = data["train"]
             self.val_set = data["test"]
 
@@ -41,7 +45,8 @@ class JigsawData(Dataset):
                 data_labels = pd.read_csv(test_csv_file[:-4] + "_labels.csv")
                 for category in data_labels.columns[1:]:
                     val_set[category] = data_labels[category]
-            self.val_set = datasets.Dataset.from_pandas(val_set)
+            val_set = datasets.Dataset.from_pandas(val_set)
+            self.val_set = val_set
 
         if train:
             self.data = self.train_set
@@ -52,6 +57,17 @@ class JigsawData(Dataset):
 
     def __len__(self):
         return len(self.data)
+    
+    def load_data(self, train_csv_file):
+        files = []
+        cols = ['id', 'comment_text', 'toxic']
+        for file in tqdm(train_csv_file):
+            file_df = pd.read_csv(file)
+            file_df = file_df[cols]
+            file_df = file_df.astype({'id': 'string'}, {'toxic': 'float64'})
+            files.append(file_df)
+        train = pd.concat(files)
+        return train
 
 
 class JigsawDataBERT(JigsawData):
@@ -61,8 +77,8 @@ class JigsawDataBERT(JigsawData):
 
     def __init__(
         self,
-        train_csv_file="/data/unitarybot/jigsaw_data/train.csv",
-        test_csv_file="/data/unitarybot/jigsaw_data/test.csv",
+        train_csv_file="jigsaw_data/train.csv",
+        test_csv_file="jigsaw_data/test.csv",
         train=True,
         val_fraction=0.1,
         create_val_set=True,
@@ -77,13 +93,14 @@ class JigsawDataBERT(JigsawData):
             add_test_labels=add_test_labels,
             create_val_set=create_val_set,
         )
-        self.classes = list(self.data.column_names[2:])
+        self.classes = ['toxic', 'severe_toxic', 'obscene', 'threat', 'insult', 'identity_hate']
 
     def __getitem__(self, index):
         meta = {}
         entry = self.data[index]
         text_id = entry["id"]
         text = entry["comment_text"]
+
         target_dict = {
             label: value for label, value in entry.items() if label in self.classes
         }
@@ -103,12 +120,13 @@ class JigsawDataBiasBERT(JigsawData):
 
     def __init__(
         self,
-        train_csv_file="/data/unitarybot/jigsaw_data/train.csv",
-        test_csv_file="/data/unitarybot/jigsaw_data/test.csv",
+        train_csv_file="jigsaw_data/train.csv",
+        test_csv_file="jigsaw_data/test.csv",
         train=True,
         val_fraction=0.1,
         create_val_set=True,
         compute_bias_weights=True,
+        loss_weight=0.75
     ):
 
         self.classes = [
@@ -146,12 +164,14 @@ class JigsawDataBiasBERT(JigsawData):
                 self.weights = None
 
         self.train = train
+        self.loss_weight = loss_weight
 
     def __getitem__(self, index):
         meta = {}
         entry = self.data[index]
         text_id = entry["id"]
         text = entry["comment_text"]
+
         target_dict = {label: 1 if entry[label] >= 0.5 else 0 for label in self.classes}
 
         identity_target = {
@@ -162,23 +182,27 @@ class JigsawDataBiasBERT(JigsawData):
             {label: 1 for label in identity_target if identity_target[label] >= 0.5}
         )
         identity_target.update(
-            {label: 0 for label in identity_target if 0 < identity_target[label] < 0.5}
+            {label: 0 for label in identity_target if 0 <= identity_target[label] < 0.5}
         )
+
         target_dict.update(identity_target)
 
         meta["multi_target"] = torch.tensor(
-            list(target_dict.values()), dtype=torch.int32
+            list(target_dict.values()), dtype=torch.float32
         )
         meta["text_id"] = text_id
 
         if self.train:
             meta["weights"] = self.weights[index]
-        else:
-            meta["weights"] = torch.tensor([1], dtype=torch.int32)
+            toxic_weight = self.weights[index] * self.loss_weight \
+                           * 1./len(self.classes)
+            identity_weight = (1 - self.loss_weight) \
+                               * 1./len(self.identity_classes)
+            meta['weights1'] = torch.tensor([
+                               *[toxic_weight] * len(self.classes),
+                               *[identity_weight] * len(self.identity_classes)
+                               ])
 
-        meta["toxicity_ids"] = torch.tensor(
-            [True] * len(self.classes) + [False] * len(self.identity_classes)
-        )
         return text, meta
 
     def compute_weigths(self, train_df):
@@ -205,8 +229,8 @@ class JigsawDataMultilingualBERT(JigsawData):
 
     def __init__(
         self,
-        train_csv_file="/data/unitarybot/jigsaw_data/multilingual_challenge/jigsaw-toxic-comment-train.csv",
-        test_csv_file="/data/unitarybot/jigsaw_data/multilingual_challenge/validation.csv",
+        train_csv_file="jigsaw_data/multilingual_challenge/jigsaw-toxic-comment-train.csv",
+        test_csv_file="jigsaw_data/multilingual_challenge/validation.csv",
         train=True,
         val_fraction=0.1,
         create_val_set=False,
@@ -225,9 +249,14 @@ class JigsawDataMultilingualBERT(JigsawData):
         meta = {}
         entry = self.data[index]
         text_id = entry["id"]
-        text = entry["comment_text"]
-        target_dict = {label: 1 if entry[label] >= 0.5 else 0 for label in self.classes}
+        if 'translated' in entry:
+            text = entry['translated']
+        elif 'comment_text_en' in entry:
+            text = entry["comment_text_en"]
+        else:
+            text = entry["comment_text"]
 
+        target_dict = {label: 1 if entry[label] >= 0.5 else 0 for label in self.classes}
         meta["target"] = torch.tensor(list(target_dict.values()), dtype=torch.int32)
         meta["text_id"] = text_id
 
