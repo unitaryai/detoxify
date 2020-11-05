@@ -10,10 +10,7 @@
             "num_classes": 1,
             "model_type": "xlm-roberta-base",
             "model_name": "XLMRobertaForSequenceClassification",
-            "tokenizer_name": "XLMRobertaTokenizer",
-            "classes": [
-                "toxicity"
-            ]
+            "tokenizer_name": "XLMRobertaTokenizer"
         }
     },
     "dataset": {
@@ -25,7 +22,10 @@
             ],
             "test_csv_file": "jigsaw_data/jigsaw-multilingual-toxic-comment-classification/validation.csv",
             "val_fraction": null,
-            "create_val_set": false
+            "create_val_set": false,
+            "classes": [
+                "toxic"
+            ]
         }
     },
     "optimizer": {
