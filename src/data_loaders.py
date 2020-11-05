@@ -4,7 +4,7 @@ import pandas as pd
 import numpy as np
 import datasets
 from datasets import list_datasets, load_dataset, list_metrics, load_metric
-import random 
+import random
 from tqdm import tqdm
 
 
@@ -57,14 +57,14 @@ class JigsawData(Dataset):
 
     def __len__(self):
         return len(self.data)
-    
+
     def load_data(self, train_csv_file):
         files = []
-        cols = ['id', 'comment_text', 'toxic']
+        cols = ["id", "comment_text", "toxic"]
         for file in tqdm(train_csv_file):
             file_df = pd.read_csv(file)
             file_df = file_df[cols]
-            file_df = file_df.astype({'id': 'string'}, {'toxic': 'float64'})
+            file_df = file_df.astype({"id": "string"}, {"toxic": "float64"})
             files.append(file_df)
         train = pd.concat(files)
         return train
@@ -83,6 +83,7 @@ class JigsawDataOriginal(JigsawData):
         val_fraction=0.1,
         create_val_set=True,
         add_test_labels=True,
+        classes=["toxic"],
     ):
 
         super().__init__(
@@ -93,7 +94,7 @@ class JigsawDataOriginal(JigsawData):
             add_test_labels=add_test_labels,
             create_val_set=create_val_set,
         )
-        self.classes = ['toxic', 'severe_toxic', 'obscene', 'threat', 'insult', 'identity_hate']
+        self.classes = classes
 
     def __getitem__(self, index):
         meta = {}
@@ -126,29 +127,14 @@ class JigsawDataBias(JigsawData):
         val_fraction=0.1,
         create_val_set=True,
         compute_bias_weights=True,
-        loss_weight=0.75
+        loss_weight=0.75,
+        classes=["toxic"],
+        identity_classes=["female"],
     ):
 
-        self.classes = [
-            "toxicity",
-            "severe_toxicity",
-            "obscene",
-            "identity_attack",
-            "insult",
-            "threat",
-            "sexual_explicit",
-        ]
-        self.identity_classes = [
-            "male",
-            "female",
-            "homosexual_gay_or_lesbian",
-            "christian",
-            "jewish",
-            "muslim",
-            "black",
-            "white",
-            "psychiatric_or_mental_illness",
-        ]
+        self.classes = classes
+
+        self.identity_classes = identity_classes
 
         super().__init__(
             train_csv_file=train_csv_file,
@@ -194,14 +180,16 @@ class JigsawDataBias(JigsawData):
 
         if self.train:
             meta["weights"] = self.weights[index]
-            toxic_weight = self.weights[index] * self.loss_weight \
-                           * 1./len(self.classes)
-            identity_weight = (1 - self.loss_weight) \
-                               * 1./len(self.identity_classes)
-            meta['weights1'] = torch.tensor([
-                               *[toxic_weight] * len(self.classes),
-                               *[identity_weight] * len(self.identity_classes)
-                               ])
+            toxic_weight = (
+                self.weights[index] * self.loss_weight * 1.0 / len(self.classes)
+            )
+            identity_weight = (1 - self.loss_weight) * 1.0 / len(self.identity_classes)
+            meta["weights1"] = torch.tensor(
+                [
+                    *[toxic_weight] * len(self.classes),
+                    *[identity_weight] * len(self.identity_classes),
+                ]
+            )
 
         return text, meta
 
@@ -234,9 +222,10 @@ class JigsawDataMultilingual(JigsawData):
         train=True,
         val_fraction=0.1,
         create_val_set=False,
+        classes=["toxic"],
     ):
 
-        self.classes = ["toxic"]
+        self.classes = classes
         super().__init__(
             train_csv_file=train_csv_file,
             test_csv_file=test_csv_file,
@@ -249,9 +238,9 @@ class JigsawDataMultilingual(JigsawData):
         meta = {}
         entry = self.data[index]
         text_id = entry["id"]
-        if 'translated' in entry:
-            text = entry['translated']
-        elif 'comment_text_en' in entry:
+        if "translated" in entry:
+            text = entry["translated"]
+        elif "comment_text_en" in entry:
             text = entry["comment_text_en"]
         else:
             text = entry["comment_text"]
