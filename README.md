@@ -8,9 +8,13 @@
 
 </div>
  
+![Exmaples image](examples.png)
+
 ## Description   
 
 Trained models & code to predict toxic comments on 3 Jigsaw challenges: Toxic comment classification, Unintended Bias in Toxic comments, Multilingual toxic comment classification.
+
+Built by [Laura Hanu](https://laurahanu.github.io/) at [Unitary](https://www.unitary.ai/), where we are working to stop harmful content online by interpreting visual content in context. 
 
 Dependencies:
 - For inference:
@@ -103,31 +107,28 @@ pip install -r requirements.txt
  ```   
 
 ## Prediction
+
+Checkpoints can be downloaded from the latest release or via the Pytorch hub API with the following names:
+- `toxic_bert`
+- `toxic_roberta_bias`
+- `toxic_xlmr_multilingual`
+
+Can run on a comment directly or from a csv containing a list of comments. 
 ```bash
 
-# Run on a comment or from a csv
+# from model name via torch.hub
 
-# model_type options: original, bias, multilingual
+python run_prediction.py --input 'shut up, you are a liar' --model_name toxic_bert --device cpu 
 
-python run_prediction.py 'shut up, you are a liar' --model_type original --device cpu --checkpoint model_path
+# from checkpoint path
+
+python run_prediction.py --input test_set.csv --from_ckpt_path model_path --device cpu 
 
 # to see usage
 
 python run_prediction.py --help
 
 ```
-## Examples
-
-| Example Input | Model Type | Language | Toxicity | Severe_toxicity | Obscene | Threat | Insult | Identity_attack | Sexually_explicit
-|-|-|-|-|-|-|-|-|-|-|
-| shut up, you are a liar | Original | en | 0.988 | 0.015 | 0.356 | 0.002 | 0.838 | 0.007 | N/A
-| I am a jewish woman who is blind | Bias | en | 0.171 | 0.001 | 0.004 | 0.004 |  0.032 | 0.088 | 0.001
-| tais-toi, tu es un menteur | Multilingual | fr | 0.987 | N/A | N/A | N/A | N/A | N/A | N/A
-| cállate, eres mentirosa | Multilingual | es | 0.945 | N/A | N/A | N/A | N/A | N/A | N/A
-| kapa çeneni, sen bir yalancısın | Multilingual | tr | 0.952 | N/A | N/A | N/A | N/A | N/A | N/A
-| stai zitto, tu sei un bugiardo | Multilingual | it | 0.986 | N/A | N/A | N/A | N/A | N/A | N/A
-| заткнись, ты лжец | Multilingual | ru | 0.941 | N/A | N/A | N/A | N/A | N/A | N/A
-| cala a boca, você é um mentiroso | Multilingual | pt | 0.81 | N/A | N/A | N/A | N/A | N/A | N/A
 
 ## Training
 
@@ -224,15 +225,6 @@ This challenge is evaluated on the AUC score of the main toxic label.
 python evaluate.py --checkpoint saved/lightning_logs/checkpoints/example_checkpoint.pth --test_csv test.csv
 
 ```
-## Checkpoints
-
-Trained checkpoints available for each challenge.
-
-| Model | Checkpoints | Score
-|-|-|-|
-| Toxic Comment Classification Challenge| path to checkpoint | N/a
-| Unintended Bias Toxic Comment Classification Challenge | path to checkpoint | N/a
-| MultilingualToxic Comment Classification Challenge | path to checkpoint | N/a
 
 ### Citation   
 ```
