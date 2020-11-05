@@ -21,12 +21,16 @@ def get_instance(module, name, config, *args, **kwargs):
     )
 
 
-def get_model(model_type, tokenizer_name, model_name, num_classes):
-    tokenizer = getattr(transformers, tokenizer_name).from_pretrained(model_type)
+def get_model(model_type, model_name, num_classes):
     model = getattr(transformers, model_name).from_pretrained(
         model_type, num_labels=num_classes
     )
-    return tokenizer, model
+    return model
+
+
+def get_tokenizer(model_type, tokenizer_name):
+    tokenizer = getattr(transformers, tokenizer_name).from_pretrained(model_type)
+    return tokenizer
 
 
 class ToxicClassifier(pl.LightningModule):
@@ -39,10 +43,17 @@ class ToxicClassifier(pl.LightningModule):
     def __init__(self, config):
         super().__init__()
         self.save_hyperparameters()
-
         self.num_classes = config["arch"]["args"]["num_classes"]
-        self.tokenizer, self.model = get_model(**config["arch"]["args"])
-
+        self.model_args = config["arch"]["args"]
+        self.model = get_model(
+            self.model_args["model_type"],
+            self.model_args["model_name"],
+            self.model_args["num_classes"],
+        )
+        self.tokenizer = get_tokenizer(
+            self.model_args["model_type"],
+            self.model_args["tokenizer_name"],
+        )
         self.bias_loss = False
 
         if "loss_weight" in config:
@@ -76,6 +87,15 @@ class ToxicClassifier(pl.LightningModule):
         acc = self.binary_accuracy(output, meta)
         self.log("val_loss", loss)
         self.log("val_acc", acc)
+        return {"loss": loss, "acc": acc}
+
+    def test_step(self, batch, batch_idx):
+        x, meta = batch
+        output = self.forward(x)
+        loss = self.binary_cross_entropy(output, meta)
+        acc = self.binary_accuracy(output, meta)
+        self.log("test_loss", loss)
+        self.log("test_acc", acc)
         return {"loss": loss, "acc": acc}
 
     def configure_optimizers(self):
@@ -139,7 +159,10 @@ class ToxicClassifier(pl.LightningModule):
             mask = target != -1
             pred = torch.sigmoid(output[mask]) >= 0.5
             correct = torch.sum(pred.to(output[mask].device) == target[mask])
-            correct = correct.item() / torch.sum(mask).item()
+            if torch.sum(mask).item() != 0:
+                correct = correct.item() / torch.sum(mask).item()
+            else:
+                correct = 0
 
         return torch.tensor(correct)
 
