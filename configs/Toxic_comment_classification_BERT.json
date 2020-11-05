@@ -10,7 +10,15 @@
             "num_classes": 6,
             "model_type": "bert-base-uncased",
             "model_name": "BertForSequenceClassification",
-            "tokenizer_name": "BertTokenizer"
+            "tokenizer_name": "BertTokenizer",
+            "classes": [
+                "toxicity",
+                "severe_toxicity",
+                "obscene",
+                "threat",
+                "insult",
+                "identity_hate"
+            ]
         }
     },
     "dataset": {

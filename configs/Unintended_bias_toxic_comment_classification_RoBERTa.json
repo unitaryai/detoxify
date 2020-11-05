@@ -11,7 +11,27 @@
             "num_classes": 16,
             "model_type": "roberta-base",
             "model_name": "RobertaForSequenceClassification",
-            "tokenizer_name": "RobertaTokenizer"
+            "tokenizer_name": "RobertaTokenizer",
+            "classes": [
+                "toxicity",
+                "severe_toxicity",
+                "obscene",
+                "identity_attack",
+                "insult",
+                "threat",
+                "sexual_explicit"
+            ],
+            "identity_classes": [
+                "male",
+                "female",
+                "homosexual_gay_or_lesbian",
+                "christian",
+                "jewish",
+                "muslim",
+                "black",
+                "white",
+                "psychiatric_or_mental_illness"
+            ]
         }
     },
     "dataset": {
@@ -24,7 +44,6 @@
             "loss_weight": 0.75
         }
     },
-    "fc_lrmul": 10,
     "optimizer": {
         "type": "Adam",
         "args": {
