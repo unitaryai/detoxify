@@ -20,11 +20,13 @@ Dependencies:
   - Kaggle API (to download data)
 
 
-| Challenge | Year | Goal | Original Data Source | Top Leaderboard Score
-|-|-|-|-|-|
-| [Toxic Comment Classification Challenge](https://www.kaggle.com/c/jigsaw-toxic-comment-classification-challenge) | 2018 |  build a multi-headed model that’s capable of detecting different types of of toxicity like threats, obscenity, insults, and identity-based hate. | Wikipedia Comments | 0.98856
-| [Jigsaw Unintended Bias in Toxicity Classification](https://www.kaggle.com/c/jigsaw-unintended-bias-in-toxicity-classification) | 2019 | build a model that recognizes toxicity and minimizes this type of unintended bias with respect to mentions of identities. You'll be using a dataset labeled for identity mentions and optimizing a metric designed to measure unintended bias. | Civil Comments | 0.94734
-| [Jigsaw Multilingual Toxic Comment Classification](https://www.kaggle.com/c/jigsaw-multilingual-toxic-comment-classification) | 2020 | build effective multilingual models | Wikipedia Comments + Civil Comments | 0.9536
+| Challenge | Year | Goal | Original Data Source | Top Leaderboard Score | Our Score
+|-|-|-|-|-|-|
+| [Toxic Comment Classification Challenge](https://www.kaggle.com/c/jigsaw-toxic-comment-classification-challenge) | 2018 |  build a multi-headed model that’s capable of detecting different types of of toxicity like threats, obscenity, insults, and identity-based hate. | Wikipedia Comments | 0.98856 | 0.98636
+| [Jigsaw Unintended Bias in Toxicity Classification](https://www.kaggle.com/c/jigsaw-unintended-bias-in-toxicity-classification) | 2019 | build a model that recognizes toxicity and minimizes this type of unintended bias with respect to mentions of identities. You'll be using a dataset labeled for identity mentions and optimizing a metric designed to measure unintended bias. | Civil Comments | 0.94734 | 0.93639
+| [Jigsaw Multilingual Toxic Comment Classification](https://www.kaggle.com/c/jigsaw-multilingual-toxic-comment-classification) | 2020 | build effective multilingual models | Wikipedia Comments + Civil Comments | 0.9536 | 0.91655*
+
+*Score not directly comparable since it is obtained on the validation set provided and not on the test set. To update when the test labels are made available.
 
 ## Labels
 All challenges have a toxicity label. The toxicity labels represent the aggregate ratings of up to 10 annotators according the following schema:
@@ -234,10 +236,10 @@ Trained checkpoints available for each challenge.
 
 ### Citation   
 ```
-@article{Unitary,
+@misc{Unitary,
   title={Detoxify},
   author={Unitary team},
-  journal={Github. https://github.com/laurahanu/Jigsaw-toxic-comment-challenges},
+  howpublished={Github. https://github.com/laurahanu/Jigsaw-toxic-comment-challenges},
   year={2020}
 }
 ```   
