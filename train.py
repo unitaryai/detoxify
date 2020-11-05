@@ -13,24 +13,7 @@ from torch.utils.data import DataLoader
 
 import src.data_loaders as module_data
 from src.utils import move_to
-
-
-def get_instance(module, name, config, *args, **kwargs):
-    return getattr(module, config[name]["type"])(
-        *args, **config[name]["args"], **kwargs
-    )
-
-
-def get_model(model_type, model_name, num_classes):
-    model = getattr(transformers, model_name).from_pretrained(
-        model_type, num_labels=num_classes
-    )
-    return model
-
-
-def get_tokenizer(model_type, tokenizer_name):
-    tokenizer = getattr(transformers, tokenizer_name).from_pretrained(model_type)
-    return tokenizer
+from src.utils import get_model_and_tokenizer
 
 
 class ToxicClassifier(pl.LightningModule):
@@ -45,15 +28,7 @@ class ToxicClassifier(pl.LightningModule):
         self.save_hyperparameters()
         self.num_classes = config["arch"]["args"]["num_classes"]
         self.model_args = config["arch"]["args"]
-        self.model = get_model(
-            self.model_args["model_type"],
-            self.model_args["model_name"],
-            self.model_args["num_classes"],
-        )
-        self.tokenizer = get_tokenizer(
-            self.model_args["model_type"],
-            self.model_args["tokenizer_name"],
-        )
+        self.model, self.tokenizer = get_model_and_tokenizer(**self.model_args)
         self.bias_loss = False
 
         if "loss_weight" in config:

@@ -1,6 +1,7 @@
 import torch
 from torch.utils.data._utils.collate import default_collate
 from torch.nn.utils.rnn import pad_sequence
+import transformers
 
 
 def move_to(obj, device):
@@ -21,3 +22,12 @@ def move_to(obj, device):
         return res
     else:
         raise TypeError("Invalid type for move_to")
+
+
+def get_model_and_tokenizer(model_type, model_name, tokenizer_name, num_classes):
+    model = getattr(transformers, model_name).from_pretrained(
+        model_type, num_labels=num_classes
+    )
+    tokenizer = getattr(transformers, tokenizer_name).from_pretrained(model_type)
+
+    return model, tokenizer
