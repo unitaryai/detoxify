@@ -48,7 +48,7 @@ This challenge includes the following labels:
 ### Jigsaw Unintended Bias in Toxicity Classification
 This challenge has 2 types of labels: the main toxicity labels and some additional identity labels that represent the identities mentioned in the comments. 
 
-Only identities with more than 500 examples in the test set (combined public and private) are included during training as additional labels and in the evaluation calculation. These identities are shown in bold.
+Only identities with more than 500 examples in the test set (combined public and private) are included during training as additional labels and in the evaluation calculation.
 
 - `toxicity`
 - `severe_toxicity`
@@ -58,31 +58,18 @@ Only identities with more than 500 examples in the test set (combined public and
 - `identity_attack`
 - `sexual_explicit`
 
-Identity labels:
-- **`male`**
-- **`female`**
-- `transgender`
-- `other_gender`
-- `heterosexual`
-- **`homosexual_gay_or_lesbian`**
-- `bisexual`
-- `other_sexual_orientation`
-- **`christian`**
-- **`jewish`**
-- **`muslim`**
-- `hindu`
-- `buddhist`
-- `atheist`
-- `other_religion`
-- **`black`**
-- **`white`**
-- `asian`
-- `latino`
-- `other_race_or_ethnicity`
-- `physical_disability`
-- `intellectual_or_learning_disability`
-- **`psychiatric_or_mental_illness`**
-- `other_disability`
+Identity labels used:
+- `male`
+- `female`
+- `homosexual_gay_or_lesbian`
+- `christian`
+- `jewish`
+- `muslim`
+- `black`
+- `white`
+- `psychiatric_or_mental_illness`
+
+A complete list of all the identity labels available can be found [here](https://www.kaggle.com/c/jigsaw-unintended-bias-in-toxicity-classification/data).
 
 
 ### Jigsaw Multilingual Toxic Comment Classification
