@@ -43,7 +43,7 @@ def test_classifier(config, dataset, checkpoint_path, device="cuda:0"):
         test_dataset,
         batch_size=int(config["batch_size"]),
         num_workers=20,
-        shuffle=False
+        shuffle=False,
     )
 
     scores = []
@@ -130,7 +130,9 @@ if __name__ == "__main__":
         os.environ["CUDA_VISIBLE_DEVICES"] = args.device
         config["gpus"] = args.device
 
-    results = test_classifier(config, args.test_csv, args.checkpoint, 'cuda:'+args.device)
+    results = test_classifier(
+        config, args.test_csv, args.checkpoint, "cuda:" + args.device
+    )
 
     with open(args.checkpoint[:-4] + "results.json", "w") as f:
         json.dump(results, f)
