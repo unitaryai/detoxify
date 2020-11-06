@@ -34,6 +34,29 @@ Dependencies:
 
 It is also noteworthy to mention that the top leadearboard scores have been achieved using model ensembles. The purpose of this library was to build something user-friendly and straightforward to use.
 
+## Quick prediction
+```bash
+# clone project   
+
+git clone https://github.com/unitary/detoxify
+
+# create virtual env
+
+python3 -m venv toxic-env
+source toxic-env/bin/activate
+
+# install project   
+
+pip install -e detoxify
+cd detoxify
+
+# from model name: original, unbiased or multilingual
+
+python run_prediction.py --input 'shut up, you are a liar' --model_name original
+
+```
+For more details check the Prediction section.
+
 ## Labels
 All challenges have a toxicity label. The toxicity labels represent the aggregate ratings of up to 10 annotators according the following schema:
 - **Very Toxic** (a very hateful, aggressive, or disrespectful comment that is very likely to make you leave a discussion or give up on sharing your perspective)
