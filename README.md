@@ -3,8 +3,8 @@
 # 🙊 Detoxify
 ##  Toxic Comment Classification with ⚡ Pytorch Lightning and 🤗 Transformers   
 
-![CI testing](https://github.com/unitary/Jigsaw-toxic-comment-challenges/workflows/CI%20testing/badge.svg)
-![Lint](https://github.com/unitary/Jigsaw-toxic-comment-challenges/workflows/Lint/badge.svg)
+![CI testing](https://github.com/unitaryai/Jigsaw-toxic-comment-challenges/workflows/CI%20testing/badge.svg)
+![Lint](https://github.com/unitaryai/Jigsaw-toxic-comment-challenges/workflows/Lint/badge.svg)
 
 </div>
  
@@ -286,7 +286,7 @@ python evaluate.py --checkpoint saved/lightning_logs/checkpoints/example_checkpo
 @misc{Unitary,
   title={Detoxify},
   author={Unitary team},
-  howpublished={Github. https://github.com/unitary/detoxify},
+  howpublished={Github. https://github.com/unitaryai/detoxify},
   year={2020}
 }
 ```   
