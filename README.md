@@ -38,7 +38,7 @@ It is also noteworthy to mention that the top leadearboard scores have been achi
 ```bash
 # clone project   
 
-git clone https://github.com/unitary/detoxify
+git clone https://github.com/unitaryai/detoxify
 
 # create virtual env
 
@@ -115,7 +115,7 @@ First, install dependencies
 ```bash
 # clone project   
 
-git clone https://github.com/unitary/detoxify
+git clone https://github.com/unitaryai/detoxify
 
 # create virtual env
 
@@ -164,7 +164,7 @@ Checkpoints can be downloaded from the latest release or via the Pytorch hub API
 - `unbiased_toxic_roberta`
 - `multilingual_toxic_xlm_r`
 ```bash
-model = torch.hub.load('unitary/detoxify','toxic_bert')
+model = torch.hub.load('unitaryai/detoxify','toxic_bert')
 ```
 
 Importing detoxify in python:
