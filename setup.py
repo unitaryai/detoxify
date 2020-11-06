@@ -8,7 +8,7 @@ setup(
     description="A python library for detecting toxic comments",
     author="Unitary",
     author_email="laura@unitary.ai",
-    url="https://github.com/unitary/detoxify",
+    url="https://github.com/unitaryai/detoxify",
     install_requires=[
         "transformers",
         "torch",
