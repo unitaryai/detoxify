@@ -2,9 +2,9 @@ import torch
 import transformers
 
 MODEL_URLS = {
-    "original": "https://github.com/detoxify/detoxify/releases/download/v0.1-alpha/toxic_original-c1212f89.ckpt",
-    "unbiased": "https://github.com/detoxify/detoxify/releases/download/v0.1-alpha/toxic_bias-4e693588.ckpt",
-    "multilingual": "https://github.com/detoxify/detoxify/releases/download/v0.1-alpha/toxic_multilingual-bbddc277.ckpt",
+    "original": "https://github.com/unitaryai/detoxify/releases/download/v0.1-alpha/toxic_original-c1212f89.ckpt",
+    "unbiased": "https://github.com/unitaryai/detoxify/releases/download/v0.1-alpha/toxic_bias-4e693588.ckpt",
+    "multilingual": "https://github.com/unitaryai/detoxify/releases/download/v0.1-alpha/toxic_multilingual-bbddc277.ckpt",
 }
 
 PRETRAINED_MODEL = None
