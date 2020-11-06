@@ -3,8 +3,8 @@
 # 🙊 Detoxify
 ##  Toxic Comment Classification with ⚡ Pytorch Lightning and 🤗 Transformers   
 
-![CI testing](https://github.com/laurahanu/Jigsaw-toxic-comment-challenges/workflows/CI%20testing/badge.svg)
-![Lint](https://github.com/laurahanu/Jigsaw-toxic-comment-challenges/workflows/Lint/badge.svg)
+![CI testing](https://github.com/unitary/Jigsaw-toxic-comment-challenges/workflows/CI%20testing/badge.svg)
+![Lint](https://github.com/unitary/Jigsaw-toxic-comment-challenges/workflows/Lint/badge.svg)
 
 </div>
  
@@ -92,7 +92,7 @@ First, install dependencies
 ```bash
 # clone project   
 
-git clone https://github.com/laurahanu/detoxify
+git clone https://github.com/unitary/detoxify
 
 # create virtual env
 
@@ -107,7 +107,6 @@ cd detoxify
 # for training
 pip install -r requirements.txt
 
-
  ```   
 
 ## Prediction
@@ -117,7 +116,7 @@ Trained models summary:
 |Model name| Transformer type| Data from
 |:--:|:--:|:--:|
 |`original`| `bert-base-uncased` | Toxic Comment Classification Challenge
-|`bias`| `roberta-base`| Unintended Bias in Toxicity Classification
+|`unbiased`| `roberta-base`| Unintended Bias in Toxicity Classification
 |`multilingual`| `xlm-roberta-base`| Multilingual Toxic Comment Classification
 
 For a quick prediction can run the example script on a comment directly or from a csv containing a list of comments. 
@@ -142,20 +141,22 @@ Checkpoints can be downloaded from the latest release or via the Pytorch hub API
 - `unbiased_toxic_roberta`
 - `multilingual_toxic_xlm_r`
 ```bash
-model = torch.hub.load('laurahanu/detoxify','toxic_bert')
+model = torch.hub.load('unitary/detoxify','toxic_bert')
 ```
 
 Importing detoxify in python:
 
 ```bash
+
 from detoxify import Detoxify
 
-results = Detoxify('bias').predict('some text')
+results = Detoxify('unbiased').predict('some text')
 
 # to display results nicely
 
 import pandas as pd
 pd.DataFrame(results).round(4)
+
 ```
 
 
@@ -198,6 +199,7 @@ python train.py --config configs/Toxic_comment_classification_BERT.json
 ```bash
 
 python train.py --config configs/Unintended_bias_toxic_comment_classification_RoBERTa.json
+
 ```
  ### Multilingual Toxic Comment Classification
 
@@ -221,6 +223,7 @@ python train.py --config configs/Multilingual_toxic_comment_classification_XLMR_
  ```bash
 
 tensorboard --logdir=./saved
+
 ```
 ## Model Evaluation
 
@@ -260,7 +263,7 @@ python evaluate.py --checkpoint saved/lightning_logs/checkpoints/example_checkpo
 @misc{Unitary,
   title={Detoxify},
   author={Unitary team},
-  howpublished={Github. https://github.com/laurahanu/Jigsaw-toxic-comment-challenges},
+  howpublished={Github. https://github.com/unitary/detoxify},
   year={2020}
 }
 ```   

@@ -81,7 +81,7 @@ if __name__ == "__main__":
     if ARGS.model_name is not None:
         assert ARGS.model_name in [
             "original",
-            "bias",
+            "unbiased",
             "multilingual",
         ]
 

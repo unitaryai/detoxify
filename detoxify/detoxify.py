@@ -2,9 +2,9 @@ import torch
 import transformers
 
 MODEL_URLS = {
-    "original": "https://github.com/laurahanu/detoxify/releases/download/v0.1-alpha/toxic_original-c1212f89.ckpt",
-    "bias": "https://github.com/laurahanu/detoxify/releases/download/v0.1-alpha/toxic_bias-4e693588.ckpt",
-    "multilingual": "https://github.com/laurahanu/detoxify/releases/download/v0.1-alpha/toxic_multilingual-bbddc277.ckpt",
+    "original": "https://github.com/detoxify/detoxify/releases/download/v0.1-alpha/toxic_original-c1212f89.ckpt",
+    "unbiased": "https://github.com/detoxify/detoxify/releases/download/v0.1-alpha/toxic_bias-4e693588.ckpt",
+    "multilingual": "https://github.com/detoxify/detoxify/releases/download/v0.1-alpha/toxic_multilingual-bbddc277.ckpt",
 }
 
 PRETRAINED_MODEL = None
@@ -52,7 +52,7 @@ class Detoxify:
         - original:
             BERT model trained on data from the Jigsaw Toxic Comment
             Classification Challenge
-        - bias:
+        - unbiased:
             RoBERTa model trained on data from the Jigsaw Unintended Bias in
             Toxicity Classification Challenge
         - multilingual:
@@ -60,7 +60,7 @@ class Detoxify:
             Toxic Comment Classification Challenge
     Args:
         model_type(str): model type to be loaded, can be either original,
-                         bias or multilingual
+                         unbiased or multilingual
         checkpoint(str): checkpoint path, defaults to None
     Returns:
         results(dict): dictionary of output scores for each class
@@ -97,7 +97,7 @@ def toxic_bert():
 
 
 def unbiased_toxic_roberta():
-    return load_model("bias")
+    return load_model("unbiased")
 
 
 def multilingual_toxic_xlm_r():
