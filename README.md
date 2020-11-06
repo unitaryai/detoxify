@@ -8,7 +8,7 @@
 
 </div>
  
-![Exmaples image](examples.png)
+![Examples image](examples.png)
 
 ## Description   
 
@@ -20,17 +20,19 @@ Dependencies:
 - For inference:
   - 🤗 Transformers
   - ⚡ Pytorch lightning 
-- For training:
+- For training will also need:
   - Kaggle API (to download data)
 
 
-| Challenge | Year | Goal | Original Data Source | Top Leaderboard Score | Our Score
+| Challenge | Year | Goal | Original Data Source | Top Leaderboard Score | Detoxify Score
 |-|-|-|-|-|-|
 | [Toxic Comment Classification Challenge](https://www.kaggle.com/c/jigsaw-toxic-comment-classification-challenge) | 2018 |  build a multi-headed model that’s capable of detecting different types of of toxicity like threats, obscenity, insults, and identity-based hate. | Wikipedia Comments | 0.98856 | 0.98636
 | [Jigsaw Unintended Bias in Toxicity Classification](https://www.kaggle.com/c/jigsaw-unintended-bias-in-toxicity-classification) | 2019 | build a model that recognizes toxicity and minimizes this type of unintended bias with respect to mentions of identities. You'll be using a dataset labeled for identity mentions and optimizing a metric designed to measure unintended bias. | Civil Comments | 0.94734 | 0.93639
 | [Jigsaw Multilingual Toxic Comment Classification](https://www.kaggle.com/c/jigsaw-multilingual-toxic-comment-classification) | 2020 | build effective multilingual models | Wikipedia Comments + Civil Comments | 0.9536 | 0.91655*
 
-*Score not directly comparable since it is obtained on the validation set provided and not on the test set. To update when the test labels are made available.
+*Score not directly comparable since it is obtained on the validation set provided and not on the test set. To update when the test labels are made available. 
+
+It is also noteworthy to mention that the top leadearboard scores have been achieved using model ensembles. The purpose of this library was to build something user-friendly and straightforward to use.
 
 ## Labels
 All challenges have a toxicity label. The toxicity labels represent the aggregate ratings of up to 10 annotators according the following schema:
@@ -101,6 +103,8 @@ source toxic-env/bin/activate
 
 pip install -e detoxify
 cd detoxify
+
+# for training
 pip install -r requirements.txt
 
 
@@ -108,27 +112,52 @@ pip install -r requirements.txt
 
 ## Prediction
 
-Checkpoints can be downloaded from the latest release or via the Pytorch hub API with the following names:
-- `toxic_bert`
-- `toxic_roberta_bias`
-- `toxic_xlmr_multilingual`
+Trained models summary:
 
-Can run on a comment directly or from a csv containing a list of comments. 
+|Model name| Transformer type| Data from
+|:--:|:--:|:--:|
+|`original`| `bert-base-uncased` | Toxic Comment Classification Challenge
+|`bias`| `roberta-base`| Unintended Bias in Toxicity Classification
+|`multilingual`| `xlm-roberta-base`| Multilingual Toxic Comment Classification
+
+For a quick prediction can run the example script on a comment directly or from a csv containing a list of comments. 
 ```bash
 
 # from model name via torch.hub
 
-python run_prediction.py --input 'shut up, you are a liar' --model_name toxic_bert --device cpu 
+python run_prediction.py --input 'shut up, you are a liar' --model_name original
 
 # from checkpoint path
 
-python run_prediction.py --input test_set.csv --from_ckpt_path model_path --device cpu 
+python run_prediction.py --input test_set.csv --from_ckpt_path model_path
 
 # to see usage
 
 python run_prediction.py --help
 
 ```
+
+Checkpoints can be downloaded from the latest release or via the Pytorch hub API with the following names:
+- `toxic_bert`
+- `unbiased_toxic_roberta`
+- `multilingual_toxic_xlm_r`
+```bash
+model = torch.hub.load('laurahanu/detoxify','toxic_bert')
+```
+
+Importing detoxify in python:
+
+```bash
+from detoxify import Detoxify
+
+results = Detoxify('bias').predict('some text')
+
+# to display results nicely
+
+import pandas as pd
+pd.DataFrame(results).round(4)
+```
+
 
 ## Training
 
