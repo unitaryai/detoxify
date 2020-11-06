@@ -4,18 +4,16 @@ from setuptools import setup, find_packages
 
 setup(
     name="detoxify",
-    version="0.0.0",
+    version="0.0.1",
     description="A python library for detecting toxic comments",
     author="Unitary",
-    author_email="",
-    # REPLACE WITH YOUR OWN GITHUB PROJECT LINK
+    author_email="laura@unitary.ai",
     url="https://github.com/laurahanu/detoxify",
-    install_requires=["pytorch-lightning",
-                      "transformers",
-                      "datasets",
-                      "pandas",
-                      "kaggle",
-                      "scikit-learn",
-                      "tqdm"],
-    packages=find_packages(),
+    install_requires=[
+        "transformers",
+        "torch",
+    ],
+    packages=[
+        "detoxify",
+    ],
 )
