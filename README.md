@@ -3,8 +3,8 @@
 # 🙊 Detoxify
 ##  Toxic Comment Classification with ⚡ Pytorch Lightning and 🤗 Transformers   
 
-![CI testing](https://github.com/unitaryai/Jigsaw-toxic-comment-challenges/workflows/CI%20testing/badge.svg)
-![Lint](https://github.com/unitaryai/Jigsaw-toxic-comment-challenges/workflows/Lint/badge.svg)
+![CI testing](https://github.com/unitaryai/detoxify/workflows/CI%20testing/badge.svg)
+![Lint](https://github.com/unitaryai/detoxify/workflows/Lint/badge.svg)
 
 </div>
  
