@@ -283,9 +283,9 @@ python evaluate.py --checkpoint saved/lightning_logs/checkpoints/example_checkpo
 
 ### Citation   
 ```
-@misc{Unitary,
+@misc{Detoxify,
   title={Detoxify},
-  author={Unitary team},
+  author={Hanu, Laura and {Unitary team}},
   howpublished={Github. https://github.com/unitaryai/detoxify},
   year={2020}
 }
