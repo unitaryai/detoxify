@@ -7,32 +7,7 @@ import os
 from collections import OrderedDict
 import json
 import warnings
-from src.utils import get_model_and_tokenizer
-
-
-def load_model_and_tokenizer(model_name, device, from_ckpt):
-    if model_name is not None:
-        loaded = torch.hub.load("laurahanu/detoxify", model_name)
-    elif from_ckpt is not None:
-        loaded = torch.load(from_ckpt, map_location=device)
-    else:
-        raise ValueError("A model name or a checkpoint path must be provided as input.")
-    class_names = loaded["config"]["dataset"]["args"]["classes"]
-    model, tokenizer = get_model_and_tokenizer(**loaded["config"]["arch"]["args"])
-    model.load_state_dict(loaded["state_dict"])
-    model.to(device)
-    model.eval()
-    return model, tokenizer, class_names
-
-
-@torch.no_grad()
-def predict(text, model, tokenizer):
-    inputs = tokenizer(text, return_tensors="pt", truncation=True, padding=True).to(
-        model.device
-    )
-    out = model(**inputs)[0]
-    scores = torch.sigmoid(out).cpu().detach().numpy()
-    return scores
+from detoxify import Detoxify
 
 
 def load_input_text(input_obj):
@@ -53,27 +28,16 @@ def load_input_text(input_obj):
     return text
 
 
-def run(model_name, input_obj, dest_file, device, from_ckpt):
-    """Loads model from checkpoint and runs inference on the input_obj.
+def run(model_name, input_obj, dest_file, from_ckpt):
+    """Loads model from checkpoint or from model name and runs inference on the input_obj.
     Displays results as a pandas DataFrame object.
     If a dest_file is given, it saves the results to a csv file.
     """
-    # parse input
     text = load_input_text(input_obj)
-
-    # predict
-    model, tokenizer, class_names = load_model_and_tokenizer(
-        model_name, device, from_ckpt
-    )
-    scores = predict(text, model, tokenizer)
-
-    # display results
-    res = {}
-    if not isinstance(text, str):
-        for i, cla in enumerate(class_names):
-            res[cla] = {text[ex_i]: scores[ex_i][i] for ex_i in range(len(scores))}
+    if model_name is not None:
+        res = Detoxify(model_name).predict(text)
     else:
-        res[text] = {cla: scores[0][i] for i, cla in enumerate(class_names)}
+        res = Detoxify(checkpoint=from_ckpt).predict(text)
 
     res_df = pd.DataFrame(res).round(3)
     print(res_df)
@@ -109,12 +73,6 @@ if __name__ == "__main__":
         type=str,
         help="destination path to output model results to (default: None)",
     )
-    parser.add_argument(
-        "--device",
-        default="cpu",
-        type=str,
-        help="device to run inference on (default: cuda)",
-    )
 
     ARGS = parser.parse_args()
 
@@ -122,9 +80,9 @@ if __name__ == "__main__":
 
     if ARGS.model_name is not None:
         assert ARGS.model_name in [
-            "toxic_bert",
-            "toxic_roberta_bias",
-            "toxic_xlmr_multilingual",
+            "original",
+            "bias",
+            "multilingual",
         ]
 
     if ARGS.from_ckpt_path is not None and ARGS.model_name is not None:
@@ -134,4 +92,4 @@ if __name__ == "__main__":
     if ARGS.from_ckpt_path is not None:
         assert os.path.isfile(ARGS.from_ckpt_path)
 
-    run(ARGS.model_name, ARGS.input, ARGS.save_to, ARGS.device, ARGS.from_ckpt_path)
+    run(ARGS.model_name, ARGS.input, ARGS.save_to, ARGS.from_ckpt_path)
