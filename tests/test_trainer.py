@@ -65,10 +65,11 @@ def test_trainer():
     CONFIG["dataset"]["args"][
         "test_csv_file"
     ] = "tests/dummy_data/jigsaw-toxic-comment-classification-challenge/test.csv"
+    CONFIG["batch_size"] = 2
+
     results = initialize_trainer(CONFIG)
     print(results)
-    assert results[0]["acc"] > 0.6
-    assert results[1]["acc"] > 0.6
+    assert results[0]["test_acc"] > 0.6
 
 
 if __name__ == "__main__":
