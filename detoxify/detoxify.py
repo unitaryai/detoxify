@@ -13,8 +13,12 @@ PRETRAINED_MODEL = None
 def get_model_and_tokenizer(
     model_type, model_name, tokenizer_name, num_classes, state_dict
 ):
-    model = getattr(transformers, model_name).from_pretrained(
-        model_type, num_labels=num_classes, state_dict=state_dict
+    model_class = getattr(transformers, model_name)
+    model = model_class.from_pretrained(
+        pretrained_model_name_or_path=None,
+        config=model_type,
+        num_labels=num_classes,
+        state_dict=state_dict,
     )
     tokenizer = getattr(transformers, tokenizer_name).from_pretrained(model_type)
 
