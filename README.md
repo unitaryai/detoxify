@@ -41,23 +41,21 @@ It is also noteworthy to mention that the top leadearboard scores have been achi
 ```bash
 # clone project   
 
-git clone https://github.com/unitaryai/detoxify
+pip install detoxify
 
-# create virtual env
+```
+```python
 
-python3 -m venv toxic-env
-source toxic-env/bin/activate
+from detoxify import Detoxify
 
-# install project   
+# model name can be: original, unbiased or multilingual
 
-pip install -e detoxify
-cd detoxify
+results = Detoxify('unbiased').predict('example text')
 
-pip install -r requirements.txt
+# optional to display results nicely (will need to pip install pandas)
 
-# from model name: original, unbiased or multilingual
-
-python run_prediction.py --input 'shut up, you are a liar' --model_name original
+import pandas as pd
+print(pd.DataFrame(results).round(4))
 
 ```
 For more details check the Prediction section.
@@ -174,7 +172,7 @@ model = torch.hub.load('unitaryai/detoxify','toxic_bert')
 
 Importing detoxify in python:
 
-```bash
+```python
 
 from detoxify import Detoxify
 
@@ -183,7 +181,7 @@ results = Detoxify('unbiased').predict('some text')
 # to display results nicely
 
 import pandas as pd
-pd.DataFrame(results).round(4)
+print(pd.DataFrame(results).round(4))
 
 ```
 
