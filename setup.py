@@ -18,7 +18,7 @@ setup(
         "transformers",
         "torch",
     ],
-    packages=find_packages(),
+    packages=find_packages(exclude=("tests","src")),
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: Apache Software License",
