@@ -2,10 +2,15 @@
 
 from setuptools import setup, find_packages
 
+with open("README.md", "r") as fh:
+    long_description = fh.read()
+
 setup(
-    name="detoxify",
+    name="detoxify-unitary",
     version="0.0.1",
     description="A python library for detecting toxic comments",
+    long_description=long_description,
+    long_description_content_type="text/markdown",
     author="Unitary",
     author_email="laura@unitary.ai",
     url="https://github.com/unitaryai/detoxify",
@@ -13,7 +18,11 @@ setup(
         "transformers",
         "torch",
     ],
-    packages=[
-        "detoxify",
+    packages=find_packages(),
+    classifiers=[
+        "Programming Language :: Python :: 3",
+        "License :: OSI Approved :: Apache Software License",
+        "Operating System :: OS Independent",
     ],
+    python_requires='>=3.6',
 )
