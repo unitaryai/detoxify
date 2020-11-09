@@ -10,9 +10,11 @@ MODEL_URLS = {
 PRETRAINED_MODEL = None
 
 
-def get_model_and_tokenizer(model_type, model_name, tokenizer_name, num_classes):
+def get_model_and_tokenizer(
+    model_type, model_name, tokenizer_name, num_classes, state_dict
+):
     model = getattr(transformers, model_name).from_pretrained(
-        model_type, num_labels=num_classes
+        model_type, num_labels=num_classes, state_dict=state_dict
     )
     tokenizer = getattr(transformers, tokenizer_name).from_pretrained(model_type)
 
@@ -31,8 +33,10 @@ def load_checkpoint(model_type="original", checkpoint=None):
                     with as well as the state dict"
             )
     class_names = loaded["config"]["dataset"]["args"]["classes"]
-    model, tokenizer = get_model_and_tokenizer(**loaded["config"]["arch"]["args"])
-    model.load_state_dict(loaded["state_dict"])
+
+    model, tokenizer = get_model_and_tokenizer(
+        **loaded["config"]["arch"]["args"], state_dict=loaded["state_dict"]
+    )
 
     return model, tokenizer, class_names
 
