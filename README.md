@@ -23,6 +23,9 @@ Dependencies:
 - For training will also need:
   - Kaggle API (to download data)
 
+### Disclaimer:
+
+If words that are associated with swearing, insults or profanity are present in a comment, it is likely that it will be classified as toxic, regardless of the tone or the intent of the author e.g. humorous/self-deprecating.
 
 | Challenge | Year | Goal | Original Data Source | Top Leaderboard Score | Detoxify Score
 |-|-|-|-|-|-|
@@ -49,6 +52,8 @@ source toxic-env/bin/activate
 
 pip install -e detoxify
 cd detoxify
+
+pip install -r requirements.txt
 
 # from model name: original, unbiased or multilingual
 
