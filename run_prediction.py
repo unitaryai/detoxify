@@ -1,29 +1,22 @@
-import torch
-import transformers
 import pandas as pd
 import argparse
-from train import ToxicClassifier
 import os
-from collections import OrderedDict
-import json
-import warnings
 from detoxify import Detoxify
 
 
 def load_input_text(input_obj):
-    """Checks input_obj is either the path to a csv file or a text string.
-    If input_obj is a csv file it returns a list of strings."""
+    """Checks input_obj is either the path to a txt file or a text string.
+    If input_obj is a txt file it returns a list of strings."""
 
     if isinstance(input_obj, str) and os.path.isfile(input_obj):
-        if not input_obj.endswith(".csv"):
-            raise ValueError("Invalid file type: only csv files supported.")
-        test_set = pd.read_csv(input_obj, header=None)
-        text = [t[0] for t in test_set.values.tolist()]
+        if not input_obj.endswith(".txt"):
+            raise ValueError("Invalid file type: only txt files supported.")
+        text = open(input_obj, "r").read().splitlines()
     elif isinstance(input_obj, str):
         text = input_obj
     else:
         raise ValueError(
-            "Invalid input type: input type must be a string or a csv file."
+            "Invalid input type: input type must be a string or a txt file."
         )
     return text
 
@@ -31,7 +24,7 @@ def load_input_text(input_obj):
 def run(model_name, input_obj, dest_file, from_ckpt):
     """Loads model from checkpoint or from model name and runs inference on the input_obj.
     Displays results as a pandas DataFrame object.
-    If a dest_file is given, it saves the results to a csv file.
+    If a dest_file is given, it saves the results to a txt file.
     """
     text = load_input_text(input_obj)
     if model_name is not None:
@@ -54,13 +47,13 @@ if __name__ == "__main__":
     parser.add_argument(
         "--input",
         type=str,
-        help="text, list of strings, or csv file",
+        help="text, list of strings, or txt file",
     )
     parser.add_argument(
         "--model_name",
-        default=None,
+        default="unbiased",
         type=str,
-        help="Name of the torch.hub model (default: None)",
+        help="Name of the torch.hub model (default: unbiased)",
     )
     parser.add_argument(
         "--from_ckpt_path",
@@ -75,22 +68,22 @@ if __name__ == "__main__":
         help="destination path to output model results to (default: None)",
     )
 
-    ARGS = parser.parse_args()
+    args = parser.parse_args()
 
-    assert ARGS.from_ckpt_path is not None or ARGS.model_name is not None
+    assert args.from_ckpt_path is not None or args.model_name is not None
 
-    if ARGS.model_name is not None:
-        assert ARGS.model_name in [
+    if args.model_name is not None:
+        assert args.model_name in [
             "original",
             "unbiased",
             "multilingual",
         ]
 
-    if ARGS.from_ckpt_path is not None and ARGS.model_name is not None:
+    if args.from_ckpt_path is not None and args.model_name is not None:
         raise ValueError(
             "Please specify only one model source, can either load model from checkpoint path or from model_name."
         )
-    if ARGS.from_ckpt_path is not None:
-        assert os.path.isfile(ARGS.from_ckpt_path)
+    if args.from_ckpt_path is not None:
+        assert os.path.isfile(args.from_ckpt_path)
 
-    run(ARGS.model_name, ARGS.input, ARGS.save_to, ARGS.from_ckpt_path)
+    run(args.model_name, args.input, args.save_to, args.from_ckpt_path)
