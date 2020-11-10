@@ -23,9 +23,6 @@ Dependencies:
 - For training will also need:
   - Kaggle API (to download data)
 
-### Disclaimer:
-
-If words that are associated with swearing, insults or profanity are present in a comment, it is likely that it will be classified as toxic, regardless of the tone or the intent of the author e.g. humorous/self-deprecating.
 
 | Challenge | Year | Goal | Original Data Source | Detoxify Model Name | Top Kaggle Leaderboard Score | Detoxify Score
 |-|-|-|-|-|-|-|
@@ -38,8 +35,15 @@ If words that are associated with swearing, insults or profanity are present in 
 It is also noteworthy to mention that the top leadearboard scores have been achieved using model ensembles. The purpose of this library was to build something user-friendly and straightforward to use.
 
 ## Quick prediction
+
+**Disclaimer:**
+
+If words that are associated with swearing, insults or profanity are present in a comment, it is likely that it will be classified as toxic, regardless of the tone or the intent of the author e.g. humorous/self-deprecating.
+
+The `multilingual` model has been trained on 7 different languages so it should only be tested on: `english`, `french`, `spanish`, `italian`, `portuguese`, `turkish` or `russian`.
+
 ```bash
-# clone project   
+# install detoxify  
 
 pip install detoxify
 
@@ -48,17 +52,23 @@ pip install detoxify
 
 from detoxify import Detoxify
 
-# model name can be: original, unbiased or multilingual
+# each model takes in either a string or a list of strings
 
-results = Detoxify('unbiased').predict('example text')
+results = Detoxify('original').predict('example text')
+
+results = Detoxify('unbiased').predict(['example text 1','example text 2'])
+
+results = Detoxify('multilingual').predict(['example text','exemple de texte','texto de ejemplo','testo di esempio','texto de exemplo','örnek metin','пример текста'])
 
 # optional to display results nicely (will need to pip install pandas)
 
 import pandas as pd
-print(pd.DataFrame(results).round(4))
+
+print(pd.DataFrame(results, index=input_text).round(5))
 
 ```
 For more details check the Prediction section.
+
 
 ## Labels
 All challenges have a toxicity label. The toxicity labels represent the aggregate ratings of up to 10 annotators according the following schema:
@@ -176,12 +186,17 @@ Importing detoxify in python:
 
 from detoxify import Detoxify
 
-results = Detoxify('unbiased').predict('some text')
+results = Detoxify('original').predict('some text')
+
+results = Detoxify('unbiased').predict(['example text 1','example text 2'])
+
+results = Detoxify('multilingual').predict(['example text','exemple de texte','texto de ejemplo','testo di esempio','texto de exemplo','örnek metin','пример текста'])
 
 # to display results nicely
 
 import pandas as pd
-print(pd.DataFrame(results).round(4))
+
+print(pd.DataFrame(results,index=input_text).round(5))
 
 ```
 
