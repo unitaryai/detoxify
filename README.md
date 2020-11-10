@@ -158,13 +158,17 @@ Trained models summary:
 For a quick prediction can run the example script on a comment directly or from a csv containing a list of comments. 
 ```bash
 
-# from model name via torch.hub
+# load model via torch.hub
 
-python run_prediction.py --input 'shut up, you are a liar' --model_name original
+python run_prediction.py --input 'example' --model_name original
 
-# from checkpoint path
+# load model from from checkpoint path
 
-python run_prediction.py --input test_set.csv --from_ckpt_path model_path
+python run_prediction.py --input 'example' --from_ckpt_path model_path
+
+# save results to a .csv file
+
+python run_prediction.py --input test_set.csv --model_name original --save_to results.csv
 
 # to see usage
 
