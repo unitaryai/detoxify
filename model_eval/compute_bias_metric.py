@@ -1,6 +1,5 @@
 import pandas as pd
 import json
-from tqdm import tqdm
 import numpy as np
 from sklearn.metrics import roc_auc_score
 import argparse
@@ -57,7 +56,7 @@ def convert_to_bool(df, col_name):
 
 def convert_dataframe_to_bool(df):
     bool_df = df.copy()
-    for col in ["toxicity"] + identity_columns:
+    for col in ["toxicity"] + IDENTITY_COLUMNS:
         convert_to_bool(bool_df, col)
     return bool_df
 
@@ -97,7 +96,7 @@ def main():
     test_private[MODEL_NAME] = [s[0] for s in results["scores"]]
 
     bias_metrics_df = compute_bias_metrics_for_model(
-        test_private, identity_columns, MODEL_NAME, TOXICITY_COLUMN
+        test_private, IDENTITY_COLUMNS, MODEL_NAME, TOXICITY_COLUMN
     )
     print(bias_metrics_df)
 
@@ -116,10 +115,9 @@ if __name__ == "__main__":
     )
     args = parser.parse_args()
 
-    TEST = "../Jigsaw_ROBERTA_bias/lightning_logs/version_3/checkpoints/epoch=3.results.json"
-    # TEST = args.res_path
+    TEST = args.res_path
 
-    identity_columns = [
+    IDENTITY_COLUMNS = [
         "male",
         "female",
         "homosexual_gay_or_lesbian",
@@ -140,3 +138,5 @@ if __name__ == "__main__":
 
     # stands for background negative, subgroup positive
     BNSP_AUC = "bnsp_auc"
+
+    main()

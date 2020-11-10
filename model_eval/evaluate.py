@@ -1,5 +1,3 @@
-from pytorch_lightning import Trainer, seed_everything
-
 from train import ToxicClassifier
 import src.data_loaders as module_data
 import argparse
@@ -7,16 +5,13 @@ import torch
 from torch.utils.data import DataLoader
 import json
 from tqdm import tqdm
-from src.utils import move_to
-import torch.nn.functional as F
 from sklearn.metrics import roc_auc_score
 import numpy as np
 import os
 from src.data_loaders import (
-    JigsawData,
-    JigsawDataBERT,
-    JigsawDataBiasBERT,
-    JigsawDataMultilingualBERT,
+    JigsawDataOriginal,
+    JigsawDataBias,
+    JigsawDataMultilingual,
 )
 import pandas as pd
 import warnings
