@@ -34,11 +34,19 @@ Dependencies:
 
 It is also noteworthy to mention that the top leadearboard scores have been achieved using model ensembles. The purpose of this library was to build something user-friendly and straightforward to use.
 
+## Limitations and ethical considerations
+
+If words that are associated with swearing, insults or profanity are present in a comment, it is likely that it will be classified as toxic, regardless of the tone or the intent of the author e.g. humorous/self-deprecating. This could present some biases towards already vulnerable minority groups.
+
+The intended use of this library is for research purposes, fine-tuning on carefully constructed datasets that reflect real world demographics  and/or to aid content moderators in flagging out harmful content quicker.
+
+Some useful resources about the risk of different biases in toxicity or hate speech detection are:
+- [The Risk of Racial Bias in Hate Speech Detection](https://homes.cs.washington.edu/~msap/pdfs/sap2019risk.pdf)
+- [Automated Hate Speech Detection and the Problem of Offensive Language](https://arxiv.org/pdf/1703.04009.pdf%201.pdf)
+- [Racial Bias in Hate Speech and Abusive Language Detection Datasets](https://arxiv.org/pdf/1905.12516.pdf)
+
 ## Quick prediction
 
-**Disclaimer:**
-
-If words that are associated with swearing, insults or profanity are present in a comment, it is likely that it will be classified as toxic, regardless of the tone or the intent of the author e.g. humorous/self-deprecating.
 
 The `multilingual` model has been trained on 7 different languages so it should only be tested on: `english`, `french`, `spanish`, `italian`, `portuguese`, `turkish` or `russian`.
 
@@ -155,7 +163,7 @@ Trained models summary:
 |`unbiased`| `roberta-base`| Unintended Bias in Toxicity Classification
 |`multilingual`| `xlm-roberta-base`| Multilingual Toxic Comment Classification
 
-For a quick prediction can run the example script on a comment directly or from a csv containing a list of comments. 
+For a quick prediction can run the example script on a comment directly or from a txt containing a list of comments. 
 ```bash
 
 # load model via torch.hub
@@ -168,7 +176,7 @@ python run_prediction.py --input 'example' --from_ckpt_path model_path
 
 # save results to a .csv file
 
-python run_prediction.py --input test_set.csv --model_name original --save_to results.csv
+python run_prediction.py --input test_set.txt --model_name original --save_to results.csv
 
 # to see usage
 
