@@ -1,18 +1,14 @@
 import argparse
 import json
 import os
-from argparse import ArgumentParser
 
 import pytorch_lightning as pl
 import torch
-import transformers
 from pytorch_lightning.callbacks import ModelCheckpoint
-from pytorch_lightning.metrics.functional import accuracy
 from torch.nn import functional as F
 from torch.utils.data import DataLoader
 
 import src.data_loaders as module_data
-from src.utils import move_to
 from src.utils import get_model_and_tokenizer
 
 
@@ -146,7 +142,7 @@ def cli_main():
     pl.seed_everything(1234)
 
     # args
-    parser = argparse.ArgumentParser(description="PyTorch Template")
+    parser = argparse.ArgumentParser()
     parser.add_argument(
         "-c",
         "--config",
@@ -167,6 +163,12 @@ def cli_main():
         default=None,
         type=str,
         help="indices of GPUs to enable (default: all)",
+    )
+    parser.add_argument(
+        "--num_workers",
+        default=10,
+        type=str,
+        help="number of workers used in the data loader (default: 10)",
     )
     parser.add_argument(
         "-g", "--n_gpu", default=None, type=int, help="if given, override the num"
@@ -194,7 +196,7 @@ def cli_main():
     data_loader = DataLoader(
         dataset,
         batch_size=int(config["batch_size"]),
-        num_workers=20,
+        num_workers=args.num_workers,
         shuffle=True,
         drop_last=True,
         pin_memory=True,
@@ -203,7 +205,7 @@ def cli_main():
     valid_data_loader = DataLoader(
         val_dataset,
         batch_size=config["batch_size"],
-        num_workers=20,
+        num_workers=args.num_workers,
         shuffle=False,
     )
     # model
