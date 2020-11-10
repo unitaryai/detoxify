@@ -88,11 +88,9 @@ class Detoxify:
         scores = torch.sigmoid(out).cpu().detach().numpy()
         results = {}
         for i, cla in enumerate(self.class_names):
-            if isinstance(text, str):
-                text = [text]
             results[cla] = (
                 scores[0][i]
-                if len(scores) == 1
+                if isinstance(text, str)
                 else [scores[ex_i][i].tolist() for ex_i in range(len(scores))]
             )
         return results
