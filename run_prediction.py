@@ -39,9 +39,10 @@ def run(model_name, input_obj, dest_file, from_ckpt):
     else:
         res = Detoxify(checkpoint=from_ckpt).predict(text)
 
-    res_df = pd.DataFrame(res).round(3)
+    res_df = pd.DataFrame(res, index=[text] if isinstance(text, str) else text).round(5)
     print(res_df)
     if dest_file is not None:
+        res_df.index.name = "input_text"
         res_df.to_csv(dest_file)
 
     return res
