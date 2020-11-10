@@ -90,9 +90,11 @@ class Detoxify:
         for i, cla in enumerate(self.class_names):
             if isinstance(text, str):
                 text = [text]
-            results[cla] = {
-                text[ex_i]: scores[ex_i][i].tolist() for ex_i in range(len(scores))
-            }
+            results[cla] = (
+                scores[0][i]
+                if len(scores) == 1
+                else [scores[ex_i][i].tolist() for ex_i in range(len(scores))]
+            )
         return results
 
 
