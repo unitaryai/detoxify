@@ -268,7 +268,7 @@ python train.py --config configs/Multilingual_toxic_comment_classification_XLMR.
 
 # stage 2
 
-python train.py --config configs/Multilingual_toxic_comment_classification_XLMR_stage2.json
+python train.py --config configs/Multilingual_toxic_comment_classification_XLMR_stage2.json --resume path_to_saved_checkpoint_stage1
 
 ```
 ### Monitor progress with tensorboard
