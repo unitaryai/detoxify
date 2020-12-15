@@ -82,6 +82,7 @@ class Detoxify:
             model_type=model_type, checkpoint=checkpoint
         )
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
+        self.model.to(self.device)
 
 
     @torch.no_grad()
