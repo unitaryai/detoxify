@@ -1,0 +1,42 @@
+{
+    "name": "Jigsaw_ALBERT",
+    "n_gpu": 1,
+    "batch_size": 10,
+    "accumulate_grad_batches": 3,
+    "loss": "binary_cross_entropy",
+    "arch": {
+        "type": "ALBERT",
+        "args": {
+            "num_classes": 6,
+            "model_type": "albert-base-v2",
+            "model_name": "AlbertForSequenceClassification",
+            "tokenizer_name": "AlbertTokenizer"
+        }
+    },
+    "dataset": {
+        "type": "JigsawDataOriginal",
+        "args": {
+            "train_csv_file": "jigsaw_data/jigsaw-toxic-comment-classification-challenge/train.csv",
+            "test_csv_file": "jigsaw_data/jigsaw-toxic-comment-classification-challenge/val.csv",
+            "val_fraction": null,
+            "create_val_set": false,
+            "add_test_labels": false,
+            "classes": [
+                "toxic",
+                "severe_toxic",
+                "obscene",
+                "threat",
+                "insult",
+                "identity_hate"
+            ]
+        }
+    },
+    "optimizer": {
+        "type": "Adam",
+        "args": {
+            "lr": 3e-5,
+            "weight_decay": 3e-6,
+            "amsgrad": true
+        }
+    }
+}
