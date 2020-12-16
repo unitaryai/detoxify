@@ -10,6 +10,12 @@
  
 ![Examples image](examples.png)
 
+## News & Updates
+
+### Lightweight models
+
+- Added smaller models trained with Albert for the `original` and `unbiased` models! Can access these in the same way with detoxify using `original-small` and `unbiased-small` as inputs. The `original-small` achieved a mean AUC score of 0.98281 (0.98856 before) and the `unbiased-small` achieved a final score of 0.93362 (0.94734 before).
+
 ## Description   
 
 Trained models & code to predict toxic comments on 3 Jigsaw challenges: Toxic comment classification, Unintended Bias in Toxic comments, Multilingual toxic comment classification.
