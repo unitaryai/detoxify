@@ -171,9 +171,6 @@ def cli_main():
         help="number of workers used in the data loader (default: 10)",
     )
     parser.add_argument(
-        "-g", "--n_gpu", default=None, type=int, help="if given, override the num"
-    )
-    parser.add_argument(
         "-e", "--n_epochs", default=100, type=int, help="if given, override the num"
     )
 

@@ -5,6 +5,8 @@ MODEL_URLS = {
     "original": "https://github.com/unitaryai/detoxify/releases/download/v0.1-alpha/toxic_original-c1212f89.ckpt",
     "unbiased": "https://github.com/unitaryai/detoxify/releases/download/v0.1-alpha/toxic_bias-4e693588.ckpt",
     "multilingual": "https://github.com/unitaryai/detoxify/releases/download/v0.1-alpha/toxic_multilingual-bbddc277.ckpt",
+    "original-small": "https://github.com/unitaryai/detoxify/releases/download/v0.1.2/original-albert-0e1d6498.ckpt",
+    "unbiased-small": "https://github.com/unitaryai/detoxify/releases/download/v0.1.2/unbiased-albert-c8519128.ckpt"
 }
 
 PRETRAINED_MODEL = None
@@ -58,13 +60,13 @@ class Detoxify:
     Easily predict if a comment or list of comments is toxic.
     Can initialize 3 different model types from model type or checkpoint path:
         - original:
-            BERT model trained on data from the Jigsaw Toxic Comment
+            model trained on data from the Jigsaw Toxic Comment
             Classification Challenge
         - unbiased:
-            RoBERTa model trained on data from the Jigsaw Unintended Bias in
+            model trained on data from the Jigsaw Unintended Bias in
             Toxicity Classification Challenge
         - multilingual:
-            XLM-RoBertA model trained on data from the Jigsaw Multilingual
+            model trained on data from the Jigsaw Multilingual
             Toxic Comment Classification Challenge
     Args:
         model_type(str): model type to be loaded, can be either original,
@@ -81,6 +83,7 @@ class Detoxify:
         )
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
         self.model.to(self.device)
+
 
     @torch.no_grad()
     def predict(self, text):
@@ -104,8 +107,16 @@ def toxic_bert():
     return load_model("original")
 
 
+def toxic_albert():
+    return load_model("original-small")
+
+
 def unbiased_toxic_roberta():
     return load_model("unbiased")
+
+
+def unbiased_albert():
+    return load_model("unbiased-small")
 
 
 def multilingual_toxic_xlm_r():

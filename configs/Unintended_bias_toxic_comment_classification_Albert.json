@@ -1,0 +1,55 @@
+{
+    "name": "Jigsaw_ALBERT_bias",
+    "n_gpu": 1,
+    "batch_size": 10,
+    "accumulate_grad_batches": 3,
+    "num_main_classes": 7,
+    "loss_weight": 0.75,
+    "arch": {
+        "type": "ALBERT",
+        "args": {
+            "num_classes": 16,
+            "model_type": "albert-base-v2",
+            "model_name": "AlbertForSequenceClassification",
+            "tokenizer_name": "AlbertTokenizer"
+        }
+    },
+    "dataset": {
+        "type": "JigsawDataBias",
+        "args": {
+            "train_csv_file": "jigsaw_data/jigsaw-unintended-bias-in-toxicity-classification/train.csv",
+            "test_csv_file": "jigsaw_data/jigsaw-unintended-bias-in-toxicity-classification/test_public_expanded.csv",
+            "val_fraction": null,
+            "create_val_set": false,
+            "loss_weight": 0.75,
+            "classes": [
+                "toxicity",
+                "severe_toxicity",
+                "obscene",
+                "identity_attack",
+                "insult",
+                "threat",
+                "sexual_explicit"
+            ],
+            "identity_classes": [
+                "male",
+                "female",
+                "homosexual_gay_or_lesbian",
+                "christian",
+                "jewish",
+                "muslim",
+                "black",
+                "white",
+                "psychiatric_or_mental_illness"
+            ]
+        }
+    },
+    "optimizer": {
+        "type": "Adam",
+        "args": {
+            "lr": 3e-5,
+            "weight_decay": 3e-6,
+            "amsgrad": true
+        }
+    }
+}
