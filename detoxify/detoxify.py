@@ -72,16 +72,18 @@ class Detoxify:
         model_type(str): model type to be loaded, can be either original,
                          unbiased or multilingual
         checkpoint(str): checkpoint path, defaults to None
+        device(str): the device that the model and input will be allocated on,
+                     defaults to cpu
     Returns:
         results(dict): dictionary of output scores for each class
     """
 
-    def __init__(self, model_type="original", checkpoint=PRETRAINED_MODEL):
+    def __init__(self, model_type="original", checkpoint=PRETRAINED_MODEL, device="cpu"):
         super(Detoxify, self).__init__()
         self.model, self.tokenizer, self.class_names = load_checkpoint(
             model_type=model_type, checkpoint=checkpoint
         )
-        self.device = "cuda" if torch.cuda.is_available() else "cpu"
+        self.device = device
         self.model.to(self.device)
 
 
