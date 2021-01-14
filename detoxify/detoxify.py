@@ -72,8 +72,8 @@ class Detoxify:
         model_type(str): model type to be loaded, can be either original,
                          unbiased or multilingual
         checkpoint(str): checkpoint path, defaults to None
-        device(str): the device that the model and input will be allocated on,
-                     defaults to cpu
+        device(str or torch.device): accepts any torch.device input or 
+                                     torch.device object, defaults to cpu
     Returns:
         results(dict): dictionary of output scores for each class
     """
