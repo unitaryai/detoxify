@@ -27,10 +27,10 @@ def get_model_and_tokenizer(
     return model, tokenizer
 
 
-def load_checkpoint(model_type="original", checkpoint=None):
+def load_checkpoint(model_type="original", checkpoint=None, device='cpu'):
     if checkpoint is None:
         checkpoint_path = MODEL_URLS[model_type]
-        loaded = torch.hub.load_state_dict_from_url(checkpoint_path)
+        loaded = torch.hub.load_state_dict_from_url(checkpoint_path, map_location=device)
     else:
         loaded = torch.load(checkpoint)
         if "config" not in loaded or "state_dict" not in loaded:
@@ -81,7 +81,7 @@ class Detoxify:
     def __init__(self, model_type="original", checkpoint=PRETRAINED_MODEL, device="cpu"):
         super(Detoxify, self).__init__()
         self.model, self.tokenizer, self.class_names = load_checkpoint(
-            model_type=model_type, checkpoint=checkpoint
+            model_type=model_type, checkpoint=checkpoint, device=device
         )
         self.device = device
         self.model.to(self.device)
