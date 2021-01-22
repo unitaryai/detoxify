@@ -7,7 +7,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name="detoxify",
-    version="0.2.1",
+    version="0.2.2",
     description="A python library for detecting toxic comments",
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -19,7 +19,7 @@ setup(
         "torch >= 1.7.0",
         "sentencepiece >= 0.1.94"
     ],
-    packages=find_packages('detoxify', exclude=("tests", "src")),
+    packages=find_packages(include=["detoxify"], exclude=["tests", "src"]),
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: Apache Software License",
