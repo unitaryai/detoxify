@@ -27,10 +27,10 @@ def get_model_and_tokenizer(
     return model, tokenizer
 
 
-def load_checkpoint(model_type="original", checkpoint=None):
+def load_checkpoint(model_type="original", checkpoint=None, device='cpu'):
     if checkpoint is None:
         checkpoint_path = MODEL_URLS[model_type]
-        loaded = torch.hub.load_state_dict_from_url(checkpoint_path)
+        loaded = torch.hub.load_state_dict_from_url(checkpoint_path, map_location=device)
     else:
         loaded = torch.load(checkpoint)
         if "config" not in loaded or "state_dict" not in loaded:
@@ -72,16 +72,18 @@ class Detoxify:
         model_type(str): model type to be loaded, can be either original,
                          unbiased or multilingual
         checkpoint(str): checkpoint path, defaults to None
+        device(str or torch.device): accepts any torch.device input or 
+                                     torch.device object, defaults to cpu
     Returns:
         results(dict): dictionary of output scores for each class
     """
 
-    def __init__(self, model_type="original", checkpoint=PRETRAINED_MODEL):
+    def __init__(self, model_type="original", checkpoint=PRETRAINED_MODEL, device="cpu"):
         super(Detoxify, self).__init__()
         self.model, self.tokenizer, self.class_names = load_checkpoint(
-            model_type=model_type, checkpoint=checkpoint
+            model_type=model_type, checkpoint=checkpoint, device=device
         )
-        self.device = "cuda" if torch.cuda.is_available() else "cpu"
+        self.device = device
         self.model.to(self.device)
 
 
