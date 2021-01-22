@@ -19,7 +19,7 @@ setup(
         "torch >= 1.7.0",
         "sentencepiece >= 0.1.94"
     ],
-    packages=find_packages(exclude=("tests", "src")),
+    packages=find_packages('detoxify', exclude=("tests", "src")),
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: Apache Software License",
