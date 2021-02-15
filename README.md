@@ -3,6 +3,7 @@
 # 🙊 Detoxify
 ##  Toxic Comment Classification with ⚡ Pytorch Lightning and 🤗 Transformers   
 
+[![PyPI version](https://badge.fury.io/py/detoxify.svg)](https://badge.fury.io/py/detoxify)
 ![CI testing](https://github.com/unitaryai/detoxify/workflows/CI%20testing/badge.svg)
 ![Lint](https://github.com/unitaryai/detoxify/workflows/Lint/badge.svg)
 
@@ -12,7 +13,10 @@
 
 ## News & Updates
 
-### Lightweight models
+### 15-02-2021: Detoxify featured in Scientific American!
+- Our opinion piece ["Can AI identify toxic online content?"](https://www.scientificamerican.com/article/can-ai-identify-toxic-online-content/) is now live on Scientific American
+
+### 14-01-2021: Lightweight models
 
 - Added smaller models trained with Albert for the `original` and `unbiased` models! Can access these in the same way with detoxify using `original-small` and `unbiased-small` as inputs. The `original-small` achieved a mean AUC score of 0.98281 (0.98856 before) and the `unbiased-small` achieved a final score of 0.93362 (0.94734 before).
 
