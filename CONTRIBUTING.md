@@ -16,5 +16,5 @@ pip install -r tests/requirements.txt
 Run tests (may take 90 seconds):
 
 ```sh
-pytest
+pytest --disable-pytest-warnings
 ```
