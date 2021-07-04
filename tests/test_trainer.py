@@ -62,7 +62,7 @@ def test_trainer():
 
     results = initialize_trainer(CONFIG)
     print(results)
-    assert results[0]["test_acc"] > 0.3
+    assert results[0]["test_acc"] > 0.6
 
 
 if __name__ == "__main__":
