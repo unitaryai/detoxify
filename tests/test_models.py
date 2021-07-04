@@ -8,11 +8,11 @@ from transformers import (
 )
 
 from detoxify.detoxify import (
-    toxic_bert, # "original"
-    toxic_albert, # "original-small"
-    unbiased_toxic_roberta, # "unbiased"
-    unbiased_albert, # "unbiased-small"
-    multilingual_toxic_xlm_r # # "multilingual"
+    toxic_bert,
+    toxic_albert,
+    unbiased_toxic_roberta,
+    unbiased_albert,
+    multilingual_toxic_xlm_r
 )
 
 def test_model_toxic_bert():
