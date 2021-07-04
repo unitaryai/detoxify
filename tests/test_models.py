@@ -13,7 +13,6 @@ from detoxify.detoxify import (
     unbiased_toxic_roberta, # "unbiased"
     unbiased_albert, # "unbiased-small"
     multilingual_toxic_xlm_r # # "multilingual"
-
 )
 
 def test_model_toxic_bert():
