@@ -179,7 +179,6 @@ def cli_main():
 
     if args.device is not None:
         config["device"] = args.device
-        os.environ["CUDA_VISIBLE_DEVICES"] = args.device
 
     # data
     def get_instance(module, name, config, *args, **kwargs):
