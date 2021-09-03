@@ -1,5 +1,5 @@
 <div align="center">    
- 
+
 # 🙊 Detoxify
 ##  Toxic Comment Classification with ⚡ Pytorch Lightning and 🤗 Transformers   
 
