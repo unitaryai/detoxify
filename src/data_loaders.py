@@ -58,14 +58,40 @@ class JigsawData(Dataset):
 
     def load_data(self, train_csv_file):
         files = []
-        cols = ["id", "comment_text", "toxic"]
+        change_names = {
+            "target": "toxicity",
+            "toxic": "toxicity",
+            "identity_hate": "identity_attack",
+            "severe_toxic": "severe_toxicity",
+        }
         for file in tqdm(train_csv_file):
-            file_df = pd.read_csv(file)
-            file_df = file_df[cols]
-            file_df = file_df.astype({"id": "string"}, {"toxic": "float64"})
+            chunks = []
+            for chunk in pd.read_csv(file, chunksize=100000):
+                chunks.append(chunk)
+
+            file_df = pd.concat(chunks, axis=0)
+            filtered_change_names = {
+                k: v for k, v in change_names.items() if k in file_df.columns
+            }
+            if len(filtered_change_names) > 0:
+                file_df.rename(columns=filtered_change_names, inplace=True)
+            file_df = file_df.astype({"id": "string"})
             files.append(file_df)
-        train = pd.concat(files)
+
+        train = pd.concat(files, join="outer")
         return train
+
+    def filter_entry_labels(self, entry, classes, threshold=0.5, soft_labels=False):
+        target = {
+            label: -1 if label not in entry or entry[label] is None else entry[label]
+            for label in classes
+        }
+        if not soft_labels:
+            target.update({label: 1 for label in target if target[label] >= threshold})
+            target.update(
+                {label: 0 for label in target if 0 <= target[label] < threshold}
+            )
+        return target
 
 
 class JigsawDataOriginal(JigsawData):
@@ -128,10 +154,11 @@ class JigsawDataBias(JigsawData):
         loss_weight=0.75,
         classes=["toxic"],
         identity_classes=["female"],
+        soft_labels=False,
     ):
 
         self.classes = classes
-
+        self.soft_labels = soft_labels
         self.identity_classes = identity_classes
 
         super().__init__(
@@ -156,21 +183,12 @@ class JigsawDataBias(JigsawData):
         text_id = entry["id"]
         text = entry["comment_text"]
 
-        target_dict = {label: 1 if entry[label] >= 0.5 else 0 for label in self.classes}
-
-        identity_target = {
-            label: -1 if entry[label] is None else entry[label]
-            for label in self.identity_classes
-        }
-        identity_target.update(
-            {label: 1 for label in identity_target if identity_target[label] >= 0.5}
+        target_dict = self.filter_entry_labels(
+            entry,
+            self.classes + self.identity_classes,
+            threshold=0.5,
+            soft_labels=self.soft_labels,
         )
-        identity_target.update(
-            {label: 0 for label in identity_target if 0 <= identity_target[label] < 0.5}
-        )
-
-        target_dict.update(identity_target)
-
         meta["multi_target"] = torch.tensor(
             list(target_dict.values()), dtype=torch.float32
         )
@@ -192,7 +210,7 @@ class JigsawDataBias(JigsawData):
         return text, meta
 
     def compute_weigths(self, train_df):
-        """Inspired from 2nd solution.
+        """Inspired from 2nd best solution.
         Source: https://www.kaggle.com/c/jigsaw-unintended-bias-in-toxicity-classification/discussion/100661"""
         subgroup_bool = (train_df[self.identity_classes].fillna(0) >= 0.5).sum(
             axis=1
@@ -200,7 +218,8 @@ class JigsawDataBias(JigsawData):
         positive_bool = train_df["toxicity"] >= 0.5
         weights = np.ones(len(train_df)) * 0.25
 
-        # Backgroud Positive and Subgroup Negative
+        # Background Positive and Subgroup Negative
+        # i.e. weigh higher toxic comments that don't mention identity and non toxic ones that mention it
         weights[
             ((~subgroup_bool) & (positive_bool)) | ((subgroup_bool) & (~positive_bool))
         ] += 0.25
