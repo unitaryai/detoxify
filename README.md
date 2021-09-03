@@ -13,12 +13,15 @@
 
 ## News & Updates
 
+### 03-09-2021: New improved unbiased model
+-  Updated the `unbiased` model weights used by Detoxify with a model trained on both datasets from the first 2 Jigsaw challenges. New best score on the test set: 0.93744 (0.93639 before).
+
 ### 15-02-2021: Detoxify featured in Scientific American!
 - Our opinion piece ["Can AI identify toxic online content?"](https://www.scientificamerican.com/article/can-ai-identify-toxic-online-content/) is now live on Scientific American
 
 ### 14-01-2021: Lightweight models
 
-- Added smaller models trained with Albert for the `original` and `unbiased` models! Can access these in the same way with detoxify using `original-small` and `unbiased-small` as inputs. The `original-small` achieved a mean AUC score of 0.98281 (0.98856 before) and the `unbiased-small` achieved a final score of 0.93362 (0.94734 before).
+- Added smaller models trained with Albert for the `original` and `unbiased` models! Can access these in the same way with detoxify using `original-small` and `unbiased-small` as inputs. The `original-small` achieved a mean AUC score of 0.98281 (0.98636 before) and the `unbiased-small` achieved a final score of 0.93362 (0.93639 before).
 
 ## Description   
 
@@ -37,7 +40,7 @@ Dependencies:
 | Challenge | Year | Goal | Original Data Source | Detoxify Model Name | Top Kaggle Leaderboard Score | Detoxify Score
 |-|-|-|-|-|-|-|
 | [Toxic Comment Classification Challenge](https://www.kaggle.com/c/jigsaw-toxic-comment-classification-challenge) | 2018 |  build a multi-headed model that’s capable of detecting different types of of toxicity like threats, obscenity, insults, and identity-based hate. | Wikipedia Comments | `original` | 0.98856 | 0.98636
-| [Jigsaw Unintended Bias in Toxicity Classification](https://www.kaggle.com/c/jigsaw-unintended-bias-in-toxicity-classification) | 2019 | build a model that recognizes toxicity and minimizes this type of unintended bias with respect to mentions of identities. You'll be using a dataset labeled for identity mentions and optimizing a metric designed to measure unintended bias. | Civil Comments | `unbiased` | 0.94734 | 0.93639
+| [Jigsaw Unintended Bias in Toxicity Classification](https://www.kaggle.com/c/jigsaw-unintended-bias-in-toxicity-classification) | 2019 | build a model that recognizes toxicity and minimizes this type of unintended bias with respect to mentions of identities. You'll be using a dataset labeled for identity mentions and optimizing a metric designed to measure unintended bias. | Civil Comments | `unbiased` | 0.94734 | 0.93744
 | [Jigsaw Multilingual Toxic Comment Classification](https://www.kaggle.com/c/jigsaw-multilingual-toxic-comment-classification) | 2020 | build effective multilingual models | Wikipedia Comments + Civil Comments | `multilingual` | 0.9536 | 0.91655*
 
 *Score not directly comparable since it is obtained on the validation set provided and not on the test set. To update when the test labels are made available. 
