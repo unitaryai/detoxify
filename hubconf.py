@@ -1,4 +1,4 @@
-dependencies = ["torch", "transformers"]
+dependencies = ["torch"]
 
 from detoxify import toxic_bert
 
