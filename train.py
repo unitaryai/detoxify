@@ -209,11 +209,17 @@ def cli_main():
 
     # training
 
+    checkpoint_callback = ModelCheckpoint(
+        save_top_k=100,
+        verbose=True,
+        monitor="val_loss",
+        mode="min",
+    )
     trainer = pl.Trainer(
         gpus=args.device,
         max_epochs=args.n_epochs,
         accumulate_grad_batches=config["accumulate_grad_batches"],
-        checkpoint_callback=True,
+        callbacks=[checkpoint_callback],
         resume_from_checkpoint=args.resume,
         default_root_dir="saved/" + config["name"],
         deterministic=True,
