@@ -220,7 +220,7 @@ def cli_main():
         gpus=args.device,
         max_epochs=args.n_epochs,
         accumulate_grad_batches=config["accumulate_grad_batches"],
-        checkpoint_callback=checkpoint_callback,
+        callbacks=[checkpoint_callback],
         resume_from_checkpoint=args.resume,
         default_root_dir="saved/" + config["name"],
         deterministic=True,
