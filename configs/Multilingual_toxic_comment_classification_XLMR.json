@@ -21,8 +21,6 @@
                 "jigsaw_data/jigsaw-multilingual-toxic-comment-classification/jigsaw-unintended-bias-train.csv"
             ],
             "test_csv_file": "jigsaw_data/jigsaw-multilingual-toxic-comment-classification/validation.csv",
-            "val_fraction": null,
-            "create_val_set": false,
             "classes": [
                 "toxic"
             ]

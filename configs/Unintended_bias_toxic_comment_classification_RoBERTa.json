@@ -19,8 +19,6 @@
         "args": {
             "train_csv_file": "jigsaw_data/jigsaw-unintended-bias-in-toxicity-classification/train.csv",
             "test_csv_file": "jigsaw_data/jigsaw-unintended-bias-in-toxicity-classification/test_public_expanded.csv",
-            "val_fraction": null,
-            "create_val_set": false,
             "loss_weight": 0.75,
             "classes": [
                 "toxicity",

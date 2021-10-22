@@ -22,13 +22,18 @@
                 "jigsaw_data/jigsaw-multilingual-toxic-comment-classification/jigsaw-toxic-comment-train-google-it-cleaned.csv",
                 "jigsaw_data/jigsaw-multilingual-toxic-comment-classification/jigsaw-toxic-comment-train-google-pt-cleaned.csv",
                 "jigsaw_data/jigsaw-multilingual-toxic-comment-classification/jigsaw-toxic-comment-train-google-ru-cleaned.csv",
-                "jigsaw_data/jigsaw-multilingual-toxic-comment-classification/jigsaw-toxic-comment-train-google-tr-cleaned.csv"
+                "jigsaw_data/jigsaw-multilingual-toxic-comment-classification/jigsaw-toxic-comment-train-google-tr-cleaned.csv",
+                "jigsaw_data/jigsaw-unintended-bias-in-toxicity-classification/test_public_expanded.csv"
             ],
             "test_csv_file": "jigsaw_data/jigsaw-multilingual-toxic-comment-classification/validation.csv",
-            "val_fraction": null,
-            "create_val_set": false,
             "classes": [
-                "toxic"
+                "toxicity",
+                "severe_toxicity",
+                "obscene",
+                "identity_attack",
+                "insult",
+                "threat",
+                "sexual_explicit"
             ]
         }
     },
