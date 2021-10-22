@@ -14,15 +14,17 @@
 
 ## News & Updates
 
+### 22-10-2021: New improved multilingual model
+-  Updated the `multilingual` model weights used by Detoxify with a model trained on the translated data from the 2nd Jigsaw challenge (as well as the 1st). This model has also been trained to minimise bias and now returns the same categories as the `unbiased` model. New best AUC score on the test set: 92.11 (89.71 before).
 ### 03-09-2021: New improved unbiased model
--  Updated the `unbiased` model weights used by Detoxify with a model trained on both datasets from the first 2 Jigsaw challenges. New best score on the test set: 0.93744 (0.93639 before).
+-  Updated the `unbiased` model weights used by Detoxify with a model trained on both datasets from the first 2 Jigsaw challenges. New best score on the test set: 93.74 (93.64 before).
 
 ### 15-02-2021: Detoxify featured in Scientific American!
 - Our opinion piece ["Can AI identify toxic online content?"](https://www.scientificamerican.com/article/can-ai-identify-toxic-online-content/) is now live on Scientific American
 
 ### 14-01-2021: Lightweight models
 
-- Added smaller models trained with Albert for the `original` and `unbiased` models! Can access these in the same way with detoxify using `original-small` and `unbiased-small` as inputs. The `original-small` achieved a mean AUC score of 0.98281 (0.98636 before) and the `unbiased-small` achieved a final score of 0.93362 (0.93639 before).
+- Added smaller models trained with Albert for the `original` and `unbiased` models! Can access these in the same way with detoxify using `original-small` and `unbiased-small` as inputs. The `original-small` achieved a mean AUC score of 98.28 (98.64 before) and the `unbiased-small` achieved a final score of 93.36 (93.64 before).
 
 ## Description   
 
@@ -38,15 +40,25 @@ Dependencies:
   - Kaggle API (to download data)
 
 
-| Challenge | Year | Goal | Original Data Source | Detoxify Model Name | Top Kaggle Leaderboard Score | Detoxify Score
+| Challenge | Year | Goal | Original Data Source | Detoxify Model Name | Top Kaggle Leaderboard Score % | Detoxify Score %
 |-|-|-|-|-|-|-|
-| [Toxic Comment Classification Challenge](https://www.kaggle.com/c/jigsaw-toxic-comment-classification-challenge) | 2018 |  build a multi-headed model that’s capable of detecting different types of of toxicity like threats, obscenity, insults, and identity-based hate. | Wikipedia Comments | `original` | 0.98856 | 0.98636
-| [Jigsaw Unintended Bias in Toxicity Classification](https://www.kaggle.com/c/jigsaw-unintended-bias-in-toxicity-classification) | 2019 | build a model that recognizes toxicity and minimizes this type of unintended bias with respect to mentions of identities. You'll be using a dataset labeled for identity mentions and optimizing a metric designed to measure unintended bias. | Civil Comments | `unbiased` | 0.94734 | 0.93744
-| [Jigsaw Multilingual Toxic Comment Classification](https://www.kaggle.com/c/jigsaw-multilingual-toxic-comment-classification) | 2020 | build effective multilingual models | Wikipedia Comments + Civil Comments | `multilingual` | 0.9536 | 0.91655*
+| [Toxic Comment Classification Challenge](https://www.kaggle.com/c/jigsaw-toxic-comment-classification-challenge) | 2018 |  build a multi-headed model that’s capable of detecting different types of of toxicity like threats, obscenity, insults, and identity-based hate. | Wikipedia Comments | `original` | 98.86 | 98.64
+| [Jigsaw Unintended Bias in Toxicity Classification](https://www.kaggle.com/c/jigsaw-unintended-bias-in-toxicity-classification) | 2019 | build a model that recognizes toxicity and minimizes this type of unintended bias with respect to mentions of identities. You'll be using a dataset labeled for identity mentions and optimizing a metric designed to measure unintended bias. | Civil Comments | `unbiased` | 94.73 | 93.74
+| [Jigsaw Multilingual Toxic Comment Classification](https://www.kaggle.com/c/jigsaw-multilingual-toxic-comment-classification) | 2020 | build effective multilingual models | Wikipedia Comments + Civil Comments | `multilingual` | 95.36 | 92.11
 
-*Score not directly comparable since it is obtained on the validation set provided and not on the test set. To update when the test labels are made available. 
 
 It is also noteworthy to mention that the top leadearboard scores have been achieved using model ensembles. The purpose of this library was to build something user-friendly and straightforward to use.
+
+### Multilingual model language breakdown
+
+| Language Subgroup   |   Subgroup size |   Subgroup AUC Score % |
+|:-----------|----------------:|---------------:|
+it      |     8494   |   89.18 |
+fr      |    10920   |   89.61 |
+ru      |    10948   |   89.81 |
+pt      |    11012   |   91.00 |
+es      |     8438   |   92.74 |
+tr      |    14000   |   97.19 |
 
 ## Limitations and ethical considerations
 
@@ -261,7 +273,8 @@ kaggle competitions download -c jigsaw-multilingual-toxic-comment-classification
 
  ```bash
 
-python create_val_set.py
+# combine test.csv and test_labels.csv
+python preprocessing_utils.py --test_csv jigsaw_data/jigsaw-toxic-comment-classification-challenge/test.csv --update_test
 
 python train.py --config configs/Toxic_comment_classification_BERT.json
 ``` 
@@ -269,26 +282,24 @@ python train.py --config configs/Toxic_comment_classification_BERT.json
 
 ```bash
 
-python train.py --config configs/Unintended_bias_toxic_comment_classification_RoBERTa.json
+python train.py --config configs/Unintended_bias_toxic_comment_classification_RoBERTa_combined.json
 
 ```
  ### Multilingual Toxic Comment Classification
-
- This is trained in 2 stages. First, train on all available data, and second, train only on the translated versions of the first challenge. 
  
- The [translated data](https://www.kaggle.com/miklgr500/jigsaw-train-multilingual-coments-google-api) can be downloaded from Kaggle in french, spanish, italian, portuguese, turkish, and russian (the languages available in the test set).
+ 
+ The translated data ([source 1](https://www.kaggle.com/miklgr500/jigsaw-train-multilingual-coments-google-api) [source 2](https://www.kaggle.com/ludovick/jigsawtanslatedgoogle)) can be downloaded from Kaggle in french, spanish, italian, portuguese, turkish, and russian (the languages available in the test set).
 
- ```bash
 
-# stage 1
+```bash
+
+# combine test.csv and test_labels.csv
+python preprocessing_utils.py --test_csv jigsaw_data/jigsaw-multilingual-toxic-comment-classification/test.csv --update_test
 
 python train.py --config configs/Multilingual_toxic_comment_classification_XLMR.json
 
-# stage 2
-
-python train.py --config configs/Multilingual_toxic_comment_classification_XLMR_stage2.json --resume path_to_saved_checkpoint_stage1
-
 ```
+
 ### Monitor progress with tensorboard
 
  ```bash
