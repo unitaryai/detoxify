@@ -122,30 +122,12 @@ if __name__ == "__main__":
     config = json.load(open(args.config))
 
     if args.device is not None:
-        os.environ["CUDA_VISIBLE_DEVICES"] = args.device
         config["gpus"] = args.device
 
     results = test_classifier(
         config, args.test_csv, args.checkpoint, "cuda:" + args.device
     )
+    test_set_name = args.test_csv.split("/")[-1:][0]
 
-    with open(args.checkpoint[:-4] + "results.json", "w") as f:
+    with open(args.checkpoint[:-4] + f"results_{test_set_name}.json", "w") as f:
         json.dump(results, f)
-    submission = [
-        [results["ids"][s], *results["scores"][s]]
-        for s in range(len(results["scores"]))
-    ]
-
-    df_submission = pd.DataFrame(
-        submission,
-        columns=[
-            "id",
-            "toxic",
-            "severe_toxic",
-            "obscene",
-            "threat",
-            "insult",
-            "identity_hate",
-        ],
-    )
-    df_submission.to_csv(args.checkpoint[:-4] + "submission.csv", index=False)
