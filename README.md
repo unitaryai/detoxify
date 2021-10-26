@@ -53,12 +53,12 @@ It is also noteworthy to mention that the top leadearboard scores have been achi
 
 | Language Subgroup   |   Subgroup size |   Subgroup AUC Score % |
 |:-----------|----------------:|---------------:|
-it      |     8494   |   89.18 |
-fr      |    10920   |   89.61 |
-ru      |    10948   |   89.81 |
-pt      |    11012   |   91.00 |
-es      |     8438   |   92.74 |
-tr      |    14000   |   97.19 |
+🇮🇹 it       |     8494   |   89.18 |
+🇫🇷 fr      |    10920   |   89.61 |
+🇷🇺 ru     |    10948   |   89.81 |
+🇵🇹 pt      |    11012   |   91.00 |
+🇪🇸 es      |     8438   |   92.74 |
+🇹🇷 tr     |    14000   |   97.19 |
 
 ## Limitations and ethical considerations
 
