@@ -39,7 +39,13 @@ def load_checkpoint(model_type="original", checkpoint=None, device='cpu'):
                     with as well as the state dict"
             )
     class_names = loaded["config"]["dataset"]["args"]["classes"]
-
+    # standardise class names between models
+    change_names = {
+        "toxic": "toxicity",
+        "identity_hate": "identity_attack",
+        "severe_toxic": "severe_toxicity",
+    }
+    class_names = [cl if cl not in change_names else change_names[cl] for cl in class_names]
     model, tokenizer = get_model_and_tokenizer(
         **loaded["config"]["arch"]["args"], state_dict=loaded["state_dict"]
     )
