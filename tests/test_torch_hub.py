@@ -2,7 +2,7 @@ import torch
 import gc
 
 def test_torch_hub_models():
-    result = torch.hub.list("unitaryai/detoxify")
+    result = torch.hub.list("unitaryai/detoxify", skip_validation=True)
 
 def test_torch_hub_bert():
     model = torch.hub.load('unitaryai/detoxify', 'toxic_bert', skip_validation=True)
