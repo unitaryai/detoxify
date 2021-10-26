@@ -20,12 +20,12 @@
             "test_csv_file": "jigsaw_data/jigsaw-toxic-comment-classification-challenge/val.csv",
             "add_test_labels": false,
             "classes": [
-                "toxicity",
-                "severe_toxicity",
+                "toxic",
+                "severe_toxic",
                 "obscene",
                 "threat",
                 "insult",
-                "identity_attack"
+                "identity_hate"
             ]
         }
     },
