@@ -58,7 +58,7 @@ def load_model(model_type, checkpoint=None):
 class Detoxify:
     """Detoxify
     Easily predict if a comment or list of comments is toxic.
-    Can initialize 3 different model types from model type or checkpoint path:
+    Can initialize 5 different model types from model type or checkpoint path:
         - original:
             model trained on data from the Jigsaw Toxic Comment
             Classification Challenge
@@ -68,6 +68,10 @@ class Detoxify:
         - multilingual:
             model trained on data from the Jigsaw Multilingual
             Toxic Comment Classification Challenge
+        - original-small:
+            lightweight version of the original model
+        - unbiased-small:
+            lightweight version of the unbiased model
     Args:
         model_type(str): model type to be loaded, can be either original,
                          unbiased or multilingual
