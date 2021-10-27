@@ -14,8 +14,10 @@
 
 ## News & Updates
 
-### 22-10-2021: New improved multilingual model
+### 22-10-2021: New improved multilingual model & standardised class names
 -  Updated the `multilingual` model weights used by Detoxify with a model trained on the translated data from the 2nd Jigsaw challenge (as well as the 1st). This model has also been trained to minimise bias and now returns the same categories as the `unbiased` model. New best AUC score on the test set: 92.11 (89.71 before).
+- All detoxify models now return consistent class names (e.g. "identity_attack" replaces "identity_hate" in the `original` model to match the `unbiased` classes).
+
 ### 03-09-2021: New improved unbiased model
 -  Updated the `unbiased` model weights used by Detoxify with a model trained on both datasets from the first 2 Jigsaw challenges. New best score on the test set: 93.74 (93.64 before).
 
