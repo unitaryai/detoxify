@@ -4,7 +4,7 @@ import transformers
 MODEL_URLS = {
     "original": "https://github.com/unitaryai/detoxify/releases/download/v0.1-alpha/toxic_original-c1212f89.ckpt",
     "unbiased": "https://github.com/unitaryai/detoxify/releases/download/v0.3-alpha/toxic_debiased-c7548aa0.ckpt",
-    "multilingual": "https://github.com/unitaryai/detoxify/releases/download/v0.1-alpha/toxic_multilingual-bbddc277.ckpt",
+    "multilingual": "https://github.com/unitaryai/detoxify/releases/download/v0.4-alpha/multilingual_debiased-0b549669.ckpt",
     "original-small": "https://github.com/unitaryai/detoxify/releases/download/v0.1.2/original-albert-0e1d6498.ckpt",
     "unbiased-small": "https://github.com/unitaryai/detoxify/releases/download/v0.1.2/unbiased-albert-c8519128.ckpt"
 }
@@ -39,7 +39,13 @@ def load_checkpoint(model_type="original", checkpoint=None, device='cpu'):
                     with as well as the state dict"
             )
     class_names = loaded["config"]["dataset"]["args"]["classes"]
-
+    # standardise class names between models
+    change_names = {
+        "toxic": "toxicity",
+        "identity_hate": "identity_attack",
+        "severe_toxic": "severe_toxicity",
+    }
+    class_names = [change_names.get(cl, cl) for cl in class_names]
     model, tokenizer = get_model_and_tokenizer(
         **loaded["config"]["arch"]["args"], state_dict=loaded["state_dict"]
     )
@@ -58,7 +64,7 @@ def load_model(model_type, checkpoint=None):
 class Detoxify:
     """Detoxify
     Easily predict if a comment or list of comments is toxic.
-    Can initialize 3 different model types from model type or checkpoint path:
+    Can initialize 5 different model types from model type or checkpoint path:
         - original:
             model trained on data from the Jigsaw Toxic Comment
             Classification Challenge
@@ -68,6 +74,10 @@ class Detoxify:
         - multilingual:
             model trained on data from the Jigsaw Multilingual
             Toxic Comment Classification Challenge
+        - original-small:
+            lightweight version of the original model
+        - unbiased-small:
+            lightweight version of the unbiased model
     Args:
         model_type(str): model type to be loaded, can be either original,
                          unbiased or multilingual

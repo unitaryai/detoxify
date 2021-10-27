@@ -18,16 +18,14 @@
         "args": {
             "train_csv_file": "jigsaw_data/jigsaw-toxic-comment-classification-challenge/train.csv",
             "test_csv_file": "jigsaw_data/jigsaw-toxic-comment-classification-challenge/val.csv",
-            "val_fraction": null,
-            "create_val_set": false,
             "add_test_labels": false,
             "classes": [
-                "toxic",
-                "severe_toxic",
+                "toxicity",
+                "severe_toxicity",
                 "obscene",
                 "threat",
                 "insult",
-                "identity_hate"
+                "identity_attack"
             ]
         }
     },

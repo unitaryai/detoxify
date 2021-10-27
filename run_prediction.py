@@ -21,16 +21,17 @@ def load_input_text(input_obj):
     return text
 
 
-def run(model_name, input_obj, dest_file, from_ckpt):
+def run(model_name, input_obj, dest_file, from_ckpt, device="cpu"):
     """Loads model from checkpoint or from model name and runs inference on the input_obj.
     Displays results as a pandas DataFrame object.
     If a dest_file is given, it saves the results to a txt file.
     """
     text = load_input_text(input_obj)
     if model_name is not None:
-        res = Detoxify(model_name).predict(text)
+        model = Detoxify(model_name, device=device)
     else:
-        res = Detoxify(checkpoint=from_ckpt).predict(text)
+        model = Detoxify(checkpoint=from_ckpt, device=device)
+    res = model.predict(text)
 
     res_df = pd.DataFrame(res, index=[text] if isinstance(text, str) else text).round(5)
     print(res_df)
@@ -54,6 +55,12 @@ if __name__ == "__main__":
         default="unbiased",
         type=str,
         help="Name of the torch.hub model (default: unbiased)",
+    )
+    parser.add_argument(
+        "--device",
+        default="cpu",
+        type=str,
+        help="device to load the model on",
     )
     parser.add_argument(
         "--from_ckpt_path",
@@ -86,4 +93,4 @@ if __name__ == "__main__":
     if args.from_ckpt_path is not None:
         assert os.path.isfile(args.from_ckpt_path)
 
-    run(args.model_name, args.input, args.save_to, args.from_ckpt_path)
+    run(args.model_name, args.input, args.save_to, args.from_ckpt_path, device=args.device)

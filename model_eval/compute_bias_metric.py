@@ -3,18 +3,7 @@ import json
 import numpy as np
 from sklearn.metrics import roc_auc_score
 import argparse
-
-
-def compute_auc(y_true, y_pred):
-    try:
-        return roc_auc_score(y_true, y_pred)
-    except ValueError:
-        return np.nan
-
-
-def compute_subgroup_auc(df, subgroup, label, model_name):
-    subgroup_examples = df[df[subgroup]]
-    return compute_auc(subgroup_examples[label], subgroup_examples[model_name])
+from utils import compute_auc, compute_subgroup_auc
 
 
 def compute_bpsn_auc(df, subgroup, label, model_name):
@@ -34,7 +23,7 @@ def compute_bnsp_auc(df, subgroup, label, model_name):
 
 
 def compute_bias_metrics_for_model(
-    dataset, subgroups, model, label_col, include_asegs=False
+    dataset, subgroups, model, label_col
 ):
     """Computes per-subgroup metrics for all subgroups and one model."""
     records = []
@@ -89,7 +78,7 @@ def main():
     with open(TEST, "r") as f:
         results = json.load(f)
 
-    test_private_path = "../jigsaw_data/jigsaw-unintended-bias-in-toxicity-classification/test_private_expanded.csv"
+    test_private_path = "jigsaw_data/jigsaw-unintended-bias-in-toxicity-classification/test_private_expanded.csv"
     test_private = pd.read_csv(test_private_path)
     test_private = convert_dataframe_to_bool(test_private)
 

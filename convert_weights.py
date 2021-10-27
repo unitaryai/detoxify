@@ -32,7 +32,7 @@ def main():
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "--ckeckpoint",
+        "--checkpoint",
         type=str,
         help="path to model checkpoint",
     )
