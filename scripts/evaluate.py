@@ -1,5 +1,5 @@
-from train import ToxicClassifier
-import src.data_loaders as module_data
+from scripts.train import ToxicClassifier
+import detoxify.utils.data_loaders as module_data
 import argparse
 import torch
 from torch.utils.data import DataLoader
@@ -8,7 +8,7 @@ from tqdm import tqdm
 from sklearn.metrics import roc_auc_score
 import numpy as np
 import os
-from src.data_loaders import (
+from detoxify.utils.data_loaders import (
     JigsawDataOriginal,
     JigsawDataBias,
     JigsawDataMultilingual,

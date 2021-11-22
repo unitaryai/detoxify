@@ -1,7 +1,7 @@
 from pytorch_lightning import Trainer, seed_everything
 
-from train import ToxicClassifier
-import src.data_loaders as module_data
+from scripts.train import ToxicClassifier
+import detoxify.utils.data_loaders as module_data
 from torch.utils.data import DataLoader
 import json
 import torch
