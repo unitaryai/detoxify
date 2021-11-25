@@ -1,7 +1,7 @@
-<div align="center">    
+<div align="center">
 
 # 🙊 Detoxify
-##  Toxic Comment Classification with ⚡ Pytorch Lightning and 🤗 Transformers   
+##  Toxic Comment Classification with ⚡ Pytorch Lightning and 🤗 Transformers
 
 [![PyPI version](https://badge.fury.io/py/detoxify.svg)](https://badge.fury.io/py/detoxify)
 ![GitHub all releases](https://img.shields.io/github/downloads/unitaryai/detoxify/total)
@@ -9,7 +9,7 @@
 ![Lint](https://github.com/unitaryai/detoxify/workflows/Lint/badge.svg)
 
 </div>
- 
+
 ![Examples image](examples.png)
 
 ## News & Updates
@@ -28,16 +28,16 @@
 
 - Added smaller models trained with Albert for the `original` and `unbiased` models! Can access these in the same way with detoxify using `original-small` and `unbiased-small` as inputs. The `original-small` achieved a mean AUC score of 98.28 (98.64 before) and the `unbiased-small` achieved a final score of 93.36 (93.64 before).
 
-## Description   
+## Description
 
 Trained models & code to predict toxic comments on 3 Jigsaw challenges: Toxic comment classification, Unintended Bias in Toxic comments, Multilingual toxic comment classification.
 
-Built by [Laura Hanu](https://laurahanu.github.io/) at [Unitary](https://www.unitary.ai/), where we are working to stop harmful content online by interpreting visual content in context. 
+Built by [Laura Hanu](https://laurahanu.github.io/) at [Unitary](https://www.unitary.ai/), where we are working to stop harmful content online by interpreting visual content in context.
 
 Dependencies:
 - For inference:
   - 🤗 Transformers
-  - ⚡ Pytorch lightning 
+  - ⚡ Pytorch lightning
 - For training will also need:
   - Kaggle API (to download data)
 
@@ -79,7 +79,7 @@ Some useful resources about the risk of different biases in toxicity or hate spe
 The `multilingual` model has been trained on 7 different languages so it should only be tested on: `english`, `french`, `spanish`, `italian`, `portuguese`, `turkish` or `russian`.
 
 ```bash
-# install detoxify  
+# install detoxify
 
 pip install detoxify
 
@@ -130,7 +130,7 @@ This challenge includes the following labels:
 - `identity_hate`
 
 ### Jigsaw Unintended Bias in Toxicity Classification
-This challenge has 2 types of labels: the main toxicity labels and some additional identity labels that represent the identities mentioned in the comments. 
+This challenge has 2 types of labels: the main toxicity labels and some additional identity labels that represent the identities mentioned in the comments.
 
 Only identities with more than 500 examples in the test set (combined public and private) are included during training as additional labels and in the evaluation calculation.
 
@@ -162,11 +162,11 @@ Since this challenge combines the data from the previous 2 challenges, it includ
 
 - `toxicity`
 
-## How to run   
+## How to run
 
-First, install dependencies   
+First, install dependencies
 ```bash
-# clone project   
+# clone project
 
 git clone https://github.com/unitaryai/detoxify
 
@@ -175,7 +175,7 @@ git clone https://github.com/unitaryai/detoxify
 python3 -m venv toxic-env
 source toxic-env/bin/activate
 
-# install project   
+# install project
 
 pip install -e detoxify
 cd detoxify
@@ -183,7 +183,7 @@ cd detoxify
 # for training
 pip install -r requirements.txt
 
- ```   
+ ```
 
 ## Prediction
 
@@ -195,7 +195,7 @@ Trained models summary:
 |`unbiased`| `roberta-base`| Unintended Bias in Toxicity Classification
 |`multilingual`| `xlm-roberta-base`| Multilingual Toxic Comment Classification
 
-For a quick prediction can run the example script on a comment directly or from a txt containing a list of comments. 
+For a quick prediction can run the example script on a comment directly or from a txt containing a list of comments.
 ```bash
 
 # load model via torch.hub
@@ -247,9 +247,9 @@ print(pd.DataFrame(results,index=input_text).round(5))
 
 ## Training
 
- If you do not already have a Kaggle account: 
+ If you do not already have a Kaggle account:
  - you need to create one to be able to download the data
- 
+
  - go to My Account and click on Create New API Token - this will download a kaggle.json file
 
  - make sure this file is located in ~/.kaggle
@@ -279,7 +279,7 @@ kaggle competitions download -c jigsaw-multilingual-toxic-comment-classification
 python preprocessing_utils.py --test_csv jigsaw_data/jigsaw-toxic-comment-classification-challenge/test.csv --update_test
 
 python train.py --config configs/Toxic_comment_classification_BERT.json
-``` 
+```
  ### Unintended Bias in Toxicicity Challenge
 
 ```bash
@@ -288,8 +288,8 @@ python train.py --config configs/Unintended_bias_toxic_comment_classification_Ro
 
 ```
  ### Multilingual Toxic Comment Classification
- 
- 
+
+
  The translated data ([source 1](https://www.kaggle.com/miklgr500/jigsaw-train-multilingual-coments-google-api) [source 2](https://www.kaggle.com/ludovick/jigsawtanslatedgoogle)) can be downloaded from Kaggle in french, spanish, italian, portuguese, turkish, and russian (the languages available in the test set).
 
 
@@ -342,7 +342,7 @@ python evaluate.py --checkpoint saved/lightning_logs/checkpoints/example_checkpo
 
 ```
 
-### Citation   
+### Citation
 ```
 @misc{Detoxify,
   title={Detoxify},
@@ -350,4 +350,4 @@ python evaluate.py --checkpoint saved/lightning_logs/checkpoints/example_checkpo
   howpublished={Github. https://github.com/unitaryai/detoxify},
   year={2020}
 }
-```   
+```

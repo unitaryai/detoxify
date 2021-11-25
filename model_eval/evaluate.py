@@ -1,20 +1,18 @@
-from train import ToxicClassifier
-import src.data_loaders as module_data
 import argparse
-import torch
-from torch.utils.data import DataLoader
 import json
-from tqdm import tqdm
-from sklearn.metrics import roc_auc_score
-import numpy as np
 import os
-from src.data_loaders import (
-    JigsawDataOriginal,
-    JigsawDataBias,
-    JigsawDataMultilingual,
-)
-import pandas as pd
 import warnings
+
+import numpy as np
+import pandas as pd
+import torch
+from sklearn.metrics import roc_auc_score
+from torch.utils.data import DataLoader
+from tqdm import tqdm
+
+import src.data_loaders as module_data
+from src.data_loaders import JigsawDataBias, JigsawDataMultilingual, JigsawDataOriginal
+from train import ToxicClassifier
 
 
 def test_classifier(config, dataset, checkpoint_path, device="cuda:0"):

@@ -1,5 +1,6 @@
-import torch
 import gc
+
+import torch
 
 
 def test_torch_hub_models():

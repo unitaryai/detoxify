@@ -1,6 +1,8 @@
-import pandas as pd
-import json
 import argparse
+import json
+
+import pandas as pd
+
 from utils import compute_subgroup_auc
 
 
@@ -27,7 +29,7 @@ def compute_lang_metrics_for_model(
 
 
 def main():
-    with open(TEST, "r") as f:
+    with open(TEST) as f:
         results = json.load(f)
 
     test_private_path = (

@@ -1,7 +1,8 @@
-import torch
-from collections import OrderedDict
-import hashlib
 import argparse
+import hashlib
+from collections import OrderedDict
+
+import torch
 
 
 def main():
