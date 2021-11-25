@@ -1,4 +1,4 @@
-from detoxify.utils import (
+from detoxify.model import (
     Detoxify,
     toxic_bert,
     toxic_albert,

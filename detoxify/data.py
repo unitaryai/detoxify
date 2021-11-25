@@ -1,9 +1,18 @@
 from torch.utils.data.dataset import Dataset
 import torch
-import pandas as pd
 import numpy as np
-import datasets
-from tqdm import tqdm
+try:
+    import datasets
+except ImportError:
+    print("Package `datasets` is missing.")
+try:
+    import pandas as pd
+except ImportError:
+    print("Package `pandas` is missing.")
+try:
+    from tqdm import tqdm
+except ImportError:
+    print("Package `tqdm` is missing.")
 
 
 class JigsawData(Dataset):

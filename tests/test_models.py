@@ -5,7 +5,7 @@ from transformers import (
     XLMRobertaForSequenceClassification,
 )
 
-from detoxify.utils import (
+from detoxify.model import (
     toxic_bert,
     toxic_albert,
     unbiased_toxic_roberta,

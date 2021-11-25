@@ -8,7 +8,7 @@ from torch.nn import functional as F
 from torch.utils.data import DataLoader
 
 import detoxify.data as module_data
-from detoxify.extra import get_model_and_tokenizer
+from detoxify.utils import get_model_and_tokenizer
 
 
 class ToxicClassifier(pl.LightningModule):
