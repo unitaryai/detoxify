@@ -13,21 +13,25 @@ PRETRAINED_MODEL = None
 
 
 def get_model_and_tokenizer(
-    model_type, model_name, tokenizer_name, num_classes, state_dict
+    model_type, model_name, tokenizer_name, num_classes, state_dict, pretrained_model_path=None
 ):
     model_class = getattr(transformers, model_name)
     model = model_class.from_pretrained(
-        pretrained_model_name_or_path=None,
-        config=model_type,
+        pretrained_model_name_or_path=pretrained_model_path,
         num_labels=num_classes,
         state_dict=state_dict,
+        local_files_only=pretrained_model_path is not None,
     )
-    tokenizer = getattr(transformers, tokenizer_name).from_pretrained(model_type)
+    tokenizer = getattr(transformers, tokenizer_name).from_pretrained(
+        pretrained_model_name_or_path=pretrained_model_path,
+        model_type=model_type,
+        local_files_only=pretrained_model_path is not None,
+    )
 
     return model, tokenizer
 
 
-def load_checkpoint(model_type="original", checkpoint=None, device='cpu'):
+def load_checkpoint(model_type="original", checkpoint=None, device='cpu', pretrained_model_path=None):
     if checkpoint is None:
         checkpoint_path = MODEL_URLS[model_type]
         loaded = torch.hub.load_state_dict_from_url(checkpoint_path, map_location=device)
@@ -47,7 +51,7 @@ def load_checkpoint(model_type="original", checkpoint=None, device='cpu'):
     }
     class_names = [change_names.get(cl, cl) for cl in class_names]
     model, tokenizer = get_model_and_tokenizer(
-        **loaded["config"]["arch"]["args"], state_dict=loaded["state_dict"]
+        **loaded["config"]["arch"]["args"], state_dict=loaded["state_dict"], pretrained_model_path=pretrained_model_path,
     )
 
     return model, tokenizer, class_names
@@ -88,10 +92,10 @@ class Detoxify:
         results(dict): dictionary of output scores for each class
     """
 
-    def __init__(self, model_type="original", checkpoint=PRETRAINED_MODEL, device="cpu"):
+    def __init__(self, model_type="original", checkpoint=PRETRAINED_MODEL, device="cpu", pretrained_model_path=None):
         super(Detoxify, self).__init__()
         self.model, self.tokenizer, self.class_names = load_checkpoint(
-            model_type=model_type, checkpoint=checkpoint, device=device
+            model_type=model_type, checkpoint=checkpoint, device=device, pretrained_model_path=pretrained_model_path,
         )
         self.device = device
         self.model.to(self.device)
