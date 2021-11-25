@@ -1,6 +1,5 @@
 import argparse
 import json
-import os
 
 import pytorch_lightning as pl
 import torch
@@ -8,8 +7,8 @@ from pytorch_lightning.callbacks import ModelCheckpoint
 from torch.nn import functional as F
 from torch.utils.data import DataLoader
 
-import detoxify.utils.data_loaders as module_data
-from detoxify.utils.extra import get_model_and_tokenizer
+import detoxify.data as module_data
+from detoxify.extra import get_model_and_tokenizer
 
 
 class ToxicClassifier(pl.LightningModule):

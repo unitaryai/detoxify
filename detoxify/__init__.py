@@ -1,4 +1,4 @@
-from detoxify.core import (
+from detoxify.utils import (
     Detoxify,
     toxic_bert,
     toxic_albert,
