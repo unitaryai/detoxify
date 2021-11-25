@@ -23,8 +23,7 @@ def get_model_and_tokenizer(
         local_files_only=pretrained_model_path is not None,
     )
     tokenizer = getattr(transformers, tokenizer_name).from_pretrained(
-        pretrained_model_name_or_path=pretrained_model_path,
-        model_type=model_type,
+        pretrained_model_path or model_type,
         local_files_only=pretrained_model_path is not None,
     )
 
@@ -99,7 +98,6 @@ class Detoxify:
         )
         self.device = device
         self.model.to(self.device)
-
 
     @torch.no_grad()
     def predict(self, text):
