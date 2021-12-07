@@ -29,18 +29,13 @@ repos:
         args: [--py36-plus]
         name: Upgrade code
 
-  - repo: https://github.com/PyCQA/isort
-    rev: 5.9.3
+  - repo: https://github.com/omnilib/ufmt
+    rev: v1.3.0
     hooks:
-      - id: isort
-        name: Sort imports
-
-  # TODO
-  #- repo: https://github.com/pre-commit/mirrors-yapf
-  #  rev: v0.31.0
-  #  hooks:
-  #    - id: yapf
-  #      name: formatting
+      - id: ufmt
+        additional_dependencies:
+          - black == 21.9b0
+          - usort == 0.6.4
 
   # TODO
   #- repo: https://github.com/executablebooks/mdformat
