@@ -6,8 +6,7 @@ import torch
 
 
 def main():
-    """Converts saved checkpoint to the expected format for detoxify.
-    """
+    """Converts saved checkpoint to the expected format for detoxify."""
     checkpoint = torch.load(ARGS.checkpoint, map_location=ARGS.device)
 
     new_state_dict = {

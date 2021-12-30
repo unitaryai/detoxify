@@ -1,17 +1,16 @@
-from transformers import (
-    AlbertForSequenceClassification,
-    BertForSequenceClassification,
-    RobertaForSequenceClassification,
-    XLMRobertaForSequenceClassification
-)
-
 from detoxify.detoxify import (
     Detoxify,
     multilingual_toxic_xlm_r,
     toxic_albert,
     toxic_bert,
     unbiased_albert,
-    unbiased_toxic_roberta
+    unbiased_toxic_roberta,
+)
+from transformers import (
+    AlbertForSequenceClassification,
+    BertForSequenceClassification,
+    RobertaForSequenceClassification,
+    XLMRobertaForSequenceClassification,
 )
 
 CLASSES = [
@@ -88,7 +87,9 @@ def test_unbiased_small():
 
 def test_multilingual():
     model = Detoxify("multilingual")
-    results = model.predict(["tais toi, tu es un menteur", "ben kör bir yahudi kadınıyım"])
+    results = model.predict(
+        ["tais toi, tu es un menteur", "ben kör bir yahudi kadınıyım"]
+    )
     assert len(results) == 7
     assert all(cl in results for cl in CLASSES)
     assert results["toxicity"][0] >= 0.7

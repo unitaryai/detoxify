@@ -2,7 +2,6 @@ import argparse
 import json
 
 import pandas as pd
-
 from utils import compute_subgroup_auc
 
 
@@ -13,9 +12,7 @@ def convert_dataframe_to_bool(df):
     return bool_df
 
 
-def compute_lang_metrics_for_model(
-    dataset, subgroups, model, label_col
-):
+def compute_lang_metrics_for_model(dataset, subgroups, model, label_col):
     """Computes per-subgroup metrics for all subgroups and one model."""
     records = []
     for subgroup in subgroups:

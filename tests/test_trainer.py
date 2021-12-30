@@ -1,10 +1,9 @@
 import json
 
+import src.data_loaders as module_data
 import torch
 from pytorch_lightning import Trainer, seed_everything
 from torch.utils.data import DataLoader
-
-import src.data_loaders as module_data
 from train import ToxicClassifier
 
 

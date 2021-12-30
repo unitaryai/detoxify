@@ -4,7 +4,7 @@ from .detoxify import (
     toxic_albert,
     toxic_bert,
     unbiased_albert,
-    unbiased_toxic_roberta
+    unbiased_toxic_roberta,
 )
 
 __all__ = [

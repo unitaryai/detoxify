@@ -17,7 +17,7 @@ setup(
     install_requires=[
         "transformers >= 3.2.0",
         "torch >= 1.7.0",
-        "sentencepiece >= 0.1.94"
+        "sentencepiece >= 0.1.94",
     ],
     packages=find_packages(include=["detoxify"], exclude=["tests", "src"]),
     classifiers=[

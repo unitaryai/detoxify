@@ -30,14 +30,8 @@ def create_val_set(csv_file, val_fraction):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "--test_csv",
-        type=str
-    )
-    parser.add_argument(
-        "--val_csv",
-        type=str
-    )
+    parser.add_argument("--test_csv", type=str)
+    parser.add_argument("--val_csv", type=str)
     parser.add_argument(
         "--update_test",
         action="store_true",

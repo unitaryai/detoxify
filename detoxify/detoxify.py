@@ -7,7 +7,7 @@ MODEL_URLS = {
     "unbiased": DOWNLOAD_URL + "v0.3-alpha/toxic_debiased-c7548aa0.ckpt",
     "multilingual": DOWNLOAD_URL + "v0.4-alpha/multilingual_debiased-0b549669.ckpt",
     "original-small": DOWNLOAD_URL + "v0.1.2/original-albert-0e1d6498.ckpt",
-    "unbiased-small": DOWNLOAD_URL + "v0.1.2/unbiased-albert-c8519128.ckpt"
+    "unbiased-small": DOWNLOAD_URL + "v0.1.2/unbiased-albert-c8519128.ckpt",
 }
 
 PRETRAINED_MODEL = None
@@ -37,7 +37,9 @@ def get_model_and_tokenizer(
 def load_checkpoint(model_type="original", checkpoint=None, device='cpu', huggingface_config_path=None):
     if checkpoint is None:
         checkpoint_path = MODEL_URLS[model_type]
-        loaded = torch.hub.load_state_dict_from_url(checkpoint_path, map_location=device)
+        loaded = torch.hub.load_state_dict_from_url(
+            checkpoint_path, map_location=device
+        )
     else:
         loaded = torch.load(checkpoint)
         if "config" not in loaded or "state_dict" not in loaded:

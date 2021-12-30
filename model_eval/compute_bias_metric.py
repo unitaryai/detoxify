@@ -4,7 +4,6 @@ import json
 import numpy as np
 import pandas as pd
 from sklearn.metrics import roc_auc_score
-
 from utils import compute_auc, compute_subgroup_auc
 
 
@@ -24,9 +23,7 @@ def compute_bnsp_auc(df, subgroup, label, model_name):
     return compute_auc(examples[label], examples[model_name])
 
 
-def compute_bias_metrics_for_model(
-    dataset, subgroups, model, label_col
-):
+def compute_bias_metrics_for_model(dataset, subgroups, model, label_col):
     """Computes per-subgroup metrics for all subgroups and one model."""
     records = []
     for subgroup in subgroups:

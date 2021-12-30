@@ -2,7 +2,6 @@ import argparse
 import os
 
 import pandas as pd
-
 from detoxify import Detoxify
 
 
@@ -95,4 +94,10 @@ if __name__ == "__main__":
     if args.from_ckpt_path is not None:
         assert os.path.isfile(args.from_ckpt_path)
 
-    run(args.model_name, args.input, args.save_to, args.from_ckpt_path, device=args.device)
+    run(
+        args.model_name,
+        args.input,
+        args.save_to,
+        args.from_ckpt_path,
+        device=args.device,
+    )
