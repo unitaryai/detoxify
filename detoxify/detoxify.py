@@ -17,7 +17,8 @@ def get_model_and_tokenizer(
 ):
     model_class = getattr(transformers, model_name)
     model = model_class.from_pretrained(
-        pretrained_model_name_or_path=pretrained_model_path,
+        pretrained_model_name_or_path=None,
+        config=pretrained_model_path or model_type,
         num_labels=num_classes,
         state_dict=state_dict,
         local_files_only=pretrained_model_path is not None,
