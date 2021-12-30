@@ -26,7 +26,8 @@ def get_model_and_tokenizer(
     tokenizer = getattr(transformers, tokenizer_name).from_pretrained(
         pretrained_model_path or model_type,
         local_files_only=pretrained_model_path is not None,
-        model_max_length=512,
+        # TODO: may be needed to let it work with Kaggle competition
+        # model_max_length=512,
     )
 
     return model, tokenizer
