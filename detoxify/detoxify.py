@@ -90,7 +90,7 @@ class Detoxify:
         checkpoint(str): checkpoint path, defaults to None
         device(str or torch.device): accepts any torch.device input or 
                                      torch.device object, defaults to cpu
-        huggingface_config_path: path to HF configs
+        huggingface_config_path: path to HF config and tokenizer files needed for offline model loading
     Returns:
         results(dict): dictionary of output scores for each class
     """
