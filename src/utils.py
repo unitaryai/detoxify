@@ -23,9 +23,7 @@ def move_to(obj, device):
 
 
 def get_model_and_tokenizer(model_type, model_name, tokenizer_name, num_classes):
-    model = getattr(transformers, model_name).from_pretrained(
-        model_type, num_labels=num_classes
-    )
+    model = getattr(transformers, model_name).from_pretrained(model_type, num_labels=num_classes)
     tokenizer = getattr(transformers, tokenizer_name).from_pretrained(model_type)
 
     return model, tokenizer

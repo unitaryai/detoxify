@@ -16,9 +16,7 @@ def load_input_text(input_obj):
     elif isinstance(input_obj, str):
         text = input_obj
     else:
-        raise ValueError(
-            "Invalid input type: input type must be a string or a txt file."
-        )
+        raise ValueError("Invalid input type: input type must be a string or a txt file.")
     return text
 
 

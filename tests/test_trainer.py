@@ -12,9 +12,7 @@ def initialize_trainer(CONFIG):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     def get_instance(module, name, config, *args, **kwargs):
-        return getattr(module, config[name]["type"])(
-            *args, **config[name]["args"], **kwargs
-        )
+        return getattr(module, config[name]["type"])(*args, **config[name]["args"], **kwargs)
 
     model = ToxicClassifier(CONFIG)
     model.to(device)

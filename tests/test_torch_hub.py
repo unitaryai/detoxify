@@ -14,16 +14,12 @@ def test_torch_hub_bert():
 
 
 def test_torch_hub_roberta():
-    model = torch.hub.load(
-        "unitaryai/detoxify", "unbiased_toxic_roberta", skip_validation=True
-    )
+    model = torch.hub.load("unitaryai/detoxify", "unbiased_toxic_roberta", skip_validation=True)
     del model
     gc.collect()
 
 
 def test_torch_hub_multilingual():
-    model = torch.hub.load(
-        "unitaryai/detoxify", "multilingual_toxic_xlm_r", skip_validation=True
-    )
+    model = torch.hub.load("unitaryai/detoxify", "multilingual_toxic_xlm_r", skip_validation=True)
     del model
     gc.collect()

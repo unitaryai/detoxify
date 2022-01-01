@@ -87,9 +87,7 @@ def test_unbiased_small():
 
 def test_multilingual():
     model = Detoxify("multilingual")
-    results = model.predict(
-        ["tais toi, tu es un menteur", "ben kör bir yahudi kadınıyım"]
-    )
+    results = model.predict(["tais toi, tu es un menteur", "ben kör bir yahudi kadınıyım"])
     assert len(results) == 7
     assert all(cl in results for cl in CLASSES)
     assert results["toxicity"][0] >= 0.7

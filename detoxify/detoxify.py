@@ -37,9 +37,7 @@ def get_model_and_tokenizer(
 def load_checkpoint(model_type="original", checkpoint=None, device='cpu', huggingface_config_path=None):
     if checkpoint is None:
         checkpoint_path = MODEL_URLS[model_type]
-        loaded = torch.hub.load_state_dict_from_url(
-            checkpoint_path, map_location=device
-        )
+        loaded = torch.hub.load_state_dict_from_url(checkpoint_path, map_location=device)
     else:
         loaded = torch.load(checkpoint)
         if "config" not in loaded or "state_dict" not in loaded:
@@ -109,17 +107,13 @@ class Detoxify:
     @torch.no_grad()
     def predict(self, text):
         self.model.eval()
-        inputs = self.tokenizer(
-            text, return_tensors="pt", truncation=True, padding=True
-        ).to(self.model.device)
+        inputs = self.tokenizer(text, return_tensors="pt", truncation=True, padding=True).to(self.model.device)
         out = self.model(**inputs)[0]
         scores = torch.sigmoid(out).cpu().detach().numpy()
         results = {}
         for i, cla in enumerate(self.class_names):
             results[cla] = (
-                scores[0][i]
-                if isinstance(text, str)
-                else [scores[ex_i][i].tolist() for ex_i in range(len(scores))]
+                scores[0][i] if isinstance(text, str) else [scores[ex_i][i].tolist() for ex_i in range(len(scores))]
             )
         return results
 

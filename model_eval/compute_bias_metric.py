@@ -68,9 +68,7 @@ def get_final_metric(bias_df, overall_auc, POWER=-5, OVERALL_MODEL_WEIGHT=0.25):
             power_mean(bias_df[BNSP_AUC], POWER),
         ]
     )
-    return (OVERALL_MODEL_WEIGHT * overall_auc) + (
-        (1 - OVERALL_MODEL_WEIGHT) * bias_score
-    )
+    return (OVERALL_MODEL_WEIGHT * overall_auc) + ((1 - OVERALL_MODEL_WEIGHT) * bias_score)
 
 
 def main():
@@ -83,14 +81,10 @@ def main():
 
     test_private[MODEL_NAME] = [s[0] for s in results["scores"]]
 
-    bias_metrics_df = compute_bias_metrics_for_model(
-        test_private, IDENTITY_COLUMNS, MODEL_NAME, TOXICITY_COLUMN
-    )
+    bias_metrics_df = compute_bias_metrics_for_model(test_private, IDENTITY_COLUMNS, MODEL_NAME, TOXICITY_COLUMN)
     print(bias_metrics_df)
 
-    final_metric = get_final_metric(
-        bias_metrics_df, calculate_overall_auc(test_private, MODEL_NAME)
-    )
+    final_metric = get_final_metric(bias_metrics_df, calculate_overall_auc(test_private, MODEL_NAME))
     print(final_metric)
 
 

@@ -23,9 +23,7 @@ def test_classifier(config, dataset, checkpoint_path, device="cuda:0"):
     model.to(device)
 
     def get_instance(module, name, config, *args, **kwargs):
-        return getattr(module, config[name]["type"])(
-            *args, **config[name]["args"], **kwargs
-        )
+        return getattr(module, config[name]["type"])(*args, **config[name]["args"], **kwargs)
 
     config["dataset"]["args"]["test_csv_file"] = dataset
 
@@ -121,9 +119,7 @@ if __name__ == "__main__":
     if args.device is not None:
         config["gpus"] = args.device
 
-    results = test_classifier(
-        config, args.test_csv, args.checkpoint, "cuda:" + args.device
-    )
+    results = test_classifier(config, args.test_csv, args.checkpoint, "cuda:" + args.device)
     test_set_name = args.test_csv.split("/")[-1:][0]
 
     with open(args.checkpoint[:-4] + f"results_{test_set_name}.json", "w") as f:
