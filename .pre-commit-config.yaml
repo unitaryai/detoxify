@@ -29,6 +29,11 @@ repos:
         args: [--py36-plus]
         name: Upgrade code
 
+  - repo: https://github.com/asottile/yesqa
+    rev: v1.2.3
+    hooks:
+      - id: yesqa
+
   - repo: https://github.com/omnilib/ufmt
     rev: v1.3.0
     hooks:
@@ -46,12 +51,6 @@ repos:
   #        - mdformat-gfm
   #        - mdformat-black
   #        - mdformat_frontmatter
-
-  # TODO
-  #- repo: https://github.com/asottile/yesqa
-  #  rev: v1.2.3
-  #  hooks:
-  #    - id: yesqa
 
   - repo: https://github.com/PyCQA/flake8
     rev: 3.9.2
