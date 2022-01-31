@@ -34,7 +34,7 @@ def get_model_and_tokenizer(
     return model, tokenizer
 
 
-def load_checkpoint(model_type="original", checkpoint=None, device='cpu', huggingface_config_path=None):
+def load_checkpoint(model_type="original", checkpoint=None, device="cpu", huggingface_config_path=None):
     if checkpoint is None:
         checkpoint_path = MODEL_URLS[model_type]
         loaded = torch.hub.load_state_dict_from_url(checkpoint_path, map_location=device)
@@ -54,7 +54,9 @@ def load_checkpoint(model_type="original", checkpoint=None, device='cpu', huggin
     }
     class_names = [change_names.get(cl, cl) for cl in class_names]
     model, tokenizer = get_model_and_tokenizer(
-        **loaded["config"]["arch"]["args"], state_dict=loaded["state_dict"], huggingface_config_path=huggingface_config_path,
+        **loaded["config"]["arch"]["args"],
+        state_dict=loaded["state_dict"],
+        huggingface_config_path=huggingface_config_path,
     )
 
     return model, tokenizer, class_names
@@ -97,9 +99,12 @@ class Detoxify:
     """
 
     def __init__(self, model_type="original", checkpoint=PRETRAINED_MODEL, device="cpu", huggingface_config_path=None):
-        super(Detoxify, self).__init__()
+        super().__init__()
         self.model, self.tokenizer, self.class_names = load_checkpoint(
-            model_type=model_type, checkpoint=checkpoint, device=device, huggingface_config_path=huggingface_config_path,
+            model_type=model_type,
+            checkpoint=checkpoint,
+            device=device,
+            huggingface_config_path=huggingface_config_path,
         )
         self.device = device
         self.model.to(self.device)
