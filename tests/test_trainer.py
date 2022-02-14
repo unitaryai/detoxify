@@ -1,10 +1,10 @@
-from pytorch_lightning import Trainer, seed_everything
-
-from train import ToxicClassifier
-import src.data_loaders as module_data
-from torch.utils.data import DataLoader
 import json
+
+import src.data_loaders as module_data
 import torch
+from pytorch_lightning import Trainer, seed_everything
+from torch.utils.data import DataLoader
+from train import ToxicClassifier
 
 
 def initialize_trainer(CONFIG):
@@ -12,9 +12,7 @@ def initialize_trainer(CONFIG):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     def get_instance(module, name, config, *args, **kwargs):
-        return getattr(module, config[name]["type"])(
-            *args, **config[name]["args"], **kwargs
-        )
+        return getattr(module, config[name]["type"])(*args, **config[name]["args"], **kwargs)
 
     model = ToxicClassifier(CONFIG)
     model.to(device)

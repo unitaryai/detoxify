@@ -3,13 +3,12 @@ import json
 import os
 
 import pytorch_lightning as pl
+import src.data_loaders as module_data
 import torch
 from pytorch_lightning.callbacks import ModelCheckpoint
+from src.utils import get_model_and_tokenizer
 from torch.nn import functional as F
 from torch.utils.data import DataLoader
-
-import src.data_loaders as module_data
-from src.utils import get_model_and_tokenizer
 
 
 class ToxicClassifier(pl.LightningModule):
@@ -38,9 +37,7 @@ class ToxicClassifier(pl.LightningModule):
         self.config = config
 
     def forward(self, x):
-        inputs = self.tokenizer(
-            x, return_tensors="pt", truncation=True, padding=True
-        ).to(self.model.device)
+        inputs = self.tokenizer(x, return_tensors="pt", truncation=True, padding=True).to(self.model.device)
         outputs = self.model(**inputs)[0]
         return outputs
 
@@ -170,9 +167,7 @@ def cli_main():
         type=str,
         help="number of workers used in the data loader (default: 10)",
     )
-    parser.add_argument(
-        "-e", "--n_epochs", default=100, type=int, help="if given, override the num"
-    )
+    parser.add_argument("-e", "--n_epochs", default=100, type=int, help="if given, override the num")
 
     args = parser.parse_args()
     config = json.load(open(args.config))
@@ -182,9 +177,7 @@ def cli_main():
 
     # data
     def get_instance(module, name, config, *args, **kwargs):
-        return getattr(module, config[name]["type"])(
-            *args, **config[name]["args"], **kwargs
-        )
+        return getattr(module, config[name]["type"])(*args, **config[name]["args"], **kwargs)
 
     dataset = get_instance(module_data, "dataset", config)
     val_dataset = get_instance(module_data, "dataset", config, train=False)

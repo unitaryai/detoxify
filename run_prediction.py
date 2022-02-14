@@ -1,6 +1,7 @@
-import pandas as pd
 import argparse
 import os
+
+import pandas as pd
 from detoxify import Detoxify
 
 
@@ -11,13 +12,11 @@ def load_input_text(input_obj):
     if isinstance(input_obj, str) and os.path.isfile(input_obj):
         if not input_obj.endswith(".txt"):
             raise ValueError("Invalid file type: only txt files supported.")
-        text = open(input_obj, "r").read().splitlines()
+        text = open(input_obj).read().splitlines()
     elif isinstance(input_obj, str):
         text = input_obj
     else:
-        raise ValueError(
-            "Invalid input type: input type must be a string or a txt file."
-        )
+        raise ValueError("Invalid input type: input type must be a string or a txt file.")
     return text
 
 
@@ -93,4 +92,10 @@ if __name__ == "__main__":
     if args.from_ckpt_path is not None:
         assert os.path.isfile(args.from_ckpt_path)
 
-    run(args.model_name, args.input, args.save_to, args.from_ckpt_path, device=args.device)
+    run(
+        args.model_name,
+        args.input,
+        args.save_to,
+        args.from_ckpt_path,
+        device=args.device,
+    )

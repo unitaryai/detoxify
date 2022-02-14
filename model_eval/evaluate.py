@@ -1,20 +1,17 @@
-from train import ToxicClassifier
-import src.data_loaders as module_data
 import argparse
-import torch
-from torch.utils.data import DataLoader
 import json
-from tqdm import tqdm
-from sklearn.metrics import roc_auc_score
-import numpy as np
 import os
-from src.data_loaders import (
-    JigsawDataOriginal,
-    JigsawDataBias,
-    JigsawDataMultilingual,
-)
-import pandas as pd
 import warnings
+
+import numpy as np
+import pandas as pd
+import src.data_loaders as module_data
+import torch
+from sklearn.metrics import roc_auc_score
+from src.data_loaders import JigsawDataBias, JigsawDataMultilingual, JigsawDataOriginal
+from torch.utils.data import DataLoader
+from tqdm import tqdm
+from train import ToxicClassifier
 
 
 def test_classifier(config, dataset, checkpoint_path, device="cuda:0"):
@@ -26,9 +23,7 @@ def test_classifier(config, dataset, checkpoint_path, device="cuda:0"):
     model.to(device)
 
     def get_instance(module, name, config, *args, **kwargs):
-        return getattr(module, config[name]["type"])(
-            *args, **config[name]["args"], **kwargs
-        )
+        return getattr(module, config[name]["type"])(*args, **config[name]["args"], **kwargs)
 
     config["dataset"]["args"]["test_csv_file"] = dataset
 
@@ -124,9 +119,7 @@ if __name__ == "__main__":
     if args.device is not None:
         config["gpus"] = args.device
 
-    results = test_classifier(
-        config, args.test_csv, args.checkpoint, "cuda:" + args.device
-    )
+    results = test_classifier(config, args.test_csv, args.checkpoint, "cuda:" + args.device)
     test_set_name = args.test_csv.split("/")[-1:][0]
 
     with open(args.checkpoint[:-4] + f"results_{test_set_name}.json", "w") as f:
