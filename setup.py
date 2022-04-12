@@ -15,7 +15,7 @@ setup(
     author_email="laura@unitary.ai",
     url="https://github.com/unitaryai/detoxify",
     install_requires=[
-        "transformers != 4.18.0", # v4.18.0 fails to properly load the finetuned weights 
+        "transformers != 4.18.0",  # v4.18.0 fails to properly load the finetuned weights
         "torch >= 1.7.0",
         "sentencepiece >= 0.1.94",
     ],
