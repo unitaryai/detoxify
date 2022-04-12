@@ -43,7 +43,7 @@ def initialize_trainer(CONFIG):
         max_epochs=1,
     )
     trainer.fit(model, data_loader, valid_data_loader)
-    results = trainer.test(test_dataloaders=valid_data_loader)
+    results = trainer.test(dataloaders=valid_data_loader)
 
     return results
 
