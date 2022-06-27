@@ -48,6 +48,7 @@ def test_classifier(config, dataset, checkpoint_path, device="cuda:0"):
         ids += meta["text_id"]
         with torch.no_grad():
             out = model.forward(*items)
+            # TODO: save embeddings
             sm = torch.sigmoid(out).cpu().detach().numpy()
         scores.extend(sm)
 
@@ -103,14 +104,14 @@ if __name__ == "__main__":
         "--device",
         default=None,
         type=str,
-        help="path to a saved checkpoint",
+        help="gpu index (default 0)",
     )
     parser.add_argument(
         "-t",
         "--test_csv",
         default=None,
         type=str,
-        help="path to a saved checkpoint",
+        help="path to test dataset",
     )
 
     args = parser.parse_args()
@@ -119,7 +120,7 @@ if __name__ == "__main__":
     if args.device is not None:
         config["gpus"] = args.device
 
-    results = test_classifier(config, args.test_csv, args.checkpoint, "cuda:" + args.device)
+    results = test_classifier(config, args.test_csv, args.checkpoint, 'cpu')#, "cuda:" + args.device)
     test_set_name = args.test_csv.split("/")[-1:][0]
 
     with open(args.checkpoint[:-4] + f"results_{test_set_name}.json", "w") as f:
