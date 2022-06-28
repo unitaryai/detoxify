@@ -102,9 +102,9 @@ if __name__ == "__main__":
     parser.add_argument(
         "-d",
         "--device",
-        default=None,
+        default="cuda:0",
         type=str,
-        help="gpu index (default 0)",
+        help="device name e.g., 'cpu' or 'cuda' (default cuda:0)",
     )
     parser.add_argument(
         "-t",
@@ -120,7 +120,7 @@ if __name__ == "__main__":
     if args.device is not None:
         config["gpus"] = args.device
 
-    results = test_classifier(config, args.test_csv, args.checkpoint, 'cpu')#, "cuda:" + args.device)
+    results = test_classifier(config, args.test_csv, args.checkpoint, args.device)
     test_set_name = args.test_csv.split("/")[-1:][0]
 
     with open(args.checkpoint[:-4] + f"results_{test_set_name}.json", "w") as f:
