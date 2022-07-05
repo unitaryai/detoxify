@@ -13,7 +13,7 @@ ci:
 
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.1.0
+    rev: v4.3.0
     hooks:
       - id: end-of-file-fixer
       - id: trailing-whitespace
@@ -23,7 +23,7 @@ repos:
       - id: check-docstring-first
 
   - repo: https://github.com/asottile/pyupgrade
-    rev: v2.31.1
+    rev: v2.34.0
     hooks:
       - id: pyupgrade
         args: [--py36-plus]
@@ -35,12 +35,12 @@ repos:
       - id: yesqa
 
   - repo: https://github.com/omnilib/ufmt
-    rev: v1.3.2
+    rev: v2.0.0b2
     hooks:
       - id: ufmt
         additional_dependencies:
-          - black == 21.9b0
-          - usort == 0.6.4
+          - black == 22.6
+          - usort == 1.0.2
 
   # TODO
   #- repo: https://github.com/executablebooks/mdformat
