@@ -7,12 +7,12 @@ from detoxify import Detoxify
 
 client = discord.Client()
 
-model = Detoxify('multilingual')
+model = Detoxify("multilingual")
 
 
 @client.event
 async def on_ready():
-    print('We have logged in as {0.user}'.format(client))
+    print(f"We have logged in as {client.user}")
 
 
 @client.event
@@ -21,7 +21,7 @@ async def on_message(message):
         return
     prediction = model.predict(message.content)
     total_score = 0
-    print(3 * '---')
+    print(3 * "---")
     print(f"message: {message.content}")
     for key in prediction:
         print(f"{key}: {prediction[key]}")
@@ -33,4 +33,4 @@ async def on_message(message):
         await message.channel.send("Stop being so toxic! 😠")
 
 
-client.run('your-token-here')
+client.run("your-token-here")
