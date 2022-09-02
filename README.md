@@ -13,7 +13,7 @@
 ![Examples image](examples.png)
 
 <p align="center">
-<a href="https://console.tiyaro.ai/explore?q=toxic&pub=unitary"> <img src="https://tiyaro-public-docs.s3.us-west-2.amazonaws.com/assets/try_on_tiyaro_badge.svg"></a>
+<a href="https://console.tiyaro.ai/explore?q=toxic-bert&pub=unitary"> <img src="https://tiyaro-public-docs.s3.us-west-2.amazonaws.com/assets/try_on_tiyaro_badge.svg"></a>
 </p>
 
 
