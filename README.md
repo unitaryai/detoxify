@@ -12,7 +12,15 @@
 
 ![Examples image](examples.png)
 
+<p align="center">
+<a href="https://console.tiyaro.ai/explore?q=toxic&pub=unitary"> <img src="https://tiyaro-public-docs.s3.us-west-2.amazonaws.com/assets/try_on_tiyaro_badge.svg"></a>
+</p>
+
+
 ## News & Updates
+
+### 02-09-2022: Live Demo and APIs available at Tiyaro.ai
+- Try out the hosted [API and visualizer](https://console.tiyaro.ai/explore/unitary-toxic-bert/demo)
 
 ### 22-10-2021: New improved multilingual model & standardised class names
 -  Updated the `multilingual` model weights used by Detoxify with a model trained on the translated data from the 2nd Jigsaw challenge (as well as the 1st). This model has also been trained to minimise bias and now returns the same categories as the `unbiased` model. New best AUC score on the test set: 92.11 (89.71 before).
