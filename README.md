@@ -115,7 +115,14 @@ import pandas as pd
 print(pd.DataFrame(results, index=input_text).round(5))
 
 ```
+
 For more details check the Prediction section.
+
+### Hosted APIs for Quick Prediction
+
+Alternatively, you may experiment with the detoxify model as a hosted API:
+
+- [Unitary Toxic BERT Model Card on Tiyaro.ai](https://console.tiyaro.ai/explore/unitary-toxic-bert/api)
 
 
 ## Labels
