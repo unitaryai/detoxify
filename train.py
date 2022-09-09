@@ -159,7 +159,7 @@ def cli_main():
         "--device",
         default=None,
         type=str,
-        help="indices of GPUs to enable (default: all)",
+        help="indices of GPUs to enable (default: None)",
     )
     parser.add_argument(
         "--num_workers",
