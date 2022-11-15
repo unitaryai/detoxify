@@ -64,7 +64,7 @@ jobs:
 
     - name: Tests
       run: |
-        coverage run --source src,detoxify -m py.test src tests -v --junitxml=junit/test-results-${{ runner.os }}-${{ matrix.python-version }}.xml
+        coverage run --source src,detoxify -m pytest src tests -v --junitxml=junit/test-results-${{ runner.os }}-${{ matrix.python-version }}.xml
 
     - name: Statistics
       if: success()
