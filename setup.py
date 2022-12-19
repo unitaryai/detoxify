@@ -7,7 +7,7 @@ with open("README.md") as fh:
 
 setup(
     name="detoxify",
-    version="0.5.0",
+    version="0.5.1",
     description="A python library for detecting toxic comments",
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -15,7 +15,7 @@ setup(
     author_email="laura@unitary.ai",
     url="https://github.com/unitaryai/detoxify",
     install_requires=[
-        "transformers != 4.18.0",  # v4.18.0 fails to properly load the finetuned weights
+        "transformers == 4.22.1",  # pin to this version due to #75
         "torch >= 1.7.0",
         "sentencepiece >= 0.1.94",
     ],
