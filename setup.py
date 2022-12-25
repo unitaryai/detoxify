@@ -22,7 +22,7 @@ def _load_description(path_dir=_PATH_ROOT, readme_file="README.md"):
 
 setup(
     name="detoxify",
-    version="0.4.0",
+    version="0.5.1",
     description="A python library for detecting toxic comments",
     long_description=_load_description(),
     long_description_content_type="text/markdown",

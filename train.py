@@ -159,12 +159,12 @@ def cli_main():
         "--device",
         default=None,
         type=str,
-        help="indices of GPUs to enable (default: all)",
+        help="indices of GPUs to enable (default: None)",
     )
     parser.add_argument(
         "--num_workers",
         default=10,
-        type=str,
+        type=int,
         help="number of workers used in the data loader (default: 10)",
     )
     parser.add_argument("-e", "--n_epochs", default=100, type=int, help="if given, override the num")
