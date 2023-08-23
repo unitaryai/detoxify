@@ -15,7 +15,7 @@ setup(
     author_email="laura@unitary.ai",
     url="https://github.com/unitaryai/detoxify",
     install_requires=[
-        "transformers == 4.30.0",  # pin to this version due to #75
+        "transformers == 4.30.0",
         "torch >= 1.7.0",
         "sentencepiece >= 0.1.94",
     ],
