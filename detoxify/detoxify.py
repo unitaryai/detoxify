@@ -23,7 +23,6 @@ def get_model_and_tokenizer(
     model = model_class.from_pretrained(
         pretrained_model_name_or_path=None,
         config=huggingface_config_path or config,
-        num_labels=num_classes,
         state_dict=state_dict,
         local_files_only=huggingface_config_path is not None,
     )
