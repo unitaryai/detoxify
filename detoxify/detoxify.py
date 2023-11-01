@@ -19,8 +19,6 @@ def get_model_and_tokenizer(
         config = AutoConfig.from_pretrained(model_type, num_labels=num_classes)
     model = model_class.from_pretrained(
         pretrained_model_name_or_path=None,
-        config=huggingface_config_path or model_type,
-        num_labels=num_classes,
         config=huggingface_config_path or config,
         state_dict=state_dict,
         local_files_only=huggingface_config_path is not None,
