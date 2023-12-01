@@ -1,6 +1,6 @@
 import torch
-from transformers import PreTrainedModel, AutoConfig, BertForSequenceClassification
 import transformers
+from transformers import AutoConfig, BertForSequenceClassification, PreTrainedModel
 
 DOWNLOAD_URL = "https://github.com/unitaryai/detoxify/releases/download/"
 MODEL_URLS = {
@@ -12,6 +12,7 @@ MODEL_URLS = {
 }
 
 PRETRAINED_MODEL = None
+
 
 def get_model_and_tokenizer(
     model_type, model_name, tokenizer_name, num_classes, state_dict, huggingface_config_path=None
