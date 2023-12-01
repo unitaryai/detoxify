@@ -1,5 +1,5 @@
 import torch
-from transformers import PreTrainedModel, AutoConfig, BertForSequenceClassification
+from transformers import AutoConfig
 import transformers
 
 DOWNLOAD_URL = "https://github.com/unitaryai/detoxify/releases/download/"
