@@ -1,6 +1,6 @@
 import torch
-from transformers import AutoConfig
 import transformers
+from transformers import AutoConfig
 
 
 DOWNLOAD_URL = "https://github.com/unitaryai/detoxify/releases/download/"
