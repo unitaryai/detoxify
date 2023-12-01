@@ -1,6 +1,5 @@
 import torch
 import transformers
-from transformers import AutoConfig
 
 
 DOWNLOAD_URL = "https://github.com/unitaryai/detoxify/releases/download/"
@@ -19,8 +18,7 @@ def get_model_and_tokenizer(
     model_type, model_name, tokenizer_name, num_classes, state_dict, huggingface_config_path=None
 ):
     model_class = getattr(transformers, model_name)
-    config = AutoConfig.from_pretrained(model_type)
-    config.num_labels = num_classes
+    config = model_class.config_class.from_pretrained(model_type, num_labels=num_classes)
     model = model_class.from_pretrained(
         pretrained_model_name_or_path=None,
         config=huggingface_config_path or config,
