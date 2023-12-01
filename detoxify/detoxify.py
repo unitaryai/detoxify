@@ -2,6 +2,7 @@ import torch
 from transformers import AutoConfig
 import transformers
 
+
 DOWNLOAD_URL = "https://github.com/unitaryai/detoxify/releases/download/"
 MODEL_URLS = {
     "original": DOWNLOAD_URL + "v0.1-alpha/toxic_original-c1212f89.ckpt",
@@ -12,6 +13,7 @@ MODEL_URLS = {
 }
 
 PRETRAINED_MODEL = None
+
 
 def get_model_and_tokenizer(
     model_type, model_name, tokenizer_name, num_classes, state_dict, huggingface_config_path=None
