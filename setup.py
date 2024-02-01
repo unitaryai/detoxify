@@ -7,7 +7,7 @@ with open("README.md") as fh:
 
 setup(
     name="detoxify",
-    version="0.5.1",
+    version="0.5.2",
     description="A python library for detecting toxic comments",
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -25,5 +25,5 @@ setup(
         "License :: OSI Approved :: Apache Software License",
         "Operating System :: OS Independent",
     ],
-    python_requires=">=3.6",
+    python_requires=">=3.7",
 )
