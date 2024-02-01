@@ -1,11 +1,6 @@
 name: Release
 
 on:
-  # push:
-  #   branches:
-  #     - main
-  workflow_dispatch:
-  pull_request:
   release:
     types:
     - published
