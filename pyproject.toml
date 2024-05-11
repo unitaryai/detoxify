@@ -18,6 +18,9 @@ dependencies = [
     "transformers",
 ]
 
+[tool.setuptools]
+packages = ["detoxify"]
+
 [project.urls]
 Homepage = "https://github.com/unitaryai/detoxify"
 
@@ -63,3 +66,7 @@ filterwarnings = [
     "ignore:.*deprecated alias.*:DeprecationWarning:tensorboard.*tensor_util*:",
     "ignore:.*deprecated alias.*:DeprecationWarning:pyarrow.*pandas_compat*:",
 ]
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
