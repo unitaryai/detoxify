@@ -1,7 +1,36 @@
-[build-system]
-requires = [
-    "setuptools",
-    "wheel",
+[project]
+name = "detoxify"
+version = "0.5.2"
+description = "A python library for detecting toxic comments"
+readme = "README.md"
+authors = [
+    {name = "Unitary", email = "laura@unitary.ai"},
+]
+classifiers = [
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+]
+requires-python = ">=3.9,<3.12"
+dependencies = [
+    "sentencepiece",
+    "torch < 2.2",
+    "transformers",
+]
+
+[project.urls]
+Homepage = "https://github.com/unitaryai/detoxify"
+
+[project.optional-dependencies]
+dev = [
+    "datasets >= 1.0.2",
+    "pandas >= 1.1.2",
+    "pytest",
+    "pytorch-lightning<2.0.0,>1.5.0",
+    "scikit-learn >= 0.23.2",
+    "sentencepiece >= 0.1.94",
+    "tqdm",
+    "pre-commit",
 ]
 
 [tool.black]

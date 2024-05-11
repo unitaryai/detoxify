@@ -176,12 +176,12 @@ python3 -m venv toxic-env
 source toxic-env/bin/activate
 
 # install project
-
 pip install -e detoxify
-cd detoxify
 
-# for training
-pip install -r requirements.txt
+# or for training
+pip install -e 'detoxify[dev]'
+
+cd detoxify
 
  ```
 
