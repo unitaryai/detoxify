@@ -13,7 +13,7 @@ ci:
 
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.4.0
+    rev: v4.5.0
     hooks:
       - id: end-of-file-fixer
       - id: trailing-whitespace
@@ -23,7 +23,7 @@ repos:
       - id: check-docstring-first
 
   - repo: https://github.com/asottile/pyupgrade
-    rev: v3.8.0
+    rev: v3.15.2
     hooks:
       - id: pyupgrade
         args: [--py36-plus]
@@ -35,7 +35,7 @@ repos:
       - id: yesqa
 
   - repo: https://github.com/omnilib/ufmt
-    rev: v2.1.0
+    rev: v2.5.1
     hooks:
       - id: ufmt
         additional_dependencies:
@@ -53,7 +53,7 @@ repos:
   #        - mdformat_frontmatter
 
   - repo: https://github.com/PyCQA/flake8
-    rev: 6.0.0
+    rev: 7.0.0
     hooks:
       - id: flake8
         name: PEP8
