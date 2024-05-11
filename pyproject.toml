@@ -13,9 +13,9 @@ classifiers = [
 ]
 requires-python = ">=3.9,<3.12"
 dependencies = [
-    "sentencepiece",
+    "sentencepiece >= 0.1.94",
     "torch < 2.2",
-    "transformers",
+    "transformers >= 3",
 ]
 
 [tool.setuptools]
@@ -31,7 +31,6 @@ dev = [
     "pytest",
     "pytorch-lightning<2.0.0,>1.5.0",
     "scikit-learn >= 0.23.2",
-    "sentencepiece >= 0.1.94",
     "tqdm",
     "pre-commit",
 ]
