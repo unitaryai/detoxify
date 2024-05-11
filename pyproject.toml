@@ -45,3 +45,21 @@ known_first_party = [
 skip_glob = []
 profile = "black"
 line_length = 120
+
+[tool.pytest.ini_options]
+norecursedirs = [
+    ".git",
+    "dist",
+    "build",
+]
+addopts = [
+    "--strict-markers",
+    "--doctest-modules",
+    "--durations=0",
+    "--color=yes",
+]
+filterwarnings = [
+    "ignore:.*deprecated alias.*:DeprecationWarning:tensorboard.*tensorflow_stub*:",
+    "ignore:.*deprecated alias.*:DeprecationWarning:tensorboard.*tensor_util*:",
+    "ignore:.*deprecated alias.*:DeprecationWarning:pyarrow.*pandas_compat*:",
+]
