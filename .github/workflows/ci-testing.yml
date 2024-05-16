@@ -55,7 +55,7 @@ jobs:
 
     - name: Install dependencies
       run: |
-        pip install --requirement requirements.txt --upgrade --quiet --find-links https://download.pytorch.org/whl/cpu/torch_stable.html
+        pip install -e '.[dev]'
         pip install --requirement tests/requirements.txt --quiet
         python --version
         pip --version

@@ -1,7 +1,38 @@
-[build-system]
-requires = [
-    "setuptools",
-    "wheel",
+[project]
+name = "detoxify"
+version = "0.5.2"
+description = "A python library for detecting toxic comments"
+readme = "README.md"
+authors = [
+    {name = "Unitary", email = "laura@unitary.ai"},
+]
+classifiers = [
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+]
+requires-python = ">=3.9,<3.12"
+dependencies = [
+    "sentencepiece >= 0.1.94",
+    "torch < 2.2",
+    "transformers >= 3",
+]
+
+[tool.setuptools]
+packages = ["detoxify"]
+
+[project.urls]
+Homepage = "https://github.com/unitaryai/detoxify"
+
+[project.optional-dependencies]
+dev = [
+    "datasets >= 1.0.2",
+    "pandas >= 1.1.2",
+    "pytest",
+    "pytorch-lightning<2.0.0,>1.5.0",
+    "scikit-learn >= 0.23.2",
+    "tqdm",
+    "pre-commit",
 ]
 
 [tool.black]
@@ -16,3 +47,25 @@ known_first_party = [
 skip_glob = []
 profile = "black"
 line_length = 120
+
+[tool.pytest.ini_options]
+norecursedirs = [
+    ".git",
+    "dist",
+    "build",
+]
+addopts = [
+    "--strict-markers",
+    "--doctest-modules",
+    "--durations=0",
+    "--color=yes",
+]
+filterwarnings = [
+    "ignore:.*deprecated alias.*:DeprecationWarning:tensorboard.*tensorflow_stub*:",
+    "ignore:.*deprecated alias.*:DeprecationWarning:tensorboard.*tensor_util*:",
+    "ignore:.*deprecated alias.*:DeprecationWarning:pyarrow.*pandas_compat*:",
+]
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
