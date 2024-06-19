@@ -14,7 +14,7 @@ classifiers = [
 requires-python = ">=3.9,<3.12"
 dependencies = [
     "sentencepiece >= 0.1.94",
-    "torch < 2.2",
+    "torch",
     "transformers >= 3",
 ]
 
