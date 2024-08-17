@@ -264,10 +264,14 @@ cd jigsaw_data
 # download data
 
 kaggle competitions download -c jigsaw-toxic-comment-classification-challenge
+unzip jigsaw-toxic-comment-classification-challenge.zip -d jigsaw-toxic-comment-classification-challenge
+find jigsaw-toxic-comment-classification-challenge -name '*.csv.zip' | xargs -n1 unzip -d jigsaw-toxic-comment-classification-challenge
 
 kaggle competitions download -c jigsaw-unintended-bias-in-toxicity-classification
+unzip jigsaw-unintended-bias-in-toxicity-classification.zip -d jigsaw-unintended-bias-in-toxicity-classification
 
 kaggle competitions download -c jigsaw-multilingual-toxic-comment-classification
+unzip jigsaw-multilingual-toxic-comment-classification.zip -d jigsaw-multilingual-toxic-comment-classification
 
 ```
 ## Start Training
