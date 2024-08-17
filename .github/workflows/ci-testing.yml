@@ -63,8 +63,6 @@ jobs:
       shell: bash
 
     - name: Tests
-      env:
-        PYTORCH_MPS_HIGH_WATERMARK_RATIO: 0.0
       run: |
         coverage run --source src,detoxify -m pytest src tests -v --junitxml=junit/test-results-${{ runner.os }}-${{ matrix.python-version }}.xml
 

@@ -38,7 +38,7 @@ def initialize_trainer(CONFIG):
     )
 
     trainer = Trainer(
-        accelerator="auto",
+        accelerator="gpu" if torch.cuda.is_available() else "cpu",
         limit_train_batches=2,
         limit_val_batches=2,
         max_epochs=1,
