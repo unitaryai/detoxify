@@ -3,6 +3,7 @@ import json
 import os
 
 import pytorch_lightning as pl
+
 import src.data_loaders as module_data
 import torch
 from pytorch_lightning.callbacks import ModelCheckpoint
@@ -209,15 +210,14 @@ def cli_main():
         mode="min",
     )
     trainer = pl.Trainer(
-        gpus=args.device,
+        devices=[int(args.device)] if args.device is not None else "auto",
         max_epochs=args.n_epochs,
         accumulate_grad_batches=config["accumulate_grad_batches"],
         callbacks=[checkpoint_callback],
-        resume_from_checkpoint=args.resume,
         default_root_dir="saved/" + config["name"],
         deterministic=True,
     )
-    trainer.fit(model, data_loader, valid_data_loader)
+    trainer.fit(model=model, train_dataloaders=data_loader, val_dataloaders=valid_data_loader, ckpt_path=args.resume)
 
 
 if __name__ == "__main__":
