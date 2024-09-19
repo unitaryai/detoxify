@@ -11,10 +11,10 @@ classifiers = [
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3",
 ]
-requires-python = ">=3.9,<3.12"
+requires-python = ">=3.9,<3.13"
 dependencies = [
     "sentencepiece >= 0.1.94",
-    "torch < 2.2",
+    "torch >=2",
     "transformers >= 3",
 ]
 
@@ -29,7 +29,7 @@ dev = [
     "datasets >= 1.0.2",
     "pandas >= 1.1.2",
     "pytest",
-    "pytorch-lightning<2.0.0,>1.5.0",
+    "pytorch-lightning>2",
     "scikit-learn >= 0.23.2",
     "tqdm",
     "pre-commit",
