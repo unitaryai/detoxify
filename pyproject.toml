@@ -33,7 +33,7 @@ dev = [
     "scikit-learn >= 0.23.2",
     "tqdm",
     "pre-commit",
-    "numpy<2"
+    "numpy>=2"
 ]
 
 [tool.black]
