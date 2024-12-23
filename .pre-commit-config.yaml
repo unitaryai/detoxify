@@ -2,7 +2,7 @@
 # Will be applied on any updated commit files if a user has installed and linked commit hook
 
 default_language_version:
-  python: python3.8
+  python: python3.12
 
 # Define bot property if installed via https://github.com/marketplace/pre-commit-ci
 ci:
@@ -13,7 +13,7 @@ ci:
 
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.5.0
+    rev: v4.6.0
     hooks:
       - id: end-of-file-fixer
       - id: trailing-whitespace
@@ -23,7 +23,7 @@ repos:
       - id: check-docstring-first
 
   - repo: https://github.com/asottile/pyupgrade
-    rev: v3.15.2
+    rev: v3.16.0
     hooks:
       - id: pyupgrade
         args: [--py36-plus]
@@ -35,7 +35,7 @@ repos:
       - id: yesqa
 
   - repo: https://github.com/omnilib/ufmt
-    rev: v2.5.1
+    rev: v2.7.0
     hooks:
       - id: ufmt
         additional_dependencies:
@@ -53,7 +53,7 @@ repos:
   #        - mdformat_frontmatter
 
   - repo: https://github.com/PyCQA/flake8
-    rev: 7.0.0
+    rev: 7.1.0
     hooks:
       - id: flake8
         name: PEP8

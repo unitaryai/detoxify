@@ -70,8 +70,8 @@ The intended use of this library is for research purposes, fine-tuning on carefu
 
 Some useful resources about the risk of different biases in toxicity or hate speech detection are:
 - [The Risk of Racial Bias in Hate Speech Detection](https://homes.cs.washington.edu/~msap/pdfs/sap2019risk.pdf)
-- [Automated Hate Speech Detection and the Problem of Offensive Language](https://arxiv.org/pdf/1703.04009.pdf%201.pdf)
-- [Racial Bias in Hate Speech and Abusive Language Detection Datasets](https://arxiv.org/pdf/1905.12516.pdf)
+- [Automated Hate Speech Detection and the Problem of Offensive Language](https://ojs.aaai.org/index.php/ICWSM/article/view/14955)
+- [Racial Bias in Hate Speech and Abusive Language Detection Datasets](https://aclanthology.org/W19-3504/)
 
 ## Quick prediction
 
@@ -264,10 +264,14 @@ cd jigsaw_data
 # download data
 
 kaggle competitions download -c jigsaw-toxic-comment-classification-challenge
+unzip jigsaw-toxic-comment-classification-challenge.zip -d jigsaw-toxic-comment-classification-challenge
+find jigsaw-toxic-comment-classification-challenge -name '*.csv.zip' | xargs -n1 unzip -d jigsaw-toxic-comment-classification-challenge
 
 kaggle competitions download -c jigsaw-unintended-bias-in-toxicity-classification
+unzip jigsaw-unintended-bias-in-toxicity-classification.zip -d jigsaw-unintended-bias-in-toxicity-classification
 
 kaggle competitions download -c jigsaw-multilingual-toxic-comment-classification
+unzip jigsaw-multilingual-toxic-comment-classification.zip -d jigsaw-multilingual-toxic-comment-classification
 
 ```
 ## Start Training

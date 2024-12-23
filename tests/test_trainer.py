@@ -1,6 +1,7 @@
 import json
 
 import src.data_loaders as module_data
+
 import torch
 from pytorch_lightning import seed_everything, Trainer
 from torch.utils.data import DataLoader
@@ -37,7 +38,7 @@ def initialize_trainer(CONFIG):
     )
 
     trainer = Trainer(
-        gpus=0 if torch.cuda.is_available() else None,
+        accelerator="gpu" if torch.cuda.is_available() else "cpu",
         limit_train_batches=2,
         limit_val_batches=2,
         max_epochs=1,

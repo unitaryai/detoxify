@@ -3,6 +3,7 @@ import json
 import os
 
 import pytorch_lightning as pl
+
 import src.data_loaders as module_data
 import torch
 from pytorch_lightning.callbacks import ModelCheckpoint
@@ -159,7 +160,7 @@ def cli_main():
         "--device",
         default=None,
         type=str,
-        help="indices of GPUs to enable (default: None)",
+        help="comma-separated indices of GPUs to enable (default: None)",
     )
     parser.add_argument(
         "--num_workers",
@@ -208,16 +209,26 @@ def cli_main():
         monitor="val_loss",
         mode="min",
     )
+
+    if args.device is None:
+        devices = "auto"
+    else:
+        devices = [int(d.strip()) for d in args.device.split(",")]
+
     trainer = pl.Trainer(
-        gpus=args.device,
+        devices=devices,
         max_epochs=args.n_epochs,
         accumulate_grad_batches=config["accumulate_grad_batches"],
         callbacks=[checkpoint_callback],
-        resume_from_checkpoint=args.resume,
         default_root_dir="saved/" + config["name"],
         deterministic=True,
     )
-    trainer.fit(model, data_loader, valid_data_loader)
+    trainer.fit(
+        model=model,
+        train_dataloaders=data_loader,
+        val_dataloaders=valid_data_loader,
+        ckpt_path=args.resume,
+    )
 
 
 if __name__ == "__main__":
