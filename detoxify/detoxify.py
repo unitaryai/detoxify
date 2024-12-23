@@ -115,11 +115,12 @@ class Detoxify:
         self.model.eval()
         inputs = self.tokenizer(text, return_tensors="pt", truncation=True, padding=True).to(self.model.device)
         out = self.model(**inputs)[0]
-        scores = torch.sigmoid(out).cpu().detach().numpy()
+        scores = torch.sigmoid(out).cpu()
         results = {}
         for i, cla in enumerate(self.class_names):
             results[cla] = (
-                scores[0][i] if isinstance(text, str) else [scores[ex_i][i].tolist() for ex_i in range(len(scores))]
+                # If the input is a single text, squeezing will remove the dimensionality from the tensor - so `.tolist()` will return a number instead. Otherwise, we'll get the list of scores of that class.
+                scores[:,i].squeeze().tolist()
             )
         return results
 
