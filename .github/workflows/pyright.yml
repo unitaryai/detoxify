@@ -23,3 +23,5 @@ jobs:
 
       - name: Run pyright
         run: pyright
+        env:
+          FORCE_COLOR: "1"
