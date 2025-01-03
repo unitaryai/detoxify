@@ -1,9 +1,12 @@
+# flake8: noqa: E402
 import argparse
 import json
 import os
 
-import pytorch_lightning as pl
+# Disable tokenizer parallelism to avoid deadlocks due to forking
+os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
+import pytorch_lightning as pl
 import src.data_loaders as module_data
 import torch
 from pytorch_lightning.callbacks import ModelCheckpoint
