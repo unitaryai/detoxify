@@ -49,6 +49,8 @@ class JigsawData(Dataset):
             filtered_change_names = {k: v for k, v in change_names.items() if k in final_df.columns}
             if len(filtered_change_names) > 0:
                 final_df.rename(columns=filtered_change_names, inplace=True)
+        else:
+            raise TypeError("Invalid input type for csv_file, must be a string or a list of strings")
         return final_df
 
     def load_val(self, test_csv_file, add_labels=False):
@@ -157,6 +159,8 @@ class JigsawDataBias(JigsawData):
         meta["text_id"] = text_id
 
         if self.train:
+            if self.weights is None:
+                raise Exception("self.weights must not be None")
             meta["weights"] = self.weights[index]
             toxic_weight = self.weights[index] * self.loss_weight * 1.0 / len(self.classes)
             identity_weight = (1 - self.loss_weight) * 1.0 / len(self.identity_classes)
