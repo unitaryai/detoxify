@@ -51,12 +51,12 @@ def initialize_trainer(CONFIG):
 
 def test_trainer():
     CONFIG = json.load(open("configs/Toxic_comment_classification_BERT.json"))
-    CONFIG["dataset"]["args"][
-        "train_csv_file"
-    ] = "tests/dummy_data/jigsaw-toxic-comment-classification-challenge/train.csv"
-    CONFIG["dataset"]["args"][
-        "test_csv_file"
-    ] = "tests/dummy_data/jigsaw-toxic-comment-classification-challenge/test.csv"
+    CONFIG["dataset"]["args"]["train_csv_file"] = (
+        "tests/dummy_data/jigsaw-toxic-comment-classification-challenge/train.csv"
+    )
+    CONFIG["dataset"]["args"]["test_csv_file"] = (
+        "tests/dummy_data/jigsaw-toxic-comment-classification-challenge/test.csv"
+    )
     CONFIG["batch_size"] = 2
 
     results = initialize_trainer(CONFIG)

@@ -83,7 +83,6 @@ class JigsawDataOriginal(JigsawData):
         add_test_labels=True,
         classes=["toxic"],
     ):
-
         super().__init__(
             train_csv_file=train_csv_file,
             test_csv_file=test_csv_file,
@@ -122,7 +121,6 @@ class JigsawDataBias(JigsawData):
         identity_classes=["female"],
         soft_labels=False,
     ):
-
         self.classes = classes
         self.soft_labels = soft_labels
         self.identity_classes = identity_classes
@@ -199,7 +197,6 @@ class JigsawDataMultilingual(JigsawData):
         train=True,
         classes=["toxic"],
     ):
-
         self.classes = classes
         super().__init__(train_csv_file=train_csv_file, test_csv_file=test_csv_file, train=train)
 
