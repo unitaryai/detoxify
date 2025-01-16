@@ -33,7 +33,8 @@ def run(model_name, input_obj, dest_file, from_ckpt, device="cpu"):
     res = model.predict(text)
 
     res_df = pd.DataFrame(
-        res, index=[text] if isinstance(text, str) else text  # pyright: ignore[reportArgumentType]
+        res,
+        index=[text] if isinstance(text, str) else text,  # pyright: ignore[reportArgumentType]
     ).round(5)
     print(res_df)
     if dest_file is not None:
