@@ -34,14 +34,6 @@ repos:
     hooks:
       - id: yesqa
 
-  - repo: https://github.com/omnilib/ufmt
-    rev: v2.7.0
-    hooks:
-      - id: ufmt
-        additional_dependencies:
-          - black == 22.6
-          - usort == 1.0.2
-
   # TODO
   #- repo: https://github.com/executablebooks/mdformat
   #  rev: 0.7.7
@@ -52,8 +44,9 @@ repos:
   #        - mdformat-black
   #        - mdformat_frontmatter
 
-  - repo: https://github.com/PyCQA/flake8
-    rev: 7.1.0
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.3.3
     hooks:
-      - id: flake8
-        name: PEP8
+      - id: ruff
+        args: [--fix]
+      - id: ruff-format

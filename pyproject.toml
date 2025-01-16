@@ -36,18 +36,24 @@ dev = [
     "numpy>=2"
 ]
 
-[tool.black]
-# https://github.com/psf/black
+[tool.ruff]
 line-length = 120
-exclude = "(.eggs|.git|.hg|.mypy_cache|.venv|_build|buck-out|build|dist)"
+target-version = "py39"
 
-[tool.isort]
-known_first_party = [
-    "detoxify",
+[tool.ruff.lint]
+select = ["E", "F", "W"]
+ignore = [
+    "E731",    # Do not assign a lambda expression, use a def
+    "E402",    # Module level import not at top of file
+    "F401",    # Module imported but unused
+    "F841",    # Local variable name is assigned to but never used
 ]
-skip_glob = []
-profile = "black"
-line_length = 120
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "auto"
 
 [tool.pytest.ini_options]
 norecursedirs = [

@@ -15,7 +15,6 @@ from train import ToxicClassifier
 
 
 def test_classifier(config, dataset, checkpoint_path, device="cuda:0"):
-
     model = ToxicClassifier(config)
     checkpoint = torch.load(checkpoint_path, map_location=device)
     model.load_state_dict(checkpoint["state_dict"])

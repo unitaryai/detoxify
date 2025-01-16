@@ -119,8 +119,9 @@ class Detoxify:
         results = {}
         for i, cla in enumerate(self.class_names):
             results[cla] = (
-                # If the input is a single text, squeezing will remove the dimensionality from the tensor - so `.tolist()` will return a number instead. Otherwise, we'll get the list of scores of that class.
-                scores[:,i].squeeze().tolist()
+                # If the input is a single text, squeezing will remove the dimensionality from the tensor -
+                # so `.tolist()` will return a number instead. Otherwise, we'll get the list of scores of that class.
+                scores[:, i].squeeze().tolist()
             )
         return results
 
