@@ -32,13 +32,14 @@ def create_val_set(csv_file, val_fraction):
     out of it specified by val_fraction.
     """
     csv_file = Path(csv_file)
-    dataset = pd.read_csv(csv_file)
+    dataset: pd.DataFrame = pd.read_csv(csv_file)
     np.random.seed(0)
     dataset_mod = dataset[dataset.toxic != -1]
     indices = np.random.rand(len(dataset_mod)) > val_fraction
     val_set = dataset_mod[~indices]
     output_file = csv_file.parent / "val.csv"
     logger.info("Validation set saved to %s", output_file)
+    assert isinstance(val_set, (pd.DataFrame, pd.Series))
     val_set.to_csv(output_file)
 
 
