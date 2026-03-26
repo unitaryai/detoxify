@@ -6,7 +6,7 @@ authors:
 - family-names: "Unitary"
   given-names: "team"
 title: "Detoxify"
-version: 0.5.1
+version: 0.5.3
 doi: 10.5281/zenodo.7925667
 date-released: 2020-11-11
 url: "https://github.com/unitaryai/detoxify"

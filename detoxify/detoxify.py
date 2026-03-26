@@ -38,9 +38,9 @@ def get_model_and_tokenizer(
 def load_checkpoint(model_type="original", checkpoint=None, device="cpu", huggingface_config_path=None):
     if checkpoint is None:
         checkpoint_path = MODEL_URLS[model_type]
-        loaded = torch.hub.load_state_dict_from_url(checkpoint_path, map_location=device)
+        loaded = torch.hub.load_state_dict_from_url(checkpoint_path, map_location=device, weights_only=False)
     else:
-        loaded = torch.load(checkpoint, map_location=device)
+        loaded = torch.load(checkpoint, map_location=device, weights_only=False)
         if "config" not in loaded or "state_dict" not in loaded:
             raise ValueError(
                 "Checkpoint needs to contain the config it was trained \
