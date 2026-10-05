@@ -85,27 +85,35 @@ pip install detoxify
 
 ```
 ```python
-
 from detoxify import Detoxify
 
 # each model takes in either a string or a list of strings
 
-results = Detoxify('original').predict('example text')
+results = Detoxify("original").predict("example text")
 
-results = Detoxify('unbiased').predict(['example text 1','example text 2'])
+results = Detoxify("unbiased").predict(["example text 1", "example text 2"])
 
-results = Detoxify('multilingual').predict(['example text','exemple de texte','texto de ejemplo','testo di esempio','texto de exemplo','örnek metin','пример текста'])
+results = Detoxify("multilingual").predict(
+    [
+        "example text",
+        "exemple de texte",
+        "texto de ejemplo",
+        "testo di esempio",
+        "texto de exemplo",
+        "örnek metin",
+        "пример текста",
+    ]
+)
 
 # to specify the device the model will be allocated on (defaults to cpu), accepts any torch.device input
 
-model = Detoxify('original', device='cuda')
+model = Detoxify("original", device="cuda")
 
 # optional to display results nicely (will need to pip install pandas)
 
 import pandas as pd
 
 print(pd.DataFrame(results, index=input_text).round(5))
-
 ```
 For more details check the Prediction section.
 
@@ -227,21 +235,29 @@ model = torch.hub.load('unitaryai/detoxify','toxic_bert')
 Importing detoxify in python:
 
 ```python
-
 from detoxify import Detoxify
 
-results = Detoxify('original').predict('some text')
+results = Detoxify("original").predict("some text")
 
-results = Detoxify('unbiased').predict(['example text 1','example text 2'])
+results = Detoxify("unbiased").predict(["example text 1", "example text 2"])
 
-results = Detoxify('multilingual').predict(['example text','exemple de texte','texto de ejemplo','testo di esempio','texto de exemplo','örnek metin','пример текста'])
+results = Detoxify("multilingual").predict(
+    [
+        "example text",
+        "exemple de texte",
+        "texto de ejemplo",
+        "testo di esempio",
+        "texto de exemplo",
+        "örnek metin",
+        "пример текста",
+    ]
+)
 
 # to display results nicely
 
 import pandas as pd
 
-print(pd.DataFrame(results,index=input_text).round(5))
-
+print(pd.DataFrame(results, index=input_text).round(5))
 ```
 
 
