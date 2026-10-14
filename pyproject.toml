@@ -1,6 +1,6 @@
 [project]
 name = "detoxify"
-version = "0.5.3"
+version = "0.5.4"
 description = "A python library for detecting toxic comments"
 readme = "README.md"
 authors = [
@@ -16,11 +16,11 @@ classifiers = [
     "Programming Language :: Python :: 3.13",
     "Programming Language :: Python :: 3.14",
 ]
-requires-python = ">=3.10,<3.16"
+requires-python = ">=3.10"
 dependencies = [
     "sentencepiece >= 0.1.94",
     "torch >=2",
-    "transformers >= 3",
+    "transformers >= 4.48",
 ]
 
 [tool.setuptools]
