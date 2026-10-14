@@ -116,8 +116,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
     config = json.load(open(args.config))
 
-    if args.device is not None:
-        config["gpus"] = args.device
+    config["gpus"] = args.device
 
     results = test_classifier(config, args.test_csv, args.checkpoint, args.device)
     test_set_name = args.test_csv.split("/")[-1:][0]
