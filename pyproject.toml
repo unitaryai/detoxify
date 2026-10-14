@@ -1,6 +1,6 @@
 [project]
 name = "detoxify"
-version = "0.5.3"
+version = "0.5.4"
 description = "A python library for detecting toxic comments"
 readme = "README.md"
 authors = [
@@ -10,12 +10,17 @@ classifiers = [
     "License :: OSI Approved :: Apache Software License",
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
 ]
-requires-python = ">=3.9,<3.13"
+requires-python = ">=3.10"
 dependencies = [
     "sentencepiece >= 0.1.94",
     "torch >=2",
-    "transformers >= 3",
+    "transformers >= 4.48",
 ]
 
 [tool.setuptools]
@@ -39,7 +44,7 @@ dev = [
 
 [tool.ruff]
 line-length = 120
-target-version = "py39"
+target-version = "py310"
 
 [tool.ruff.lint]
 select = ["E", "F", "W"]
