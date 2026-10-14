@@ -6,13 +6,19 @@
 [![PyPI version](https://badge.fury.io/py/detoxify.svg)](https://badge.fury.io/py/detoxify)
 ![GitHub all releases](https://img.shields.io/github/downloads/unitaryai/detoxify/total)
 ![CI testing](https://github.com/unitaryai/detoxify/workflows/CI%20testing/badge.svg)
-![Lint](https://github.com/unitaryai/detoxify/workflows/Lint/badge.svg)
+![Pyright](https://github.com/unitaryai/detoxify/actions/workflows/pyright.yml/badge.svg)
 
 </div>
 
 ![Examples image](examples.png)
 
 ## News & Updates
+
+### 14-10-2026: Updated for newest Python, PyTorch 2.11, numpy 2 and PyTorch Lightning 2, added ModernBERT training config (#119)
+
+### 01-02-2024: Support for newer transformers versions
+
+### 19-12-2022: Offline model loading with `huggingface_config_path`, checkpoints now load onto the requested device
 
 ### 22-10-2021: New improved multilingual model & standardised class names
 -  Updated the `multilingual` model weights used by Detoxify with a model trained on the translated data from the 2nd Jigsaw challenge (as well as the 1st). This model has also been trained to minimise bias and now returns the same categories as the `unbiased` model. New best AUC score on the test set: 92.11 (89.71 before).
@@ -24,15 +30,20 @@
 ### 15-02-2021: Detoxify featured in Scientific American!
 - Our opinion piece ["Can AI identify toxic online content?"](https://www.scientificamerican.com/article/can-ai-identify-toxic-online-content/) is now live on Scientific American
 
+<details>
+<summary>Older updates</summary>
+
 ### 14-01-2021: Lightweight models
 
 - Added smaller models trained with Albert for the `original` and `unbiased` models! Can access these in the same way with detoxify using `original-small` and `unbiased-small` as inputs. The `original-small` achieved a mean AUC score of 98.28 (98.64 before) and the `unbiased-small` achieved a final score of 93.36 (93.64 before).
+
+</details>
 
 ## Description
 
 Trained models & code to predict toxic comments on 3 Jigsaw challenges: Toxic comment classification, Unintended Bias in Toxic comments, Multilingual toxic comment classification.
 
-Built by [Laura Hanu](https://laurahanu.github.io/) at [Unitary](https://www.unitary.ai/), where we are working to stop harmful content online by interpreting visual content in context.
+Built by [Laura Hanu](https://laurahanu.github.io/) and James Thewlis at [Unitary](https://www.unitary.ai/), where we are working to stop harmful content online by interpreting visual content in context.
 
 Dependencies:
 - For inference:
@@ -350,8 +361,17 @@ python evaluate.py --checkpoint saved/lightning_logs/checkpoints/example_checkpo
 ```
 @misc{Detoxify,
   title={Detoxify},
-  author={Hanu, Laura and {Unitary team}},
+  author={Hanu, Laura and Thewlis, James and {Unitary team}},
   howpublished={Github. https://github.com/unitaryai/detoxify},
   year={2020}
+}
+
+@article{HanuSciAm2021,
+  title={How {AI} Is Learning to Identify Toxic Online Content},
+  author={Hanu, Laura and Thewlis, James and Haco, Sasha},
+  journal={Scientific American},
+  year={2021},
+  month={feb},
+  url={https://www.scientificamerican.com/article/can-ai-identify-toxic-online-content/}
 }
 ```

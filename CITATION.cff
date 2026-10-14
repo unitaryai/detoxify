@@ -3,8 +3,9 @@ message: "If you use this software, please cite it as below."
 authors:
 - family-names: "Hanu"
   given-names: "Laura"
-- family-names: "Unitary"
-  given-names: "team"
+- family-names: "Thewlis"
+  given-names: "James"
+- name: "Unitary team"
 title: "Detoxify"
 version: 0.5.4
 doi: 10.5281/zenodo.7925667
