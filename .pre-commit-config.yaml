@@ -23,10 +23,10 @@ repos:
       - id: check-docstring-first
 
   - repo: https://github.com/asottile/pyupgrade
-    rev: v3.21.2
+    rev: v3.22.0
     hooks:
       - id: pyupgrade
-        args: [--py36-plus]
+        args: [--py310-plus]
         name: Upgrade code
 
   - repo: https://github.com/asottile/yesqa
