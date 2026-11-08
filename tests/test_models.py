@@ -1,4 +1,8 @@
+import socket
+
+import torch
 from detoxify.detoxify import (
+    MODEL_URLS,
     Detoxify,
     multilingual_toxic_xlm_r,
     toxic_albert,
@@ -7,7 +11,9 @@ from detoxify.detoxify import (
     unbiased_toxic_roberta,
 )
 from transformers import (
+    AlbertConfig,
     AlbertForSequenceClassification,
+    AlbertTokenizer,
     BertForSequenceClassification,
     RobertaForSequenceClassification,
     XLMRobertaForSequenceClassification,
@@ -90,5 +96,26 @@ def test_multilingual():
     results = model.predict(["tais toi, tu es un menteur", "ben kör bir yahudi kadınıyım"])
     assert len(results) == 7
     assert all(cl in results for cl in CLASSES)
+    assert results["toxicity"][0] >= 0.7
+    assert results["toxicity"][1] < 0.5
+
+
+def _block_network(self, address):
+    raise OSError(f"Network access blocked in test: {address}")
+
+
+def test_offline_loading_from_local_config(tmp_path, monkeypatch):
+    """Given a local folder with the Hugging Face config and tokenizer,
+    when the network is blocked and Detoxify loads with huggingface_config_path,
+    then the model loads with the checkpoint's classes and predicts correctly."""
+    torch.hub.load_state_dict_from_url(MODEL_URLS["original-small"], map_location="cpu", weights_only=False)
+    AlbertConfig.from_pretrained("albert-base-v2").save_pretrained(tmp_path)
+    AlbertTokenizer.from_pretrained("albert-base-v2").save_pretrained(tmp_path)
+    monkeypatch.setattr(socket.socket, "connect", _block_network)
+
+    model = Detoxify("original-small", huggingface_config_path=str(tmp_path))
+    results = model.predict(["shut up, you liar", "i am a jewish woman who is blind"])
+
+    assert len(results) == 6
     assert results["toxicity"][0] >= 0.7
     assert results["toxicity"][1] < 0.5
