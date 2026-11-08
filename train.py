@@ -130,7 +130,7 @@ class ToxicClassifier(pl.LightningModule):
         with torch.no_grad():
             mask = target != -1
             pred = torch.sigmoid(output[mask]) >= 0.5
-            correct = torch.sum(pred.to(output[mask].device) == target[mask])
+            correct = torch.sum(pred.to(output[mask].device) == (target[mask] >= 0.5))
             if torch.sum(mask).item() != 0:
                 correct = correct.item() / torch.sum(mask).item()
             else:
