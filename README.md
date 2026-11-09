@@ -6,7 +6,7 @@
 [![PyPI version](https://badge.fury.io/py/detoxify.svg)](https://badge.fury.io/py/detoxify)
 ![GitHub all releases](https://img.shields.io/github/downloads/unitaryai/detoxify/total)
 ![CI testing](https://github.com/unitaryai/detoxify/workflows/CI%20testing/badge.svg)
-![Pyright](https://github.com/unitaryai/detoxify/actions/workflows/pyright.yml/badge.svg)
+![ty](https://github.com/unitaryai/detoxify/actions/workflows/ty.yml/badge.svg)
 
 </div>
 

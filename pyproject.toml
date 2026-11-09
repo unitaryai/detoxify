@@ -39,7 +39,7 @@ dev = [
     "tqdm",
     "pre-commit",
     "numpy>=2",
-    "pyright"
+    "ty"
 ]
 
 [tool.ruff]
