@@ -1,14 +1,16 @@
 from __future__ import annotations
 
 from os import PathLike
-from typing import IO, overload
+from typing import IO, Literal, overload
 
 import torch
 import transformers
 
 
+ModelType = Literal["multilingual", "original", "original-small", "unbiased", "unbiased-small"]
+
 DOWNLOAD_URL = "https://github.com/unitaryai/detoxify/releases/download/"
-MODEL_URLS: dict[str, str] = {
+MODEL_URLS: dict[ModelType, str] = {
     "original": DOWNLOAD_URL + "v0.1-alpha/toxic_original-c1212f89.ckpt",
     "unbiased": DOWNLOAD_URL + "v0.3-alpha/toxic_debiased-c7548aa0.ckpt",
     "multilingual": DOWNLOAD_URL + "v0.4-alpha/multilingual_debiased-0b549669.ckpt",
@@ -50,7 +52,7 @@ def get_model_and_tokenizer(
 
 
 def load_checkpoint(
-    model_type: str = "original",
+    model_type: ModelType = "original",
     checkpoint: str | PathLike[str] | IO[bytes] | None = None,
     device: str | torch.device = "cpu",
     huggingface_config_path: str | PathLike[str] | None = None,
@@ -83,7 +85,7 @@ def load_checkpoint(
 
 
 def load_model(
-    model_type: str, checkpoint: str | PathLike[str] | IO[bytes] | None = None
+    model_type: ModelType, checkpoint: str | PathLike[str] | IO[bytes] | None = None
 ) -> transformers.PreTrainedModel:
     if checkpoint is None:
         model, _, _ = load_checkpoint(model_type=model_type)
@@ -122,7 +124,7 @@ class Detoxify:
 
     def __init__(
         self,
-        model_type: str = "original",
+        model_type: ModelType = "original",
         checkpoint: str | PathLike[str] | IO[bytes] | None = PRETRAINED_MODEL,
         device: str | torch.device = "cpu",
         huggingface_config_path: str | PathLike[str] | None = None,
