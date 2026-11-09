@@ -1,9 +1,14 @@
+from __future__ import annotations
+
+from os import PathLike
+from typing import IO, overload
+
 import torch
 import transformers
 
 
 DOWNLOAD_URL = "https://github.com/unitaryai/detoxify/releases/download/"
-MODEL_URLS = {
+MODEL_URLS: dict[str, str] = {
     "original": DOWNLOAD_URL + "v0.1-alpha/toxic_original-c1212f89.ckpt",
     "unbiased": DOWNLOAD_URL + "v0.3-alpha/toxic_debiased-c7548aa0.ckpt",
     "multilingual": DOWNLOAD_URL + "v0.4-alpha/multilingual_debiased-0b549669.ckpt",
@@ -15,8 +20,13 @@ PRETRAINED_MODEL = None
 
 
 def get_model_and_tokenizer(
-    model_type, model_name, tokenizer_name, num_classes, state_dict, huggingface_config_path=None
-):
+    model_type: str,
+    model_name: str,
+    tokenizer_name: str,
+    num_classes: int,
+    state_dict: dict[str, torch.Tensor],
+    huggingface_config_path: str | PathLike[str] | None = None,
+) -> tuple[transformers.PreTrainedModel, transformers.PreTrainedTokenizerBase]:
     model_class = getattr(transformers, model_name)
     config = model_class.config_class.from_pretrained(
         huggingface_config_path or model_type,
@@ -39,7 +49,12 @@ def get_model_and_tokenizer(
     return model, tokenizer
 
 
-def load_checkpoint(model_type="original", checkpoint=None, device="cpu", huggingface_config_path=None):
+def load_checkpoint(
+    model_type: str = "original",
+    checkpoint: str | PathLike[str] | IO[bytes] | None = None,
+    device: str | torch.device = "cpu",
+    huggingface_config_path: str | PathLike[str] | None = None,
+) -> tuple[transformers.PreTrainedModel, transformers.PreTrainedTokenizerBase, list[str]]:
     if checkpoint is None:
         checkpoint_path = MODEL_URLS[model_type]
         loaded = torch.hub.load_state_dict_from_url(checkpoint_path, map_location=device, weights_only=False)
@@ -50,7 +65,7 @@ def load_checkpoint(model_type="original", checkpoint=None, device="cpu", huggin
                 "Checkpoint needs to contain the config it was trained \
                     with as well as the state dict"
             )
-    class_names = loaded["config"]["dataset"]["args"]["classes"]
+    class_names: list[str] = loaded["config"]["dataset"]["args"]["classes"]
     # standardise class names between models
     change_names = {
         "toxic": "toxicity",
@@ -67,7 +82,9 @@ def load_checkpoint(model_type="original", checkpoint=None, device="cpu", huggin
     return model, tokenizer, class_names
 
 
-def load_model(model_type, checkpoint=None):
+def load_model(
+    model_type: str, checkpoint: str | PathLike[str] | IO[bytes] | None = None
+) -> transformers.PreTrainedModel:
     if checkpoint is None:
         model, _, _ = load_checkpoint(model_type=model_type)
     else:
@@ -103,7 +120,13 @@ class Detoxify:
         results(dict): dictionary of output scores for each class
     """
 
-    def __init__(self, model_type="original", checkpoint=PRETRAINED_MODEL, device="cpu", huggingface_config_path=None):
+    def __init__(
+        self,
+        model_type: str = "original",
+        checkpoint: str | PathLike[str] | IO[bytes] | None = PRETRAINED_MODEL,
+        device: str | torch.device = "cpu",
+        huggingface_config_path: str | PathLike[str] | None = None,
+    ) -> None:
         super().__init__()
         self.model, self.tokenizer, self.class_names = load_checkpoint(
             model_type=model_type,
@@ -114,8 +137,14 @@ class Detoxify:
         self.device = device
         self.model.to(self.device)
 
+    @overload
+    def predict(self, text: str) -> dict[str, float]: ...
+
+    @overload
+    def predict(self, text: list[str]) -> dict[str, list[float]]: ...
+
     @torch.no_grad()
-    def predict(self, text):
+    def predict(self, text: str | list[str]) -> dict[str, float] | dict[str, list[float]]:
         self.model.eval()
         inputs = self.tokenizer(text, return_tensors="pt", truncation=True, padding=True).to(self.model.device)
         out = self.model(**inputs)[0]
@@ -125,21 +154,21 @@ class Detoxify:
         return {cla: scores[..., i].tolist() for i, cla in enumerate(self.class_names)}
 
 
-def toxic_bert():
+def toxic_bert() -> transformers.PreTrainedModel:
     return load_model("original")
 
 
-def toxic_albert():
+def toxic_albert() -> transformers.PreTrainedModel:
     return load_model("original-small")
 
 
-def unbiased_toxic_roberta():
+def unbiased_toxic_roberta() -> transformers.PreTrainedModel:
     return load_model("unbiased")
 
 
-def unbiased_albert():
+def unbiased_albert() -> transformers.PreTrainedModel:
     return load_model("unbiased-small")
 
 
-def multilingual_toxic_xlm_r():
+def multilingual_toxic_xlm_r() -> transformers.PreTrainedModel:
     return load_model("multilingual")
