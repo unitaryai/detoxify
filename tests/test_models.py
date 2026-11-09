@@ -1,5 +1,6 @@
 import socket
 
+import pytest
 import torch
 from detoxify.detoxify import (
     MODEL_URLS,
@@ -119,3 +120,23 @@ def test_offline_loading_from_local_config(tmp_path, monkeypatch):
     assert len(results) == 6
     assert results["toxicity"][0] >= 0.7
     assert results["toxicity"][1] < 0.5
+
+
+@pytest.mark.parametrize(
+    ("text", "expected_type"),
+    [
+        ("shut up, you liar", float),
+        (["shut up, you liar"], list),
+        (["shut up, you liar", "i am a jewish woman who is blind"], list),
+    ],
+)
+def test_predict_output_type_follows_input_type(text, expected_type):
+    """Given a string or a list of texts,
+    when Detoxify predicts,
+    then a string gives one score per class and a list gives a list per class, even with one text."""
+    model = Detoxify("original-small")
+    results = model.predict(text)
+
+    assert all(isinstance(score, expected_type) for score in results.values())
+    if isinstance(text, list):
+        assert all(len(scores) == len(text) for scores in results.values())
