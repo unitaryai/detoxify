@@ -26,10 +26,10 @@ def run(model_name, input_obj, dest_file, from_ckpt, device="cpu"):
     If a dest_file is given, it saves the results to a txt file.
     """
     text = load_input_text(input_obj)
-    if model_name is not None:
-        model = Detoxify(model_name, device=device)
-    else:
+    if from_ckpt is not None:
         model = Detoxify(checkpoint=from_ckpt, device=device)
+    else:
+        model = Detoxify(model_name, device=device)
     res = model.predict(text)
 
     res_df = pd.DataFrame(
@@ -44,18 +44,18 @@ def run(model_name, input_obj, dest_file, from_ckpt, device="cpu"):
     return res
 
 
-if __name__ == "__main__":
-    # args
+def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "--input",
         type=str,
         help="text, list of strings, or txt file",
     )
-    parser.add_argument(
+    model_source = parser.add_mutually_exclusive_group()
+    model_source.add_argument(
         "--model_name",
         default="unbiased",
-        type=str,
+        choices=["multilingual", "original", "original-small", "unbiased", "unbiased-small"],
         help="Name of the torch.hub model (default: unbiased)",
     )
     parser.add_argument(
@@ -64,7 +64,7 @@ if __name__ == "__main__":
         type=str,
         help="device to load the model on",
     )
-    parser.add_argument(
+    model_source.add_argument(
         "--from_ckpt_path",
         default=None,
         type=str,
@@ -76,22 +76,12 @@ if __name__ == "__main__":
         type=str,
         help="destination path to output model results to (default: None)",
     )
+    return parser.parse_args(argv)
 
-    args = parser.parse_args()
 
-    assert args.from_ckpt_path is not None or args.model_name is not None
+if __name__ == "__main__":
+    args = parse_args()
 
-    if args.model_name is not None:
-        assert args.model_name in [
-            "original",
-            "unbiased",
-            "multilingual",
-        ]
-
-    if args.from_ckpt_path is not None and args.model_name is not None:
-        raise ValueError(
-            "Please specify only one model source, can either load model from checkpoint path or from model_name."
-        )
     if args.from_ckpt_path is not None:
         assert os.path.isfile(args.from_ckpt_path)
 
