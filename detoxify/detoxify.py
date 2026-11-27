@@ -59,9 +59,9 @@ def load_checkpoint(
 ) -> tuple[transformers.PreTrainedModel, transformers.PreTrainedTokenizerBase, list[str]]:
     if checkpoint is None:
         checkpoint_path = MODEL_URLS[model_type]
-        loaded = torch.hub.load_state_dict_from_url(checkpoint_path, map_location=device, weights_only=False)
+        loaded = torch.hub.load_state_dict_from_url(checkpoint_path, map_location=device, weights_only=True)
     else:
-        loaded = torch.load(checkpoint, map_location=device, weights_only=False)
+        loaded = torch.load(checkpoint, map_location=device, weights_only=True)
         if "config" not in loaded or "state_dict" not in loaded:
             raise ValueError(
                 "Checkpoint needs to contain the config it was trained \

@@ -109,7 +109,7 @@ def test_offline_loading_from_local_config(tmp_path, monkeypatch):
     """Given a local folder with the Hugging Face config and tokenizer,
     when the network is blocked and Detoxify loads with huggingface_config_path,
     then the model loads with the checkpoint's classes and predicts correctly."""
-    torch.hub.load_state_dict_from_url(MODEL_URLS["original-small"], map_location="cpu", weights_only=False)
+    torch.hub.load_state_dict_from_url(MODEL_URLS["original-small"], map_location="cpu", weights_only=True)
     AlbertConfig.from_pretrained("albert-base-v2").save_pretrained(tmp_path)
     AlbertTokenizer.from_pretrained("albert-base-v2").save_pretrained(tmp_path)
     monkeypatch.setattr(socket.socket, "connect", _block_network)
